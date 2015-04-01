@@ -1,4 +1,4 @@
-package com.github.orangegangsters.progressslider;
+package com.github.omada.progressslider;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
