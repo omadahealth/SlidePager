@@ -36,13 +36,6 @@ import com.github.omada.progressslider.lib.R;
  */
 public class ShootViewPagerTransformer implements ViewPager.PageTransformer {
 
-//    TextView top;
-//    TextView center;
-//    public ShootViewPagerTransformer(TextView top, TextView center) {
-//        this.top = top;
-//        this.center = center;
-//    }
-
     /**
      * Used for adding a fadein/fadeout animation in the ViewPager transition.
      * Must be used with {@link android.support.v4.view.ViewPager#setPageTransformer(boolean, android.support.v4.view.ViewPager.PageTransformer)}
