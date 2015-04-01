@@ -1,4 +1,4 @@
-package com.github.omada.progressslider.lib;
+package com.github.omadahealth.slidepager.lib;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

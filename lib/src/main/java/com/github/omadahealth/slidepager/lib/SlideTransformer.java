@@ -22,6 +22,10 @@ public abstract class SlideTransformer implements ViewPager.PageTransformer {
      */
     public static final Float DEFAULT_TRANSLATION_RATIO = 1.0f;
 
+    private float lastPosition = 0f;
+
+    private boolean swipingRight = false;
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @SuppressWarnings("unchecked")
     @Override
@@ -30,12 +34,17 @@ public abstract class SlideTransformer implements ViewPager.PageTransformer {
             initTags(view);
         }
 
+        swipingRight = lastPosition < position;
+        lastPosition = position;
+        //Stop the root page from moving during animation
+        lockPage(view, position);
+
         if (view.getTag() instanceof List) {
             List<View> children = (List<View>) view.getTag();
 
             if (getViewRatios() != null) {
                 for (View child : children) {
-                    float ratio = getViewRatios().containsKey(child.getId()) ? getViewRatios().get(child.getId()) : DEFAULT_TRANSLATION_RATIO;
+                    float ratio = getViewRatios().containsKey(child.getId()) ? getViewRatios().get(child.getId()).getRatio(swipingRight) : DEFAULT_TRANSLATION_RATIO;
                     child.setTranslationX(-position * ((float) view.getWidth() / ratio));
                 }
             }
@@ -54,7 +63,7 @@ public abstract class SlideTransformer implements ViewPager.PageTransformer {
         List<View> subViews = new ArrayList<>();
 
         if (getViewRatios() != null) {
-            for (Map.Entry<Integer, Float> entry : getViewRatios().entrySet()) {
+            for (Map.Entry<Integer, Ratio> entry : getViewRatios().entrySet()) {
                 View subView = view.findViewById(entry.getKey());
                 if (subView != null) {
                     subViews.add(subView);
@@ -70,8 +79,29 @@ public abstract class SlideTransformer implements ViewPager.PageTransformer {
      * as a key and the scalling for it's translation int {@link #transformPage(android.view.View, float)}.
      * If the view is not in the map, then its translation ratio defaults to {@link #DEFAULT_TRANSLATION_RATIO}
      * </p>
+     *
      * @return The map of the view-id/translation-ratio
      */
-    public abstract HashMap<Integer, Float> getViewRatios();
+    public abstract HashMap<Integer, Ratio> getViewRatios();
+
+    /**
+     * Stops the {@link android.support.v4.view.ViewPager} from scrolling the root frame
+     * while we perform animations on its children
+     * </p>
+     *
+     * @param view     The root view
+     * @param position The position the ViewPager is in
+     */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private void lockPage(View view, float position) {
+        view.setTranslationX(view.getWidth() * -position);
+        if (position <= -1.0F || position >= 1.0F) {
+            view.setAlpha(0.0F);
+        } else if (position == 0.0F) {
+            view.setAlpha(1.0F);
+        } else {
+            view.setAlpha(1.0F - Math.abs(position));
+        }
+    }
 
 }
