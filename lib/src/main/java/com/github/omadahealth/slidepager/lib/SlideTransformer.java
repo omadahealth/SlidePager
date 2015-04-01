@@ -100,7 +100,7 @@ public abstract class SlideTransformer implements ViewPager.PageTransformer {
         } else if (position == 0.0F) {
             view.setAlpha(1.0F);
         } else {
-            view.setAlpha(1.0F - Math.abs(position));
+            view.setAlpha(1.0F - (Math.abs(position) * 2));
         }
     }
 
