@@ -27,9 +27,6 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.TextView;
-
-import com.github.omada.progressslider.lib.R;
 
 /**
  * Created by oliviergoutay on 12/9/14.
@@ -50,25 +47,25 @@ public class ShootViewPagerTransformer implements ViewPager.PageTransformer {
             view.setScrollX(view.getWidth() / 2);
         }
 
-        int pageWidth = view.getWidth();
-        TextView top = (TextView) view.findViewById(R.id.user_top_textview);
-        TextView center = (TextView) view.findViewById(R.id.value_info_textview);
-
-        if (position < -1) { // [-Infinity,-1)
-            // This page is way off-screen to the left.
-            view.setAlpha(0);
-
-        } else if (position <= 1) { // [-1,1]
-
-
-            top.setTranslationX((float) (-(1 - position) * 0.5 * pageWidth));
-
-            center.setTranslationX((float) (-(1 - position) * pageWidth));
-
-        } else { // (1,+Infinity]
-            // This page is way off-screen to the right.
-            view.setAlpha(0);
-        }
+//        int pageWidth = view.getWidth();
+//        TextView top = (TextView) view.findViewById(R.id.user_top_textview);
+//        TextView center = (TextView) view.findViewById(R.id.value_info_textview);
+//
+//        if (position < -1) { // [-Infinity,-1)
+//            // This page is way off-screen to the left.
+//            view.setAlpha(0);
+//
+//        } else if (position <= 1) { // [-1,1]
+//
+//
+//            top.setTranslationX((float) (-(1 - position) * 0.5 * pageWidth));
+//
+//            center.setTranslationX((float) (-(1 - position) * pageWidth));
+//
+//        } else { // (1,+Infinity]
+//            // This page is way off-screen to the right.
+//            view.setAlpha(0);
+//        }
     }
 
 }
