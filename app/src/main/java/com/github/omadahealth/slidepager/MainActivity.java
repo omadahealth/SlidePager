@@ -1,15 +1,13 @@
 package com.github.omadahealth.slidepager;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 
-import com.github.OrangeGangsters.circularbarpager.library.CircularBar;
 import com.github.omadahealth.demo.R;
 import com.github.omadahealth.slidepager.lib.SlidePager;
+import com.nineoldandroids.animation.Animator;
 
 import java.util.List;
 
@@ -48,10 +46,28 @@ public class MainActivity extends ActionBarActivity {
                 List<View> children = (List<View>) selectedView.getTag();
                 if (children != null) {
                     int i = 0;
-                    for (View child : children) {
-                        if (child instanceof CircularBar) {
-                            CircularBar circularBar = (CircularBar) child;
-                            circularBar.animateProgress(0, (14 * i++), BAR_ANIMATION_TIME);
+                    for (final View child : children) {
+                        if (child instanceof DayProgressView) {
+                            final DayProgressView dayProgressView = (DayProgressView) child;
+                            dayProgressView.getCircularBar().addListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    dayProgressView.getRightStreak().setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+                                }
+                            });
+                            dayProgressView.getCircularBar().animateProgress(0, (14 * i++), BAR_ANIMATION_TIME);
                         }
                     }
                 }
@@ -65,13 +81,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private View[] initDummyViews() {
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         View[] views = new View[4];
-        views[0] = inflater.inflate(R.layout.page, null);
-        views[1] = inflater.inflate(R.layout.page, null);
-        views[2] = inflater.inflate(R.layout.page, null);
-        views[3] = inflater.inflate(R.layout.page, null);
+        views[0] = new DayProgressView(this);
+        views[1] = new DayProgressView(this);
+        views[2] = new DayProgressView(this);
+        views[3] = new DayProgressView(this);
         return views;
     }
 }

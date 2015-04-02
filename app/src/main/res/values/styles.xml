@@ -15,8 +15,10 @@
 
         <item name="progress_arc_clockwise_outline_width">0.75dp</item>
         <item name="progress_arc_counter_clockwise_outline_width">0.75dp</item>
-        <item name="progress_arc_clockwise_width">8dp</item>
-        <item name="progress_arc_counter_clockwise_width">8dp</item>
+        <item name="progress_arc_clockwise_width">3dp</item>
+        <item name="progress_arc_counter_clockwise_width">3dp</item>
+        <item name="progress_start_line_enabled">false</item>
+        <item name="progress_pager_fill_circle_color">@color/circle_fill</item>
     </style>
 
 </resources>

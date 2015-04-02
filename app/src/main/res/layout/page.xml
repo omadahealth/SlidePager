@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -8,53 +7,45 @@
     android:orientation="horizontal"
     android:paddingBottom="@dimen/activity_vertical_margin">
 
-    <com.github.OrangeGangsters.circularbarpager.library.CircularBar
-        android:id="@+id/circularbar_1"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
-        android:layout_weight="1"
-        style="@style/CircularBarPagerStyle" />
+    <com.github.omadahealth.slidepager.DayProgressView
+        android:id="@+id/day_progress_1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"/>
 
-    <com.github.OrangeGangsters.circularbarpager.library.CircularBar
-        android:id="@+id/circularbar_2"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
-        android:layout_weight="1"
-        style="@style/CircularBarPagerStyle" />
+    <com.github.omadahealth.slidepager.DayProgressView
+        android:id="@+id/day_progress_2"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1" />
 
-    <com.github.OrangeGangsters.circularbarpager.library.CircularBar
-        android:id="@+id/circularbar_3"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
-        android:layout_weight="1"
-        style="@style/CircularBarPagerStyle" />
+    <com.github.omadahealth.slidepager.DayProgressView
+        android:id="@+id/day_progress_3"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"/>
 
-    <com.github.OrangeGangsters.circularbarpager.library.CircularBar
-        android:id="@+id/circularbar_4"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
-        android:layout_weight="1"
-        style="@style/CircularBarPagerStyle" />
+    <com.github.omadahealth.slidepager.DayProgressView
+        android:id="@+id/day_progress_4"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"/>
 
-    <com.github.OrangeGangsters.circularbarpager.library.CircularBar
-        android:id="@+id/circularbar_5"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
-        android:layout_weight="1"
-        style="@style/CircularBarPagerStyle" />
+    <com.github.omadahealth.slidepager.DayProgressView
+        android:id="@+id/day_progress_5"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1" />
 
-    <com.github.OrangeGangsters.circularbarpager.library.CircularBar
-        android:id="@+id/circularbar_6"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
-        android:layout_weight="1"
-        style="@style/CircularBarPagerStyle" />
+    <com.github.omadahealth.slidepager.DayProgressView
+        android:id="@+id/day_progress_6"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"/>
 
-    <com.github.OrangeGangsters.circularbarpager.library.CircularBar
-        android:id="@+id/circularbar_7"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
-        android:layout_weight="1"
-        style="@style/CircularBarPagerStyle" />
-
+    <com.github.omadahealth.slidepager.DayProgressView
+        android:id="@+id/day_progress_7"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"/>
 </LinearLayout>
