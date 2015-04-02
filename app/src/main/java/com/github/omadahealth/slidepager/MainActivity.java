@@ -41,7 +41,7 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             @SuppressWarnings("unchecked")
-            public void onPageSelected(int position) {
+            public void onPageSelected(final int position) {
                 View selectedView = ((DemoPagerAdapter) mSlidePager.getAdapter()).getCurrentView(mSlidePager.getCurrentItem());
 
                 List<View> children = (List<View>) selectedView.getTag();
@@ -57,7 +57,20 @@ public class MainActivity extends ActionBarActivity {
 
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-                                    dayProgressView.getRightStreak().setVisibility(View.VISIBLE);
+                                    if (position == mSlidePager.getCurrentItem() && dayProgressView.getCircularBar().getProgress() >= 99.95f) {
+                                        switch (dayProgressView.getId()) {
+                                            case R.id.day_progress_3:
+                                                dayProgressView.getRightStreak().setVisibility(View.VISIBLE);
+                                                break;
+                                            case R.id.day_progress_4:
+                                                dayProgressView.getRightStreak().setVisibility(View.VISIBLE);
+                                                dayProgressView.getLeftStreak().setVisibility(View.VISIBLE);
+                                                break;
+                                            case R.id.day_progress_5:
+                                                dayProgressView.getLeftStreak().setVisibility(View.VISIBLE);
+                                                break;
+                                        }
+                                    }
                                 }
 
                                 @Override
@@ -68,7 +81,17 @@ public class MainActivity extends ActionBarActivity {
                                 public void onAnimationRepeat(Animator animation) {
                                 }
                             });
-                            dayProgressView.getCircularBar().animateProgress(0, (14 * i++), BAR_ANIMATION_TIME);
+                            switch (dayProgressView.getId()) {
+                                case R.id.day_progress_3:
+                                case R.id.day_progress_4:
+                                case R.id.day_progress_5:
+                                    dayProgressView.getCircularBar().animateProgress(0, 100, BAR_ANIMATION_TIME);
+                                    break;
+                                default:
+                                    dayProgressView.getCircularBar().animateProgress(0, (25 * i++), BAR_ANIMATION_TIME);
+                                    dayProgressView.getCircularBar().setCircleFillColor(getResources().getColor(android.R.color.transparent));
+                                    break;
+                            }
                         }
                     }
                 }
@@ -86,6 +109,7 @@ public class MainActivity extends ActionBarActivity {
                             if (child instanceof DayProgressView) {
                                 final DayProgressView dayProgressView = (DayProgressView) child;
                                 dayProgressView.getRightStreak().setVisibility(View.INVISIBLE);
+                                dayProgressView.getLeftStreak().setVisibility(View.INVISIBLE);
                             }
                         }
                     }
