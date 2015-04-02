@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -97,7 +97,7 @@ public abstract class SlideTransformer implements ViewPager.PageTransformer {
      *
      * @return The map of the view-id/translation-ratio
      */
-    public abstract HashMap<Integer, Ratio> getViewRatios();
+    public abstract LinkedHashMap<Integer, Ratio> getViewRatios();
 
     /**
      * Stops the {@link android.support.v4.view.ViewPager} from scrolling the root frame

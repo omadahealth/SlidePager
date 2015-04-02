@@ -4,7 +4,7 @@ import com.github.omadahealth.demo.R;
 import com.github.omadahealth.slidepager.lib.Ratio;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by oliviergoutay on 4/1/15.
@@ -12,8 +12,8 @@ import java.util.HashMap;
 public class SlideTransformerImpl extends SlideTransformer {
 
     @Override
-    public HashMap<Integer, Ratio> getViewRatios() {
-        HashMap<Integer, Ratio> ratios = new HashMap<>();
+    public LinkedHashMap<Integer, Ratio> getViewRatios() {
+        LinkedHashMap<Integer, Ratio> ratios = new LinkedHashMap<>();
         ratios.put(R.id.day_progress_1, new Ratio(4.0f, 1.0f));
         ratios.put(R.id.day_progress_2, new Ratio(3.5f, 1.5f));
         ratios.put(R.id.day_progress_3, new Ratio(3.0f, 2.0f));
