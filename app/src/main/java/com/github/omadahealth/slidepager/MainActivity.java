@@ -114,7 +114,9 @@ public class MainActivity extends ActionBarActivity {
                         }
                     }
                 }
-
+                if (state == ViewPager.SCROLL_STATE_SETTLING) {
+                    onPageSelected(mSlidePager.getCurrentItem());
+                }
             }
         });
     }
