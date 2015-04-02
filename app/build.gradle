@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.github.omadahealth.demo"
-        minSdkVersion 9
+        minSdkVersion 10
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -19,7 +19,17 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
+    //CircularBarPager
+    compile 'com.github.orangegangsters:library:1.0.0@aar'
+    //Animations and progress value easing
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.easing:library:1.0.1@aar'
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     compile project(':lib')

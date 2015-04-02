@@ -62,4 +62,8 @@ public class DemoPagerAdapter extends PagerAdapter {
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
     }
+
+    public View[] getViews() {
+        return mViews;
+    }
 }

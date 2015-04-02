@@ -45,7 +45,7 @@ public abstract class SlideTransformer implements ViewPager.PageTransformer {
             if (getViewRatios() != null) {
                 for (View child : children) {
                     float ratio = getViewRatios().containsKey(child.getId()) ? getViewRatios().get(child.getId()).getRatio(swipingRight) : DEFAULT_TRANSLATION_RATIO;
-                    child.setTranslationX(-position * ((float) view.getWidth() / ratio));
+                    child.setTranslationX(position * ((float) view.getWidth() / ratio));
                 }
             }
         } else {
@@ -76,7 +76,7 @@ public abstract class SlideTransformer implements ViewPager.PageTransformer {
 
     /**
      * Override this method to return a {@link java.util.HashMap} of the resource ID's of each view
-     * as a key and the scalling for it's translation int {@link #transformPage(android.view.View, float)}.
+     * as a key and the scaling for it's translation int {@link #transformPage(android.view.View, float)}.
      * If the view is not in the map, then its translation ratio defaults to {@link #DEFAULT_TRANSLATION_RATIO}
      * </p>
      *
