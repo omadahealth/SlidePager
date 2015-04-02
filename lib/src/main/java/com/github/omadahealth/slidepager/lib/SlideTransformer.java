@@ -22,10 +22,25 @@ public abstract class SlideTransformer implements ViewPager.PageTransformer {
      */
     public static final Float DEFAULT_TRANSLATION_RATIO = 1.0f;
 
+    /**
+     * Allows to save the last position of the {@link android.view.View} to deduce the current direction of the swipe.
+     * Used in {@link #transformPage(android.view.View, float)}
+     */
     private float lastPosition = 0f;
 
+    /**
+     * Modified in {@link #transformPage(android.view.View, float)} by using {@link #lastPosition} to know the direction of the swipe.
+     */
     private boolean swipingRight = false;
 
+    /**
+     * This method allows to create a Slide effect on the {@link android.support.v4.view.ViewPager} transitions.
+     * You need to implement this class and implement the {@link #getViewRatios()} method, providing a map between
+     * view-id and ratio.
+     *
+     * @param view     The {@link android.view.View} currently animating
+     * @param position The position reached by this view
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @SuppressWarnings("unchecked")
     @Override

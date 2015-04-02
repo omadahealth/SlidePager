@@ -8,7 +8,13 @@ package com.github.omadahealth.slidepager.lib;
  */
 public class Ratio {
 
+    /**
+     * The ratio to apply on a left Swipe in the {@link android.support.v4.view.ViewPager}
+     */
     private float mLeftRatio;
+    /**
+     * The ratio to apply on a right Swipe in the {@link android.support.v4.view.ViewPager}
+     */
     private float mRightRatio;
 
     public Ratio(float leftRatio, float rightRatio) {
@@ -16,7 +22,13 @@ public class Ratio {
         this.mRightRatio = rightRatio;
     }
 
-    public float getRatio(boolean swipingRight){
+    /**
+     * Get the ratio for the current direction
+     *
+     * @param swipingRight Pass true if the current swipe goes right, false otherwise.
+     * @return The {@link #getLeftRatio()} or {@link #getRightRatio()} depending on the direction
+     */
+    public float getRatio(boolean swipingRight) {
         return swipingRight ? getRightRatio() : getLeftRatio();
     }
 
