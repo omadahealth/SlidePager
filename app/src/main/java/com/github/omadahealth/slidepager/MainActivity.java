@@ -1,8 +1,10 @@
 package com.github.omadahealth.slidepager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.github.omadahealth.demo.R;
@@ -35,13 +37,12 @@ public class MainActivity extends ActionBarActivity {
         mSlidePager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             @SuppressWarnings("unchecked")
             public void onPageSelected(int position) {
-                View selectedView = ((DemoPagerAdapter) mSlidePager.getAdapter()).getViews()[position];
+                View selectedView = ((DemoPagerAdapter) mSlidePager.getAdapter()).getCurrentView(mSlidePager.getCurrentItem());
 
                 List<View> children = (List<View>) selectedView.getTag();
                 if (children != null) {
@@ -74,18 +75,34 @@ public class MainActivity extends ActionBarActivity {
             }
 
             @Override
+            @SuppressWarnings("unchecked")
             public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+                    View selectedView = ((DemoPagerAdapter) mSlidePager.getAdapter()).getCurrentView(mSlidePager.getCurrentItem());
+
+                    List<View> children = (List<View>) selectedView.getTag();
+                    if (children != null) {
+                        for (final View child : children) {
+                            if (child instanceof DayProgressView) {
+                                final DayProgressView dayProgressView = (DayProgressView) child;
+                                dayProgressView.getRightStreak().setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    }
+                }
 
             }
         });
     }
 
     private View[] initDummyViews() {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         View[] views = new View[4];
-        views[0] = new DayProgressView(this);
-        views[1] = new DayProgressView(this);
-        views[2] = new DayProgressView(this);
-        views[3] = new DayProgressView(this);
+        views[0] = inflater.inflate(R.layout.page, null);
+        views[1] = inflater.inflate(R.layout.page, null);
+        views[2] = inflater.inflate(R.layout.page, null);
+        views[3] = inflater.inflate(R.layout.page, null);
         return views;
     }
 }

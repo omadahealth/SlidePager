@@ -63,7 +63,10 @@ public class DemoPagerAdapter extends PagerAdapter {
         return view == object;
     }
 
-    public View[] getViews() {
-        return mViews;
+    public View getCurrentView(int position) {
+        if (mViews == null || position > mViews.length - 1) {
+            return null;
+        }
+        return mViews[position];
     }
 }
