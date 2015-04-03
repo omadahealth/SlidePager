@@ -23,21 +23,18 @@
  */
 package com.github.omadahealth.slidepager;
 
-import android.content.Context;
-import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.github.omadahealth.slidepager.lib.SlidePagerAdapter;
 
 /**
  * Created by oliviergoutay on 12/9/14.
  */
-public class DemoPagerAdapter extends PagerAdapter {
-
-    private Context mContext;
+public class DemoPagerAdapter extends SlidePagerAdapter {
     private View[] mViews;
 
-    public DemoPagerAdapter(Context context, View... views) {
-        this.mContext = context;
+    public DemoPagerAdapter(View... views) {
         this.mViews = views;
     }
 
@@ -63,6 +60,7 @@ public class DemoPagerAdapter extends PagerAdapter {
         return view == object;
     }
 
+    @Override
     public View getCurrentView(int position) {
         if (mViews == null || position > mViews.length - 1) {
             return null;

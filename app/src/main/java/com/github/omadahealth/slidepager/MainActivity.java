@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity {
 
         mSlidePager = (SlidePager) findViewById(R.id.slidepager);
         View[] demoViews = initDummyViews();
-        mSlidePager.setAdapter(new DemoPagerAdapter(this, demoViews));
+        mSlidePager.setAdapter(new DemoPagerAdapter(demoViews));
 
         mSlidePager.setPageTransformer(false, new SlideTransformerImpl());
 
@@ -42,65 +42,9 @@ public class MainActivity extends ActionBarActivity {
             }
 
             @Override
-            @SuppressWarnings("unchecked")
+
             public void onPageSelected(final int position) {
-                View selectedView = ((DemoPagerAdapter) mSlidePager.getAdapter()).getCurrentView(mSlidePager.getCurrentItem());
-
-                List<View> children = (List<View>) selectedView.getTag();
-                if (children != null) {
-                    int i = 0;
-                    for (final View child : children) {
-                        if (child instanceof DayProgressView) {
-                            final DayProgressView dayProgressView = (DayProgressView) child;
-                            dayProgressView.getDayOfWeek().setText(days[i]);
-                            dayProgressView.getCircularBar().addListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    if (position == mSlidePager.getCurrentItem() && dayProgressView.getCircularBar().getProgress() >= 99.95f) {
-                                        switch (dayProgressView.getId()) {
-                                            case R.id.day_progress_3:
-                                                dayProgressView.show(true, DayProgressView.STREAK.RIGHT_STREAK);
-                                                break;
-                                            case R.id.day_progress_4:
-                                                dayProgressView.show(true, DayProgressView.STREAK.LEFT_STREAK);
-                                                dayProgressView.show(true, DayProgressView.STREAK.RIGHT_STREAK);
-                                                break;
-                                            case R.id.day_progress_5:
-                                                dayProgressView.show(true, DayProgressView.STREAK.LEFT_STREAK);
-                                                break;
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
-                                }
-                            });
-                            
-                            switch (dayProgressView.getId()) {
-                                case R.id.day_progress_3:
-                                case R.id.day_progress_4:
-                                case R.id.day_progress_5:
-                                    dayProgressView.getCircularBar().animateProgress(0, 100, BAR_ANIMATION_TIME);
-                                    break;
-                                default:
-                                    dayProgressView.getCircularBar().animateProgress(0, (25 * i), BAR_ANIMATION_TIME);
-                                    dayProgressView.getCircularBar().setCircleFillColor(getResources().getColor(android.R.color.transparent));
-                                    break;
-                            }
-                            
-                            i++;
-                        }
-                    }
-                }
+                animatePage(position);
             }
 
             @Override
@@ -110,21 +54,93 @@ public class MainActivity extends ActionBarActivity {
                     View selectedView = ((DemoPagerAdapter) mSlidePager.getAdapter()).getCurrentView(mSlidePager.getCurrentItem());
 
                     List<View> children = (List<View>) selectedView.getTag();
-                    if (children != null) {
-                        for (final View child : children) {
-                            if (child instanceof DayProgressView) {
-                                final DayProgressView dayProgressView = (DayProgressView) child;
-                                dayProgressView.show(false, DayProgressView.STREAK.RIGHT_STREAK);
-                                dayProgressView.show(false, DayProgressView.STREAK.LEFT_STREAK);
-                            }
-                        }
-                    }
+                    animateSeries(children);
                 }
                 if (state == ViewPager.SCROLL_STATE_SETTLING) {
                     onPageSelected(mSlidePager.getCurrentItem());
                 }
             }
         });
+        animatePage(0);
+    }
+
+
+
+    @SuppressWarnings("unchecked")
+    private void animatePage(final int position) {
+        View selectedView = ((DemoPagerAdapter) mSlidePager.getAdapter()).getCurrentView(mSlidePager.getCurrentItem());
+        List<View> children = (List<View>) selectedView.getTag();
+        if (children != null) {
+            int i = 0;
+            for (final View child : children) {
+                if (child instanceof DayProgressView) {
+                    final DayProgressView dayProgressView = (DayProgressView) child;
+                    dayProgressView.getDayOfWeek().setText(days[i]);
+                    dayProgressView.getCircularBar().addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            if (position == mSlidePager.getCurrentItem() && dayProgressView.getCircularBar().getProgress() >= 99.95f) {
+                                switch (dayProgressView.getId()) {
+                                    case R.id.day_progress_3:
+                                        dayProgressView.show(true, DayProgressView.STREAK.RIGHT_STREAK);
+                                        break;
+                                    case R.id.day_progress_4:
+                                        dayProgressView.show(true, DayProgressView.STREAK.LEFT_STREAK);
+                                        dayProgressView.show(true, DayProgressView.STREAK.RIGHT_STREAK);
+                                        break;
+                                    case R.id.day_progress_5:
+                                        dayProgressView.show(true, DayProgressView.STREAK.LEFT_STREAK);
+                                        break;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+                        }
+                    });
+
+                    animateProgress(dayProgressView, i);
+
+
+                    i++;
+                }
+            }
+        }
+    }
+
+    private void animateProgress(DayProgressView view, int i) {
+        switch (view.getId()) {
+            case R.id.day_progress_3:
+            case R.id.day_progress_4:
+            case R.id.day_progress_5:
+                view.getCircularBar().animateProgress(0, 100, BAR_ANIMATION_TIME);
+                break;
+            default:
+                view.getCircularBar().animateProgress(0, (25 * i), BAR_ANIMATION_TIME);
+                view.getCircularBar().setCircleFillColor(getResources().getColor(android.R.color.transparent));
+                break;
+        }
+    }
+
+    private void animateSeries(List<View> children) {
+        if (children != null) {
+            for (final View child : children) {
+                if (child instanceof DayProgressView) {
+                    final DayProgressView dayProgressView = (DayProgressView) child;
+                    dayProgressView.show(false, DayProgressView.STREAK.RIGHT_STREAK);
+                    dayProgressView.show(false, DayProgressView.STREAK.LEFT_STREAK);
+                }
+            }
+        }
     }
 
     private View[] initDummyViews() {

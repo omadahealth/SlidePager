@@ -45,6 +45,10 @@ public abstract class SlideTransformer implements ViewPager.PageTransformer {
     @SuppressWarnings("unchecked")
     @Override
     public void transformPage(View view, float position) {
+        if(view == null){
+            return;
+        }
+
         if (view.getTag() == null) {
             initTags(view);
         }

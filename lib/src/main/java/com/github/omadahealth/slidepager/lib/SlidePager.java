@@ -7,14 +7,15 @@ import android.util.AttributeSet;
 /**
  * Created by oliviergoutay on 4/1/15.
  */
-public class SlidePager extends ViewPager {
+public class SlidePager extends ViewPager{
 
     public SlidePager(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public SlidePager(Context context, AttributeSet attrs) {
         super(context, attrs);
+
     }
 
     @Override
@@ -22,6 +23,16 @@ public class SlidePager extends ViewPager {
         if (!(transformer instanceof SlideTransformer)) {
             throw new IllegalArgumentException("Transformer should be a subclass of SlideTransformer");
         }
-        super.setPageTransformer(reverseDrawingOrder, transformer);
+
+        if(getAdapter() == null){
+            super.setPageTransformer(reverseDrawingOrder, transformer);
+            return;
+        }
+
+        if(getAdapter() instanceof SlidePagerAdapter){
+            transformer.transformPage(((SlidePagerAdapter) getAdapter()).getCurrentView(0), 0);
+            super.setPageTransformer(reverseDrawingOrder, transformer);
+        }
     }
+
 }
