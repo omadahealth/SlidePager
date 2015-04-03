@@ -33,9 +33,7 @@ public class MainActivity extends ActionBarActivity {
         mSlidePager = (SlidePager) findViewById(R.id.slidepager);
         View[] demoViews = initDummyViews();
         mSlidePager.setAdapter(new DemoPagerAdapter(demoViews));
-
         mSlidePager.setPageTransformer(false, new SlideTransformerImpl());
-
         mSlidePager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -76,7 +74,7 @@ public class MainActivity extends ActionBarActivity {
                 if (child instanceof DayProgressView) {
                     final DayProgressView dayProgressView = (DayProgressView) child;
                     dayProgressView.getDayOfWeek().setText(days[i]);
-                    dayProgressView.getCircularBar().addListener(new Animator.AnimatorListener() {
+                    dayProgressView.addAnimationListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
                         }
@@ -122,10 +120,10 @@ public class MainActivity extends ActionBarActivity {
             case R.id.day_progress_3:
             case R.id.day_progress_4:
             case R.id.day_progress_5:
-                view.getCircularBar().animateProgress(0, 100, BAR_ANIMATION_TIME);
+                view.animateProgress(0, 100, BAR_ANIMATION_TIME);
                 break;
             default:
-                view.getCircularBar().animateProgress(0, (25 * i), BAR_ANIMATION_TIME);
+                view.animateProgress(0, (25 * i), BAR_ANIMATION_TIME);
                 view.getCircularBar().setCircleFillColor(getResources().getColor(android.R.color.transparent));
                 break;
         }

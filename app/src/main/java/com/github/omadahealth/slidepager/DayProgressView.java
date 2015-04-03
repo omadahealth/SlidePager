@@ -66,6 +66,18 @@ public class DayProgressView extends RelativeLayout {
     }
 
     /**
+     * Animate the progress from start to end for the {@link CircularBar} and the rest of the views in
+     * this container
+     * @param start 0-100
+     * @param end 0-100
+     */
+    public void animateProgress(int start, int end, int duration){
+        mCircularBar.setClockwiseReachedArcColor(end == 100 ? getContext().getResources().getColor(R.color.reached_green_color) :
+                getContext().getResources().getColor(R.color.gray));
+        mCircularBar.animateProgress(start, end, duration);
+    }
+
+    /**
      * Show or hide the streaks between the view
      * @param show True if to show, false otherwise
      * @param side The side to animate and change visibility
@@ -116,11 +128,15 @@ public class DayProgressView extends RelativeLayout {
         set.start();
     }
 
-    public CircularBar getCircularBar() {
-        return mCircularBar;
+    public void addAnimationListener(Animator.AnimatorListener listener){
+        mCircularBar.addListener(listener);
     }
-    
+
     public TextView getDayOfWeek() {
         return mDayOfWeek;
+    }
+
+    public CircularBar getCircularBar() {
+        return mCircularBar;
     }
 }
