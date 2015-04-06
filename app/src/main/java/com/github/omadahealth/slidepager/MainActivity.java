@@ -23,7 +23,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         mSlidePager = (SlidePager) findViewById(R.id.slidepager);
         mSlidePager.setAdapter(new SlidePagerAdapter(this, getPreviousDate(4), new Date()));
         mSlidePager.setPageTransformer(false, new SlideTransformerImpl());
-        mSlidePager.setOnPageChangeListener(this);
+//        mSlidePager.setOnPageChangeListener(this);
 //        animatePage(0);
     }
 
@@ -34,7 +34,6 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     @Override
@@ -57,7 +56,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         Date now = new Date();
         cal.setTime(now);
 
-        cal.add(Calendar.WEEK_OF_MONTH, -1 * weeks);
+        cal.add(Calendar.DAY_OF_YEAR, -1 * 7 * weeks);
         return new Date(cal.getTimeInMillis());
     }
 }

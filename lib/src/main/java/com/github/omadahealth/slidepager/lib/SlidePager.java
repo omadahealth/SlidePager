@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by oliviergoutay on 4/1/15.
  */
-public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListener {
+public class SlidePager extends ViewPager{
     /**
      * A user defined {@link android.support.v4.view.ViewPager.OnPageChangeListener} that can
      * be added to {@link #setOnPageChangeListener(OnPageChangeListener)}. The default page listener
@@ -63,7 +63,43 @@ public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListe
     public SlidePager(Context context, AttributeSet attrs) {
         super(context, attrs);
         loadStyledAttributes(attrs, 0);
-        setSlidePager(this);
+        setSlidePager(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (mUserPageListener != null) {
+                    mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                animatePage(position);
+
+                if (mUserPageListener != null) {
+                    mUserPageListener.onPageSelected(position);
+                }
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+
+                    View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()));
+
+                    List<View> children = (List<View>) selectedView.getTag();
+                    animateSeries(children);
+                }
+                if (state == ViewPager.SCROLL_STATE_SETTLING) {
+                    onPageSelected(getCurrentItem());
+                }
+
+                if (mUserPageListener != null) {
+                    mUserPageListener.onPageScrollStateChanged(state);
+                }
+            }
+        });
 
     }
 
@@ -102,22 +138,6 @@ public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListe
         }
     }
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        if (mUserPageListener != null) {
-            mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
-        }
-    }
-
-    @Override
-    public void onPageSelected(final int position) {
-        animatePage(position);
-
-        if (mUserPageListener != null) {
-            mUserPageListener.onPageSelected(position);
-        }
-    }
-
     /**
      * Loads the styles and attributes defined in the xml tag of this class
      *
@@ -133,25 +153,6 @@ public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListe
             mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_color, res.getColor(R.color.green_color));
             mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_color, res.getColor(R.color.dark_gray));
             mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.green_color));
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void onPageScrollStateChanged(int state) {
-        if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-
-            View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()));
-
-            List<View> children = (List<View>) selectedView.getTag();
-            animateSeries(children);
-        }
-        if (state == ViewPager.SCROLL_STATE_SETTLING) {
-            onPageSelected(getCurrentItem());
-        }
-
-        if (mUserPageListener != null) {
-            mUserPageListener.onPageScrollStateChanged(state);
         }
     }
 

@@ -6,9 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Calendar;
+import com.github.omadahealth.slidepager.utils.Utilities;
+
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -51,6 +52,8 @@ public class SlidePagerAdapter extends PagerAdapter {
      * @param endDate   The end {@link Date} for computing the number of weeks
      */
     public SlidePagerAdapter(Context context, Date startDate, Date endDate) {
+//        this.mViews = initViews(startDate, endDate);
+        this.mViews = new ArrayList<>();
         this.mStartDate = startDate;
         this.mEndDate = endDate;
         this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -67,7 +70,7 @@ public class SlidePagerAdapter extends PagerAdapter {
         if (mViews.size() >= position) {
             currentView = mViews.get(position);
         } else {
-            currentView = mLayoutInflater.inflate(R.layout.view_day_progress, null);
+            currentView = mLayoutInflater.inflate(R.layout.view_day_progress, collection, true);
             mViews.add(currentView);
         }
         collection.addView(currentView);
@@ -97,32 +100,23 @@ public class SlidePagerAdapter extends PagerAdapter {
         return mViews.get(position);
     }
 
-    public static int getWeeksBetween(Date a, Date b) {
-
-        if (b.before(a)) {
-            return -getWeeksBetween(b, a);
+    /**
+     * Initializes an array the size of the number of weeks between the to parameters.
+     * Throws {@link IllegalArgumentException} if startDate is after endDate
+     * @param startDate The start date
+     * @param endDate The end date
+     * @return The number of weeks between the two dates
+     */
+    private List<View> initViews(Date startDate, Date endDate){
+        if(endDate.before(startDate)){
+            throw new IllegalArgumentException("Start date must be before end date");
         }
-        a = resetTime(a);
-        b = resetTime(b);
-
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(a);
-        int weeks = 0;
-        while (cal.getTime().before(b)) {
-            // add another week
-            cal.add(Calendar.WEEK_OF_YEAR, 1);
-            weeks++;
+        int weeks = Utilities.getWeeksBetween(startDate, endDate);
+        int size = weeks == 0 ? 1 : weeks;
+        List<View> views = new ArrayList<>(size);
+        for(int i = 0; i < size; i++){
+            views.add(mLayoutInflater.inflate(R.layout.view_week, null));
         }
-        return weeks;
-    }
-
-    public static Date resetTime (Date d) {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(d);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
+        return views;
     }
 }

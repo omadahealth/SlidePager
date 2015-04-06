@@ -13,6 +13,6 @@ public interface OnSlidePageChangeListener extends ViewPager.OnPageChangeListene
      * @param index The index for the day (0-7)
      * @return The progress value for the specified day
      */
-    public int getSlideProgress(int index);
+    int getSlideProgress(int index);
 
 }
