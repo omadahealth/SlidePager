@@ -72,7 +72,7 @@ public class DayProgressView extends RelativeLayout {
      * @param end 0-100
      */
     public void animateProgress(int start, int end, int duration){
-        mCircularBar.setClockwiseReachedArcColor(end == 100 ? getContext().getResources().getColor(R.color.reached_green_color) :
+        mCircularBar.setClockwiseReachedArcColor(end == 100 ? getContext().getResources().getColor(R.color.green_color) :
                 getContext().getResources().getColor(R.color.gray));
         mCircularBar.animateProgress(start, end, duration);
     }

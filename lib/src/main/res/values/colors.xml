@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="circle_fill">#dffee8</color>
     <color name="gray">#fa7d7d7d</color>
-    <color name="reached_green_color">#00C853</color>
+    <color name="dark_gray">#7e93a0</color>
+    <color name="green_color">#b7f7c9</color>
+    <color name="circle_fill_color">#b7f7c9</color>
+    <color name="blue_color">#00a8f7</color>
 
 </resources>

@@ -1,6 +1,8 @@
 package com.github.omadahealth.slidepager.lib;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -20,14 +22,39 @@ public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListe
      * be added to {@link #setOnPageChangeListener(OnPageChangeListener)}. The default page listener
      * is defined implemented by this class and set in {@link #setSlidePager(OnPageChangeListener)}
      */
-    private ViewPager.OnPageChangeListener mUserPageListener;
+    private OnSlidePageChangeListener mUserPageListener;
 
     private static final String[] days = {"S", "M", "T", "W", "T", "F", "S"};
 
     /**
-     * The animation time in milliseconds that we take to display the steps taken
+     * The default animation time
      */
-    private static final int BAR_ANIMATION_TIME = 1000;
+    private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 1000;
+
+    /**
+     * The animation time in milliseconds that we animate the progress
+     */
+    private int mProgressAnimationTime = DEFAULT_PROGRESS_ANIMATION_TIME;
+
+    /**
+     * The color that is set to fill the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} at the end of the animation if the progress is 100%
+     */
+    private int mFillColor;
+
+    /**
+     * The color that is set to draw the line of the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} at the end of the animation if the progress is 100%
+     */
+    private int mCompletedColor;
+
+    /**
+     * The color that is set to draw the line of the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} at the end of the animation if the progress is less than 100%
+     */
+    private int mNotCompletedColor;
+
+    /**
+     * The color that is set to draw the line of the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} if it represents today
+     */
+    private int mTodayColor;
 
     public SlidePager(Context context) {
         this(context, null);
@@ -35,6 +62,7 @@ public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListe
 
     public SlidePager(Context context, AttributeSet attrs) {
         super(context, attrs);
+        loadStyledAttributes(attrs, 0);
         setSlidePager(this);
 
     }
@@ -44,12 +72,17 @@ public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListe
         if (!(adapter instanceof SlidePagerAdapter)) {
             throw new IllegalArgumentException("PagerAdapter should be a subclass of SlidePagerAdapter");
         }
+
         super.setAdapter(adapter);
     }
 
     @Override
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
-        mUserPageListener = listener;
+        if (!(listener instanceof OnSlidePageChangeListener)) {
+            throw new IllegalArgumentException("OnPageChangeListener should be a subclass of OnSlidePageChangeListener");
+        }
+
+        mUserPageListener = (OnSlidePageChangeListener) listener;
     }
 
     @Override
@@ -71,11 +104,36 @@ public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListe
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (mUserPageListener != null) {
+            mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+        }
     }
 
     @Override
     public void onPageSelected(final int position) {
         animatePage(position);
+
+        if (mUserPageListener != null) {
+            mUserPageListener.onPageSelected(position);
+        }
+    }
+
+    /**
+     * Loads the styles and attributes defined in the xml tag of this class
+     *
+     * @param attrs        The attributes to read from
+     * @param defStyleAttr The styles to read from
+     */
+    public void loadStyledAttributes(AttributeSet attrs, int defStyleAttr) {
+        if (attrs != null) {
+            final TypedArray attributes = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
+                    defStyleAttr, 0);
+            Resources res = getContext().getResources();
+            mFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_fill_color, res.getColor(R.color.circle_fill_color));
+            mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_color, res.getColor(R.color.green_color));
+            mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_color, res.getColor(R.color.dark_gray));
+            mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.green_color));
+        }
     }
 
     @Override
@@ -90,6 +148,10 @@ public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListe
         }
         if (state == ViewPager.SCROLL_STATE_SETTLING) {
             onPageSelected(getCurrentItem());
+        }
+
+        if (mUserPageListener != null) {
+            mUserPageListener.onPageScrollStateChanged(state);
         }
     }
 
@@ -130,37 +192,40 @@ public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListe
                                         dayProgressView.show(true, DayProgressView.STREAK.RIGHT_STREAK);
                                     }
                                 }
-                            }
+
+                                //Set Color
+                                dayProgressView.getCircularBar().setCircleFillColor(mFillColor);
+                                dayProgressView.getCircularBar().setClockwiseReachedArcColor(mCompletedColor);
                         }
+                    }
 
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-                        }
+                    @Override
+                    public void onAnimationCancel (Animator animation){
+                    }
 
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
-                        }
-                    });
+                    @Override
+                    public void onAnimationRepeat (Animator animation){
+                    }
+                });
 
-                    animateProgress(dayProgressView, i);
+                animateProgress(dayProgressView, i);
 
-                    i++;
-                }
+                i++;
             }
         }
     }
 
-    private void animateProgress(DayProgressView view, int i) {
-        switch (view.getId()) {
-            case R.id.day_progress_3:
-            case R.id.day_progress_4:
-            case R.id.day_progress_5:
-                view.animateProgress(0, 100, BAR_ANIMATION_TIME);
-                break;
-            default:
-                view.animateProgress(0, (25 * i), BAR_ANIMATION_TIME);
-                view.getCircularBar().setCircleFillColor(getResources().getColor(android.R.color.transparent));
-                break;
+}
+
+    private void animateProgress(DayProgressView view, int index) {
+        if (mUserPageListener != null) {
+            int progress = mUserPageListener.getSlideProgress(index);
+
+            //Init colors
+            view.getCircularBar().setCircleFillColor(getResources().getColor(android.R.color.transparent));
+            view.getCircularBar().setClockwiseReachedArcColor(mNotCompletedColor);
+
+            view.animateProgress(0, progress, mProgressAnimationTime);
         }
     }
 
@@ -180,4 +245,14 @@ public class SlidePager extends ViewPager implements ViewPager.OnPageChangeListe
     private void setSlidePager(ViewPager.OnPageChangeListener listener) {
         super.setOnPageChangeListener(listener);
     }
+
+
+    public int getProgressAnimationTime() {
+        return mProgressAnimationTime;
+    }
+
+    public void setProgressAnimationTime(int duration) {
+        this.mProgressAnimationTime = duration;
+    }
+
 }
