@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="circle_fill">#dffee8</color>
+    <color name="gray">#fa7d7d7d</color>
+    <color name="reached_green_color">#00C853</color>
+
+</resources>

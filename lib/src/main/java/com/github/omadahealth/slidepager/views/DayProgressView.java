@@ -1,4 +1,4 @@
-package com.github.omadahealth.slidepager;
+package com.github.omadahealth.slidepager.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.OrangeGangsters.circularbarpager.library.CircularBar;
-import com.github.omadahealth.demo.R;
+import com.github.omadahealth.slidepager.lib.R;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -34,7 +34,7 @@ public class DayProgressView extends RelativeLayout {
 
     private static final int EASE_IN_DURATION = 500;
 
-    enum STREAK {
+    public enum STREAK {
         LEFT_STREAK,
         RIGHT_STREAK
     }

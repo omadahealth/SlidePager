@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.github.omadahealth.demo.R;
 import com.github.omadahealth.slidepager.lib.SlidePager;
+import com.github.omadahealth.slidepager.views.DayProgressView;
 import com.nineoldandroids.animation.Animator;
 
 import java.util.List;
@@ -145,10 +146,10 @@ public class MainActivity extends ActionBarActivity {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View[] views = new View[4];
-        views[0] = inflater.inflate(R.layout.page, null);
-        views[1] = inflater.inflate(R.layout.page, null);
-        views[2] = inflater.inflate(R.layout.page, null);
-        views[3] = inflater.inflate(R.layout.page, null);
+        views[0] = inflater.inflate(R.layout.view_week, null);
+        views[1] = inflater.inflate(R.layout.view_week, null);
+        views[2] = inflater.inflate(R.layout.view_week, null);
+        views[3] = inflater.inflate(R.layout.view_week, null);
         return views;
     }
 }
