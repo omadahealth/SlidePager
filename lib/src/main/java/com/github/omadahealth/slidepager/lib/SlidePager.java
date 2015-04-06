@@ -18,13 +18,16 @@ import java.util.List;
  */
 public class SlidePager extends ViewPager{
     /**
-     * A user defined {@link android.support.v4.view.ViewPager.OnPageChangeListener} that can
+     * A user defined {@link OnPageChangeListener} that can
      * be added to {@link #setOnPageChangeListener(OnPageChangeListener)}. The default page listener
      * is defined implemented by this class and set in {@link #setSlidePager(OnPageChangeListener)}
      */
     private OnSlidePageChangeListener mUserPageListener;
 
-    private static final String[] days = {"S", "M", "T", "W", "T", "F", "S"};
+    /**
+     * The days in a week
+     */
+    private static String[] mWeekDays;
 
     /**
      * The default animation time
@@ -56,6 +59,8 @@ public class SlidePager extends ViewPager{
      */
     private int mTodayColor;
 
+
+
     public SlidePager(Context context) {
         this(context, null);
     }
@@ -63,7 +68,7 @@ public class SlidePager extends ViewPager{
     public SlidePager(Context context, AttributeSet attrs) {
         super(context, attrs);
         loadStyledAttributes(attrs, 0);
-        setSlidePager(new ViewPager.OnPageChangeListener() {
+        setSlidePager(new OnPageChangeListener() {
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -113,7 +118,7 @@ public class SlidePager extends ViewPager{
     }
 
     @Override
-    public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
+    public void setOnPageChangeListener(OnPageChangeListener listener) {
         if (!(listener instanceof OnSlidePageChangeListener)) {
             throw new IllegalArgumentException("OnPageChangeListener should be a subclass of OnSlidePageChangeListener");
         }
@@ -149,6 +154,8 @@ public class SlidePager extends ViewPager{
             final TypedArray attributes = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
                     defStyleAttr, 0);
             Resources res = getContext().getResources();
+            mWeekDays = res.getStringArray(R.array.week_days);
+//            res.getStringArray(R.array.week_days);
             mFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_fill_color, res.getColor(R.color.circle_fill_color));
             mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_color, res.getColor(R.color.green_color));
             mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_color, res.getColor(R.color.dark_gray));
@@ -166,7 +173,7 @@ public class SlidePager extends ViewPager{
                 if (child instanceof DayProgressView) {
                     final int index = i;
                     final DayProgressView dayProgressView = (DayProgressView) child;
-                    dayProgressView.getDayOfWeek().setText(days[i]);
+                    dayProgressView.getDayOfWeek().setText(mWeekDays[i]);
                     dayProgressView.addAnimationListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
@@ -243,7 +250,7 @@ public class SlidePager extends ViewPager{
     }
 
 
-    private void setSlidePager(ViewPager.OnPageChangeListener listener) {
+    private void setSlidePager(OnPageChangeListener listener) {
         super.setOnPageChangeListener(listener);
     }
 
