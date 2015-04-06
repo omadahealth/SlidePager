@@ -22,14 +22,10 @@ import butterknife.ButterKnife;
  * Created by stoyan on 4/2/15.
  */
 public class DayProgressView extends RelativeLayout {
-//    @InjectView(R.id.day_progress_streak_left)
-    ImageView mLeftStreak;
-//    @InjectView(R.id.day_progress_streak_right)
-    ImageView mRightStreak;
-//    @InjectView(R.id.circularbar)
-    CircularBar mCircularBar;
-//    @InjectView(R.id.day_of_week)
-    TextView mDayOfWeek;
+    private ImageView mLeftStreak;
+    private ImageView mRightStreak;
+    private CircularBar mCircularBar;
+    private TextView mDayOfWeek;
 
     private static final int EASE_IN_DURATION = 500;
 
