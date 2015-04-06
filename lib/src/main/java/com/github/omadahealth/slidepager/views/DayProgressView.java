@@ -17,19 +17,18 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by stoyan on 4/2/15.
  */
 public class DayProgressView extends RelativeLayout {
-    @InjectView(R.id.day_progress_streak_left)
+//    @InjectView(R.id.day_progress_streak_left)
     ImageView mLeftStreak;
-    @InjectView(R.id.day_progress_streak_right)
+//    @InjectView(R.id.day_progress_streak_right)
     ImageView mRightStreak;
-    @InjectView(R.id.circularbar)
+//    @InjectView(R.id.circularbar)
     CircularBar mCircularBar;
-    @InjectView(R.id.day_of_week)
+//    @InjectView(R.id.day_of_week)
     TextView mDayOfWeek;
 
     private static final int EASE_IN_DURATION = 500;
@@ -62,6 +61,11 @@ public class DayProgressView extends RelativeLayout {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.view_day_progress, this);
             ButterKnife.inject(this, view);
+
+            mLeftStreak = ButterKnife.findById(this, R.id.day_progress_streak_left);
+            mRightStreak = ButterKnife.findById(this, R.id.day_progress_streak_right);
+            mCircularBar = ButterKnife.findById(this, R.id.circularbar);
+            mDayOfWeek = ButterKnife.findById(this, R.id.day_of_week);
         }
     }
 
