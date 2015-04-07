@@ -1,4 +1,4 @@
-package com.github.omadahealth.slidepager.utils;
+package com.github.omadahealth.slidepager.lib.utils;
 
 import java.util.Calendar;
 import java.util.Date;

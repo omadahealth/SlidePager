@@ -1,4 +1,4 @@
-package com.github.omadahealth.slidepager.views;
+package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

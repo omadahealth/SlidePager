@@ -1,6 +1,6 @@
 package com.github.omadahealth.slidepager;
 
-import com.github.omadahealth.slidepager.utils.Utilities;
+import com.github.omadahealth.slidepager.lib.utils.Utilities;
 
 import junit.framework.TestCase;
 
@@ -22,7 +22,7 @@ public class UtilitiesTest extends TestCase {
     }
 
     /**
-     * Tests {@link com.github.omadahealth.slidepager.utils.Utilities#getWeeksBetween(Date, Date)}
+     * Tests {@link Utilities#getWeeksBetween(Date, Date)}
      */
     public void testGetWeeksBetween(){
         //Check same day

@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.omadahealth.slidepager.utils.Utilities;
+import com.github.omadahealth.slidepager.lib.utils.Utilities;
+import com.github.omadahealth.slidepager.lib.views.DayProgressView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -21,14 +23,22 @@ public class SlidePagerAdapter extends PagerAdapter {
      * The start date of the {@link SlidePager}
      */
     private Date mStartDate;
+
     /**
      * The end date of the {@link SlidePager}
      */
     private Date mEndDate;
+
+    /**
+     * The context of the app
+     */
+    private Context mContext;
+
     /**
      * The {@link LayoutInflater} used in {@link #instantiateItem(ViewGroup, int)}
      */
     private LayoutInflater mLayoutInflater;
+
     /**
      * The list of {@link View} used to retain inflated views
      */
@@ -37,7 +47,8 @@ public class SlidePagerAdapter extends PagerAdapter {
     /**
      * Calls {@link #SlidePagerAdapter(Context, Date, Date)} with the end date being set
      * to today
-     * @param context The context
+     *
+     * @param context   The context
      * @param startDate The start {@link Date} for computing the number of weeks
      */
     public SlidePagerAdapter(Context context, Date startDate) {
@@ -47,16 +58,22 @@ public class SlidePagerAdapter extends PagerAdapter {
     /**
      * Public constructors to the {@link SlidePagerAdapter}
      *
-     * @param context The context
+     * @param context   The context
      * @param startDate The start {@link Date} for computing the number of weeks
      * @param endDate   The end {@link Date} for computing the number of weeks
      */
     public SlidePagerAdapter(Context context, Date startDate, Date endDate) {
-//        this.mViews = initViews(startDate, endDate);
-        this.mViews = new ArrayList<>();
+        this.mContext = context;
+        this.mViews = initViews(startDate, endDate);
         this.mStartDate = startDate;
         this.mEndDate = endDate;
         this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        for(int i = 0; i < 5; i++){
+//            View currentView = new DayProgressView(mContext);
+//            mViews.add(currentView);
+//        }
+        mViews = Arrays.asList(initDummyViews());
+
     }
 
     @Override
@@ -70,9 +87,12 @@ public class SlidePagerAdapter extends PagerAdapter {
         if (mViews.size() >= position) {
             currentView = mViews.get(position);
         } else {
-            currentView = mLayoutInflater.inflate(R.layout.view_day_progress, collection, true);
+            currentView = mLayoutInflater.inflate(R.layout.view_week, null);
             mViews.add(currentView);
         }
+//        collection.addView(currentView);
+//        View currentView = mLayoutInflater.inflate(R.layout.view_week, null);
+//        DayProgressView view = new DayProgressView(mContext);
         collection.addView(currentView);
         return currentView;
     }
@@ -103,20 +123,32 @@ public class SlidePagerAdapter extends PagerAdapter {
     /**
      * Initializes an array the size of the number of weeks between the to parameters.
      * Throws {@link IllegalArgumentException} if startDate is after endDate
+     *
      * @param startDate The start date
-     * @param endDate The end date
+     * @param endDate   The end date
      * @return The number of weeks between the two dates
      */
-    private List<View> initViews(Date startDate, Date endDate){
-        if(endDate.before(startDate)){
+    private List<View> initViews(Date startDate, Date endDate) {
+        if (endDate.before(startDate)) {
             throw new IllegalArgumentException("Start date must be before end date");
         }
         int weeks = Utilities.getWeeksBetween(startDate, endDate);
         int size = weeks == 0 ? 1 : weeks;
         List<View> views = new ArrayList<>(size);
-        for(int i = 0; i < size; i++){
-            views.add(mLayoutInflater.inflate(R.layout.view_week, null));
+        for (int i = 0; i < size; i++) {
+//            views.add(mLayoutInflater.inflate(R.layout.view_week, null));
+            views.add(new DayProgressView(mContext));
         }
+        return views;
+    }
+    private View[] initDummyViews() {
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View[] views = new View[4];
+        views[0] = inflater.inflate(R.layout.view_week, null);
+        views[1] = inflater.inflate(R.layout.view_week, null);
+        views[2] = inflater.inflate(R.layout.view_week, null);
+        views[3] = inflater.inflate(R.layout.view_week, null);
         return views;
     }
 }

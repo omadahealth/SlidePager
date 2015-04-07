@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.github.omadahealth.slidepager.views.DayProgressView;
+import com.github.omadahealth.slidepager.lib.views.DayProgressView;
 import com.nineoldandroids.animation.Animator;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by oliviergoutay on 4/1/15.
  */
-public class SlidePager extends ViewPager{
+public class SlidePager extends ViewPager {
     /**
      * A user defined {@link OnPageChangeListener} that can
      * be added to {@link #setOnPageChangeListener(OnPageChangeListener)}. The default page listener
@@ -58,7 +58,6 @@ public class SlidePager extends ViewPager{
      * The color that is set to draw the line of the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} if it represents today
      */
     private int mTodayColor;
-
 
 
     public SlidePager(Context context) {
@@ -204,26 +203,26 @@ public class SlidePager extends ViewPager{
                                 //Set Color
                                 dayProgressView.getCircularBar().setCircleFillColor(mFillColor);
                                 dayProgressView.getCircularBar().setClockwiseReachedArcColor(mCompletedColor);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onAnimationCancel (Animator animation){
-                    }
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                        }
 
-                    @Override
-                    public void onAnimationRepeat (Animator animation){
-                    }
-                });
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+                        }
+                    });
 
-                animateProgress(dayProgressView, i);
+                    animateProgress(dayProgressView, i);
 
-                i++;
+                    i++;
+                }
             }
         }
-    }
 
-}
+    }
 
     private void animateProgress(DayProgressView view, int index) {
         if (mUserPageListener != null) {
