@@ -43,7 +43,12 @@ public class SlidePager extends ViewPager {
     /**
      * The color that is set to fill the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} at the end of the animation if the progress is 100%
      */
-    private int mFillColor;
+    private int mCompletedFillColor;
+
+    /**
+     * The color that is set to fill the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} at the end of the animation if the progress is less than 100%
+     */
+    private int mNotCompletedFillColor;
 
     /**
      * The color that is set to draw the line of the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} at the end of the animation if the progress is 100%
@@ -156,7 +161,8 @@ public class SlidePager extends ViewPager {
             Resources res = getContext().getResources();
             mWeekDays = res.getStringArray(R.array.week_days);
 //            res.getStringArray(R.array.week_days);
-            mFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_fill_color, res.getColor(R.color.circle_fill_color));
+            mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.circle_completed_fill_color));
+            mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.circle_not_completed_fill_color));
             mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_color, res.getColor(R.color.green_color));
             mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_color, res.getColor(R.color.dark_gray));
             mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.green_color));
@@ -202,8 +208,11 @@ public class SlidePager extends ViewPager {
                                 }
 
                                 //Set Color
-                                dayProgressView.getCircularBar().setCircleFillColor(mFillColor);
+                                dayProgressView.getCircularBar().setCircleFillColor(mCompletedFillColor);
                                 dayProgressView.getCircularBar().setClockwiseReachedArcColor(mCompletedColor);
+                            }else{
+                                //Set Color
+                                dayProgressView.getCircularBar().setCircleFillColor(mNotCompletedFillColor);
                             }
                         }
 

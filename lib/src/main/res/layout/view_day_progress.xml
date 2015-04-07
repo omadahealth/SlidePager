@@ -13,7 +13,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/view_day_progress_dim"
             android:layout_weight="1"
-            android:src="@color/circle_fill_color"
+            android:src="@color/circle_completed_fill_color"
             android:alpha="0"
             android:visibility="invisible" />
 
@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/view_day_progress_dim"
             android:layout_weight="1"
-            android:src="@color/circle_fill_color"
+            android:src="@color/circle_completed_fill_color"
             android:alpha="0"
             android:visibility="invisible" />
     </LinearLayout>

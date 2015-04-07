@@ -2,8 +2,9 @@
 <resources>
     <color name="gray">#fa7d7d7d</color>
     <color name="dark_gray">#7e93a0</color>
-    <color name="green_color">#b7f7c9</color>
-    <color name="circle_fill_color">#b7f7c9</color>
+    <color name="green_color">#00e677</color>
+    <color name="circle_completed_fill_color">#e0fee9</color>
+    <color name="circle_not_completed_fill_color">#f2f6f7</color>
     <color name="blue_color">#00a8f7</color>
 
 </resources>
