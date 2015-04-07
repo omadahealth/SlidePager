@@ -2,11 +2,11 @@ package com.github.omadahealth.slidepager.lib;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
+import com.github.omadahealth.slidepager.lib.views.WeekSlideView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,10 +32,10 @@ public class SlidePagerAdapter extends PagerAdapter {
      */
     private Context mContext;
 
-    /**
-     * The {@link LayoutInflater} used in {@link #instantiateItem(ViewGroup, int)}
-     */
-    private LayoutInflater mLayoutInflater;
+//    /**
+//     * The {@link LayoutInflater} used in {@link #instantiateItem(ViewGroup, int)}
+//     */
+//    private LayoutInflater mLayoutInflater;
 
     /**
      * The list of {@link View} used to retain inflated views
@@ -64,7 +64,7 @@ public class SlidePagerAdapter extends PagerAdapter {
         this.mContext = context;
         this.mStartDate = startDate;
         this.mEndDate = endDate;
-        this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mViews = initViews(startDate, endDate);
     }
 
@@ -79,12 +79,10 @@ public class SlidePagerAdapter extends PagerAdapter {
         if (mViews.size() >= position) {
             currentView = mViews.get(position);
         } else {
-            currentView = mLayoutInflater.inflate(R.layout.view_week, null);
+//            currentView = mLayoutInflater.inflate(R.layout.view_week_slide, null);
+            currentView = new WeekSlideView(mContext);
             mViews.add(currentView);
         }
-//        collection.addView(currentView);
-//        View currentView = mLayoutInflater.inflate(R.layout.view_week, null);
-//        DayProgressView view = new DayProgressView(mContext);
         collection.addView(currentView);
         return currentView;
     }
@@ -128,7 +126,8 @@ public class SlidePagerAdapter extends PagerAdapter {
         int size = weeks == 0 ? 1 : weeks;
         List<View> views = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            views.add(mLayoutInflater.inflate(R.layout.view_week, null));
+//            views.add(mLayoutInflater.inflate(R.layout.view_week_slide, null));
+            views.add(new WeekSlideView(mContext));
         }
         return views;
     }

@@ -226,7 +226,7 @@ public class SlidePager extends ViewPager {
 
     private void animateProgress(DayProgressView view, int index) {
         if (mUserPageListener != null) {
-            int progress = mUserPageListener.getSlideProgress(index);
+            int progress = mUserPageListener.getDayProgress(index);
 
             //Init colors
             view.getCircularBar().setCircleFillColor(getResources().getColor(android.R.color.transparent));

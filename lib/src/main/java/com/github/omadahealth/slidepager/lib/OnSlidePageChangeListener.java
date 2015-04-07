@@ -13,6 +13,13 @@ public interface OnSlidePageChangeListener extends ViewPager.OnPageChangeListene
      * @param index The index for the day (0-7)
      * @return The progress value for the specified day
      */
-    int getSlideProgress(int index);
+    int getDayProgress(int index);
+
+    /**
+     * Called when one of the {@link com.github.omadahealth.slidepager.lib.views.DayProgressView} is
+     * clicked by the user
+     * @param index
+     */
+    void onDaySelected(int index);
 
 }
