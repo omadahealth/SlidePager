@@ -23,13 +23,13 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         mSlidePager = (SlidePager) findViewById(R.id.slidepager);
         mSlidePager.setAdapter(new SlidePagerAdapter(this, getPreviousDate(4), new Date()));
         mSlidePager.setPageTransformer(false, new SlideTransformerImpl());
-//        mSlidePager.setOnPageChangeListener(this);
-//        animatePage(0);
+        mSlidePager.setOnPageChangeListener(this);
+        mSlidePager.refreshPage();
     }
 
     @Override
     public int getSlideProgress(int index) {
-        return 100;
+        return index%3 *33;
     }
 
     @Override

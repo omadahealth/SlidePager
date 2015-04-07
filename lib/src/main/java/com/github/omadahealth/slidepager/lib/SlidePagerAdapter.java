@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
-import com.github.omadahealth.slidepager.lib.views.DayProgressView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -64,16 +62,10 @@ public class SlidePagerAdapter extends PagerAdapter {
      */
     public SlidePagerAdapter(Context context, Date startDate, Date endDate) {
         this.mContext = context;
-        this.mViews = initViews(startDate, endDate);
         this.mStartDate = startDate;
         this.mEndDate = endDate;
         this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        for(int i = 0; i < 5; i++){
-//            View currentView = new DayProgressView(mContext);
-//            mViews.add(currentView);
-//        }
-        mViews = Arrays.asList(initDummyViews());
-
+        this.mViews = initViews(startDate, endDate);
     }
 
     @Override
@@ -136,19 +128,8 @@ public class SlidePagerAdapter extends PagerAdapter {
         int size = weeks == 0 ? 1 : weeks;
         List<View> views = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-//            views.add(mLayoutInflater.inflate(R.layout.view_week, null));
-            views.add(new DayProgressView(mContext));
+            views.add(mLayoutInflater.inflate(R.layout.view_week, null));
         }
-        return views;
-    }
-    private View[] initDummyViews() {
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View[] views = new View[4];
-        views[0] = inflater.inflate(R.layout.view_week, null);
-        views[1] = inflater.inflate(R.layout.view_week, null);
-        views[2] = inflater.inflate(R.layout.view_week, null);
-        views[3] = inflater.inflate(R.layout.view_week, null);
         return views;
     }
 }

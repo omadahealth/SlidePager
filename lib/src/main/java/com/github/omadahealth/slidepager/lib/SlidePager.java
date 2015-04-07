@@ -248,6 +248,10 @@ public class SlidePager extends ViewPager {
         }
     }
 
+    public void refreshPage(){
+        animatePage(getCurrentItem());
+    }
+
 
     private void setSlidePager(OnPageChangeListener listener) {
         super.setOnPageChangeListener(listener);
