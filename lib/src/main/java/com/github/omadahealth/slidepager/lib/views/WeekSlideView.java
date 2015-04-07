@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.github.omadahealth.slidepager.lib.R;
+import com.github.omadahealth.slidepager.lib.interfaces.OnWeekListener;
 
 import butterknife.ButterKnife;
 
@@ -14,8 +15,15 @@ import butterknife.ButterKnife;
  * Created by stoyan on 4/7/15.
  */
 public class WeekSlideView extends LinearLayout {
-
+    /**
+     * An array that holds all the {@link DayProgressView} for this layout
+     */
     private DayProgressView[] mDays = new DayProgressView[7];
+
+    /**
+     * The callback listener for when views are clicked
+     */
+    private OnWeekListener mCallback;
 
     public WeekSlideView(Context context) {
         this(context, null);
@@ -64,10 +72,21 @@ public class WeekSlideView extends LinearLayout {
                 dayProgressView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int pos = Integer.parseInt((String) view.getTag());
+                        int index = Integer.parseInt((String) view.getTag());
+                        if(mCallback != null){
+                            mCallback.onDaySelected(index);
+                        }
                     }
                 });
             }
         }
+    }
+
+    /**
+     * Sets the listener for click events in this view
+     * @param listener
+     */
+    public void setListener(OnWeekListener listener) {
+        this.mCallback = listener;
     }
 }

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import com.github.omadahealth.demo.R;
-import com.github.omadahealth.slidepager.lib.OnSlidePageChangeListener;
+import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.SlidePager;
 import com.github.omadahealth.slidepager.lib.SlidePagerAdapter;
 

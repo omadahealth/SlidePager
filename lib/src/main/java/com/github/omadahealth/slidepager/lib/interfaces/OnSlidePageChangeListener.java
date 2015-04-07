@@ -1,6 +1,8 @@
-package com.github.omadahealth.slidepager.lib;
+package com.github.omadahealth.slidepager.lib.interfaces;
 
 import android.support.v4.view.ViewPager;
+
+import com.github.omadahealth.slidepager.lib.SlidePager;
 
 /**
  * Created by stoyan on 4/6/15.
