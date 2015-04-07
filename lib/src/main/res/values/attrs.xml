@@ -6,5 +6,6 @@
         <attr name="slide_progress_completed_color" format="color"/>
         <attr name="slide_progress_not_completed_color" format="color"/>
         <attr name="slide_progress_today_color" format="color"/>
+        <attr name="slide_progress_start_at_end" format="boolean"/>
     </declare-styleable>
 </resources>

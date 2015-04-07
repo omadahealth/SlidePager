@@ -65,6 +65,11 @@ public class SlidePager extends ViewPager {
      */
     private int mTodayColor;
 
+    /**
+     * True if we should start at the last position in the {@link SlidePagerAdapter}
+     */
+    private boolean mStartAtEnd;
+
 
     public SlidePager(Context context) {
         this(context, null);
@@ -120,6 +125,11 @@ public class SlidePager extends ViewPager {
         }
 
         super.setAdapter(adapter);
+
+        if(mStartAtEnd){
+            int position = adapter.getCount() - 1;
+            setCurrentItem(position >= 0 ? position : 0);
+        }
     }
 
     @Override
@@ -143,7 +153,7 @@ public class SlidePager extends ViewPager {
         }
 
         if (getAdapter() instanceof SlidePagerAdapter) {
-            transformer.transformPage(((SlidePagerAdapter) getAdapter()).getCurrentView(0), 0);
+            transformer.transformPage(((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()), 0);
             super.setPageTransformer(reverseDrawingOrder, transformer);
         }
     }
@@ -160,12 +170,12 @@ public class SlidePager extends ViewPager {
                     defStyleAttr, 0);
             Resources res = getContext().getResources();
             mWeekDays = res.getStringArray(R.array.week_days);
-//            res.getStringArray(R.array.week_days);
             mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.circle_completed_fill_color));
             mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.circle_not_completed_fill_color));
             mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_color, res.getColor(R.color.green_color));
             mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_color, res.getColor(R.color.dark_gray));
             mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.green_color));
+            mStartAtEnd = attributes.getBoolean(R.styleable.SlidePager_slide_progress_start_at_end, false);
         }
     }
 

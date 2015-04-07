@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener {
-
     private SlidePager mSlidePager;
 
     @Override
@@ -22,7 +21,8 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         setContentView(R.layout.activity_main);
 
         mSlidePager = (SlidePager) findViewById(R.id.slidepager);
-        mSlidePager.setAdapter(new SlidePagerAdapter(this, getPreviousDate(4), new Date()));
+        SlidePagerAdapter adapter = new SlidePagerAdapter(this, getPreviousDate(4), new Date());
+        mSlidePager.setAdapter(adapter);
         mSlidePager.setPageTransformer(false, new SlideTransformerImpl());
         mSlidePager.setOnPageChangeListener(this);
         mSlidePager.refreshPage();
