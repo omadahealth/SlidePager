@@ -1,6 +1,10 @@
 package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,7 @@ import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.OrangeGangsters.circularbarpager.library.CircularBar;
 import com.github.omadahealth.slidepager.lib.R;
+import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -22,12 +27,60 @@ import butterknife.ButterKnife;
  * Created by stoyan on 4/2/15.
  */
 public class DayProgressView extends RelativeLayout {
+    /**
+     * The left streak
+     */
     private ImageView mLeftStreak;
-    private ImageView mRightStreak;
-    private CircularBar mCircularBar;
-    private TextView mDayOfWeek;
 
+    /**
+     * The right streak
+     */
+    private ImageView mRightStreak;
+
+    /**
+     * The circular progress bar
+     */
+    private CircularBar mCircularBar;
+
+    /**
+     * The textview that shows today's day name
+     */
+    private TypefaceTextView mDayOfWeek;
+
+    /**
+     * The duration of the easing in of {@link #mLeftStreak} and {@link #mRightStreak}
+     */
     private static final int EASE_IN_DURATION = 500;
+
+    /**
+     * For save and restore instance of progressbar
+     */
+    private static final String INSTANCE_STATE = "saved_instance";
+
+    /**
+     * The default fill color for {@link #mCircularBar} when progress is 100
+     */
+    private int mCompletedFillColor;
+
+    /**
+     * The default fill color for {@link #mCircularBar} when progress is below 100
+     */
+    private int mNotCompletedFillColor;
+
+    /**
+     * The progress color for {@link #mCircularBar} when progress is 100
+     */
+    private int mCompletedColor;
+
+    /**
+     * The progress color for {@link #mCircularBar} when progress is below 100
+     */
+    private int mNotCompletedColor;
+
+    /**
+     * The progress color for {@link #mCircularBar} when it is today's date
+     */
+    private int mTodayColor;
 
     public enum STREAK {
         LEFT_STREAK,
@@ -46,6 +99,56 @@ public class DayProgressView extends RelativeLayout {
         super(context, attrs, defStyleAttr);
 
         init(context);
+        loadStyledAttributes(attrs, defStyleAttr);
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        final Bundle bundle = new Bundle();
+        bundle.putParcelable(INSTANCE_STATE, super.onSaveInstanceState());
+//        bundle.putBoolean(INSTANCE_START_LINE_ENABLED, isStartLineEnabled());
+//        bundle.putFloat(INSTANCE_CLOCKWISE_REACHED_BAR_HEIGHT, getClockwiseReachedArcWidth());
+//        bundle.putFloat(INSTANCE_CLOCKWISE_OUTLINE_BAR_HEIGHT, getClockwiseOutlineArcWidth());
+//        bundle.putInt(INSTANCE_CLOCKWISE_REACHED_BAR_COLOR, getClockwiseReachedArcColor());
+//        bundle.putInt(INSTANCE_CLOCKWISE_OUTLINE_BAR_COLOR, getClockwiseOutlineArcColor());
+//        bundle.putFloat(INSTANCE_COUNTER_CLOCKWISE_REACHED_BAR_HEIGHT, getCounterClockwiseReachedArcWidth());
+//        bundle.putFloat(INSTANCE_COUNTER_CLOCKWISE_OUTLINE_BAR_HEIGHT, getCounterClockwiseOutlineArcWidth());
+//        bundle.putInt(INSTANCE_COUNTER_CLOCKWISE_REACHED_BAR_COLOR, getCounterClockwiseReachedArcColor());
+//        bundle.putInt(INSTANCE_COUNTER_CLOCKWISE_OUTLINE_BAR_COLOR, getCounterClockwiseOutlineArcColor());
+//        bundle.putBoolean(INSTANCE_CIRCLE_FILL_ENABLED, isCircleFillEnabled());
+//        bundle.putInt(INSTANCE_CIRCLE_FILL_COLOR, getCircleFillColor());
+//        bundle.putInt(INSTANCE_MAX, getMax());
+//        bundle.putFloat(INSTANCE_PROGRESS, getProgress());
+//        bundle.putString(INSTANCE_SUFFIX, getSuffix());
+//        bundle.putString(INSTANCE_PREFIX, getPrefix());
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            final Bundle bundle = (Bundle) state;
+//            mStartLineEnabled = bundle.getBoolean(INSTANCE_START_LINE_ENABLED);
+//            mClockwiseReachedArcWidth = bundle.getFloat(INSTANCE_CLOCKWISE_REACHED_BAR_HEIGHT);
+//            mClockwiseOutlineArcWidth = bundle.getFloat(INSTANCE_CLOCKWISE_OUTLINE_BAR_HEIGHT);
+//            mClockwiseArcColor = bundle.getInt(INSTANCE_CLOCKWISE_REACHED_BAR_COLOR);
+//            mClockwiseOutlineArcColor = bundle.getInt(INSTANCE_CLOCKWISE_OUTLINE_BAR_COLOR);
+//            mCounterClockwiseReachedArcWidth = bundle.getFloat(INSTANCE_COUNTER_CLOCKWISE_REACHED_BAR_HEIGHT);
+//            mCounterClockwiseOutlineArcWidth = bundle.getFloat(INSTANCE_COUNTER_CLOCKWISE_OUTLINE_BAR_HEIGHT);
+//            mCounterClockwiseArcColor = bundle.getInt(INSTANCE_COUNTER_CLOCKWISE_REACHED_BAR_COLOR);
+//            mCounterClockwiseOutlineArcColor = bundle.getInt(INSTANCE_COUNTER_CLOCKWISE_OUTLINE_BAR_COLOR);
+//            mCircleFillEnabled = bundle.getBoolean(INSTANCE_CIRCLE_FILL_ENABLED);
+//            mCircleFillColor = bundle.getInt(INSTANCE_CIRCLE_FILL_COLOR);
+//            mCircleFillMode = bundle.getInt(INSTANCE_CIRCLE_FILL_MODE);
+//            initializePainters();
+//            setMax(bundle.getInt(INSTANCE_MAX));
+//            setProgress(bundle.getFloat(INSTANCE_PROGRESS));
+//            setPrefix(bundle.getString(INSTANCE_PREFIX));
+//            setSuffix(bundle.getString(INSTANCE_SUFFIX));
+            super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATE));
+            return;
+        }
+        super.onRestoreInstanceState(state);
     }
 
     /**
@@ -66,14 +169,33 @@ public class DayProgressView extends RelativeLayout {
     }
 
     /**
+     * Loads the styles and attributes defined in the xml tag of this class
+     *
+     * @param attrs        The attributes to read from
+     * @param defStyleAttr The styles to read from
+     */
+    public void loadStyledAttributes(AttributeSet attrs, int defStyleAttr) {
+        if (attrs != null) {
+            final TypedArray attributes = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.CircularViewPager,
+                    defStyleAttr, 0);
+            Resources res = getContext().getResources();
+            mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
+            mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.default_progress_not_completed_fill_color));
+            mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_color, res.getColor(R.color.default_progress_completed_color));
+            mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_color, res.getColor(R.color.default_progress_not_completed_color));
+            mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.default_progress_today_color));
+            attributes.recycle();
+        }
+    }
+
+    /**
      * Animate the progress from start to end for the {@link CircularBar} and the rest of the views in
      * this container
      * @param start 0-100
      * @param end 0-100
      */
     public void animateProgress(int start, int end, int duration){
-        mCircularBar.setClockwiseReachedArcColor(end == 100 ? getContext().getResources().getColor(R.color.green_color) :
-                getContext().getResources().getColor(R.color.gray));
+        mCircularBar.setClockwiseReachedArcColor(end == 100 ? mCompletedColor : mNotCompletedColor);
         mCircularBar.animateProgress(start, end, duration);
     }
 
