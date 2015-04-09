@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/stoyan/android_sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-c97adf93564ec28498b7af35481202f01ff1059c.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/5.1.1/b3652dfd65ca0bcf18790ff1a1f7624af4cb2bb8/butterknife-5.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b3652dfd65ca0bcf18790ff1a1f7624af4cb2bb8">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/butterknife-5.1.1-818903c944ccde22ebaaf67ef07d58ae3bd90cac.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-03cb7c64d1fd68c804cb2d3d5a55738cf6af192f.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-c2b4e280da1301428bc9be08b30c936e23ef39d7.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.github.omadahealth.typefaceview/typefaceview/1.0.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d5d7547cc721a3862fac56f172b3d1205fabd8c5">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-53771e70579400e463b6e855e2f225c47de5fff6.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/library-2.4.0-3ea1b002f35d0b7fd6074a40794bfa429032d5f7.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.github.orangegangsters/library/1.2.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b905b81dc20a719fd3ee3d99f9b4bfbbee272db5">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-70eb3f1b66e77bcf794bdbf21713fdd0558824f6.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/SlidePager/lib/unspecified/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="31cd62553c3c20442a95c24fef7366fd0d599908">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-6c0355c3bdac7859de7c9141946e486731606685.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.daimajia.easing/library/1.0.1/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d7e947f993bf32a00fcb3078cdda8bb11c930afb">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-1ee3f7a6854beb98af0dc6b9ba863854cd41b604.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-4688cc1a7d75ec4dd7a1249e3dad2235f9089bd5.jar" />
+    </item>
+
+</items>
