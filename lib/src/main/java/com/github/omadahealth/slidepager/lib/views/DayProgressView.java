@@ -245,13 +245,13 @@ public class DayProgressView extends RelativeLayout {
             public void onAnimationEnd(Animator animation) {
                 if (getCircularBar().getProgress() >= 99.95f) {
 
-                    if(mShowStreaks && mSiblings != null && mSiblings.size() > 0){
+                    if (mShowStreaks && mSiblings != null && mSiblings.size() > 0) {
                         //Previous exists
                         if (getIntTag() - 1 >= 0) {
                             View previousDay = mSiblings.get(index - 1);
-                            if(previousDay instanceof DayProgressView){
+                            if (previousDay instanceof DayProgressView) {
                                 //Previous is complete
-                                if (((DayProgressView)previousDay).getCircularBar().getProgress() >= 99.95f) {
+                                if (((DayProgressView) previousDay).getCircularBar().getProgress() >= 99.95f) {
                                     showStreak(true, DayProgressView.STREAK.LEFT_STREAK);
                                 }
                             }
@@ -261,9 +261,9 @@ public class DayProgressView extends RelativeLayout {
                         //Next exists
                         if (index + 1 < mSiblings.size()) {
                             View nextDay = mSiblings.get(index + 1);
-                            if(nextDay instanceof DayProgressView){
+                            if (nextDay instanceof DayProgressView) {
                                 //Next is complete
-                                if (((DayProgressView)nextDay).getCircularBar().getProgress() >= 99.95f) {
+                                if (((DayProgressView) nextDay).getCircularBar().getProgress() >= 99.95f) {
                                     showStreak(true, DayProgressView.STREAK.RIGHT_STREAK);
                                 }
                             }
@@ -311,6 +311,13 @@ public class DayProgressView extends RelativeLayout {
         mCircularBar.animateProgress(start, end, duration);
     }
 
+    public void reset(){
+        mShowStreaks = false;
+        mCircularBar.setClockwiseReachedArcColor(mNotCompletedColor);
+        mCircularBar.setCircleFillColor(mNotCompletedFillColor);
+        mCircularBar.setProgress(0);
+    }
+
     /**
      * Calls {@link #animateProgress(int, int, int, List)} with showing streaks set to false
      */
@@ -339,8 +346,13 @@ public class DayProgressView extends RelativeLayout {
             default:
                 return;
         }
-        float start = show ? 0 : 1f;
-        float end = show ? 1f : 0;
+        //Immediately remove them
+        if(!show){
+            sideView.setAlpha(0);
+            return;
+        }
+        float start = 0;
+        float end = 1f;
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, EASE_IN_DURATION, ObjectAnimator.ofFloat(sideView, "alpha", start, end)));
         set.setDuration(EASE_IN_DURATION);
         final View finalSideView = sideView;

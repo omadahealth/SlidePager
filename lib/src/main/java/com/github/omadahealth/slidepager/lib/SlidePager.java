@@ -36,7 +36,7 @@ import com.github.omadahealth.slidepager.lib.views.DayProgressView;
 import java.util.List;
 
 /**
- * Created by oliviergoutay on 4/1/15.
+ * Created by oliviergoutay and stoyand on 4/1/15.
  */
 public class SlidePager extends ViewPager {
     /**
@@ -132,6 +132,71 @@ public class SlidePager extends ViewPager {
         }
     }
 
+    /**
+     * Sets the {@link #setOnPageChangeListener(OnPageChangeListener)} for this class. If the user wants
+     * to link their own {@link android.support.v4.view.ViewPager.OnPageChangeListener} then they should
+     * use {@link #setOnPageChangeListener(OnPageChangeListener)}; where we set {@link #mUserPageListener}
+     */
+    private void setSlidePager() {
+        super.setOnPageChangeListener(new OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (mUserPageListener != null) {
+                    mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (mUserPageListener != null) {
+                    mUserPageListener.onPageSelected(position);
+                }
+                resetPage(getChildren(position));
+            }
+
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                //page scrolled with room: drag, settle, idle
+                //page scrolled when no room: drag, idle
+                switch (state) {
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                        animateSeries(getChildren(getCurrentItem()), false);
+
+                        break;
+                    case ViewPager.SCROLL_STATE_SETTLING:
+
+                        break;
+                    case ViewPager.SCROLL_STATE_IDLE://animate here onPageSelected not called when we hit a wall
+                        animatePage(getCurrentItem());
+                        break;
+                }
+
+                if (mUserPageListener != null) {
+                    mUserPageListener.onPageScrollStateChanged(state);
+                }
+            }
+        });
+    }
+
+    /**
+     * Resets the {@link DayProgressView} attributes to o progress and uncompleted colors.
+     * Hides the series with {@link #animateSeries(List, boolean)}
+     * @param children The list of views
+     */
+    private void resetPage(List<View> children) {
+        animateSeries(children, false);
+        if (children != null) {
+            for (final View child : children) {
+                if (child instanceof DayProgressView) {
+                    DayProgressView dayProgressView = (DayProgressView)child;
+                    dayProgressView.reset();
+                }
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private void animatePage(int position) {
         View selectedView = ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
@@ -177,52 +242,11 @@ public class SlidePager extends ViewPager {
         animatePage(getCurrentItem());
     }
 
-    /**
-     * Sets the {@link #setOnPageChangeListener(OnPageChangeListener)} for this class. If the user wants
-     * to link their own {@link android.support.v4.view.ViewPager.OnPageChangeListener} then they should
-     * use {@link #setOnPageChangeListener(OnPageChangeListener)}; where we set {@link #mUserPageListener}
-     */
-    private void setSlidePager() {
-        super.setOnPageChangeListener(new OnPageChangeListener() {
+    @SuppressWarnings("unchecked")
+    private List<View> getChildren(int position){
+        View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(position));
 
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (mUserPageListener != null) {
-                    mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (mUserPageListener != null) {
-                    mUserPageListener.onPageSelected(position);
-                }
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()));
-
-                List<View> children = (List<View>) selectedView.getTag();
-                //page scrolled with room: drag, settle, idle
-                //page scrolled when no room: drag, idle
-                switch (state){
-                    case ViewPager.SCROLL_STATE_DRAGGING:
-                        animateSeries(children, false);
-                        break;
-                    case ViewPager.SCROLL_STATE_SETTLING:
-                        break;
-                    case ViewPager.SCROLL_STATE_IDLE://animate here onPageSelected not called when we hit a wall
-                        animatePage(getCurrentItem());
-                        break;
-                }
-
-                if (mUserPageListener != null) {
-                    mUserPageListener.onPageScrollStateChanged(state);
-                }
-            }
-        });
+        return (List<View>) selectedView.getTag();
     }
 
     /**
