@@ -25,7 +25,7 @@ dependencies {
     //CircularBarPager
     compile 'com.github.orangegangsters:library:1.2.0@aar'
     //Typefaces
-    compile 'com.github.omadahealth.typefaceview:typefaceview:1.0.0@aar'
+    compile 'com.github.omadahealth.typefaceview:typefaceview:1.1.0@aar'
     //Animations and progress value easing
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.easing:library:1.0.1@aar'
