@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
@@ -21,12 +20,19 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
+import java.util.List;
+
 import butterknife.ButterKnife;
 
 /**
  * Created by stoyan on 4/2/15.
  */
 public class DayProgressView extends RelativeLayout {
+    /**
+     * The tag for logging
+     */
+    private static final String TAG = "DayProgressView";
+
     /**
      * The left streak
      */
@@ -82,6 +88,22 @@ public class DayProgressView extends RelativeLayout {
      */
     private int mTodayColor;
 
+    /**
+     * The days in a week
+     */
+    private static String[] mWeekDays;
+
+    /**
+     * The sibling {@link DayProgressView} of this class
+     */
+    private List<View> mSiblings;
+
+    /**
+     * Boolean that controls if the {@link #mLeftStreak} and  {@link #mRightStreak} showed
+     * be shown
+     */
+    private boolean mShowStreaks;
+
     public enum STREAK {
         LEFT_STREAK,
         RIGHT_STREAK
@@ -98,8 +120,9 @@ public class DayProgressView extends RelativeLayout {
     public DayProgressView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        init(context);
-        loadStyledAttributes(attrs, defStyleAttr);
+        injectViews(context);
+//        loadStyledAttributes(attrs, defStyleAttr);
+        initAnimations();
     }
 
     @Override
@@ -153,9 +176,10 @@ public class DayProgressView extends RelativeLayout {
 
     /**
      * Initiate the view and start butterknife injection
+     *
      * @param context
      */
-    private void init(Context context) {
+    private void injectViews(Context context) {
         if (!isInEditMode()) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.view_day_progress, this);
@@ -171,40 +195,112 @@ public class DayProgressView extends RelativeLayout {
     /**
      * Loads the styles and attributes defined in the xml tag of this class
      *
-     * @param attrs        The attributes to read from
-     * @param defStyleAttr The styles to read from
+     * @param attributes The attributes to read from, do not pass {@link AttributeSet} as inflation needs the context of the {@link android.support.v4.view.PagerAdapter}
      */
-    public void loadStyledAttributes(AttributeSet attrs, int defStyleAttr) {
-        if (attrs != null) {
-            final TypedArray attributes = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.CircularViewPager,
-                    defStyleAttr, 0);
+    public void loadStyledAttributes(TypedArray attributes) {
+        if (attributes != null) {
             Resources res = getContext().getResources();
+            mWeekDays = res.getStringArray(R.array.week_days);
+            mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_progress_show_streaks, true);
             mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
             mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.default_progress_not_completed_fill_color));
             mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_color, res.getColor(R.color.default_progress_completed_color));
             mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_color, res.getColor(R.color.default_progress_not_completed_color));
             mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.default_progress_today_color));
-            attributes.recycle();
+
+            setDayText();
+            //Do not recycle attributes, we need them for the future views
         }
+    }
+
+    private void initAnimations() {
+        final int index = getIntTag();
+        addAnimationListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (getCircularBar().getProgress() >= 99.95f) {
+
+                    if(mShowStreaks && mSiblings != null && mSiblings.size() > 0){
+                        //Previous exists
+                        if (getIntTag() - 1 >= 0) {
+                            //Previous is complete
+                            DayProgressView previousDay = (DayProgressView) mSiblings.get(index - 1);
+                            if (previousDay.getCircularBar().getProgress() >= 99.95f) {
+                                showStreak(true, DayProgressView.STREAK.LEFT_STREAK);
+                            }
+                        }
+
+                        //Next exists
+                        if (index + 1 < mSiblings.size()) {
+                            //Next is complete
+                            DayProgressView nextDay = (DayProgressView) mSiblings.get(index + 1);
+                            if (nextDay.getCircularBar().getProgress() >= 99.95f) {
+                                showStreak(true, DayProgressView.STREAK.RIGHT_STREAK);
+                            }
+                        }
+                    }
+
+                    //Set Color
+                    mCircularBar.setCircleFillColor(mCompletedFillColor);
+                    mCircularBar.setClockwiseReachedArcColor(mCompletedColor);
+                } else {
+                    //Set Color
+                    mCircularBar.setCircleFillColor(mNotCompletedFillColor);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+    }
+
+    /**
+     * Sets the text for the {@link #mDayOfWeek}
+     */
+    private void setDayText() {
+        getDayOfWeek().setText(mWeekDays[getIntTag()]);
     }
 
     /**
      * Animate the progress from start to end for the {@link CircularBar} and the rest of the views in
      * this container
+     *
      * @param start 0-100
-     * @param end 0-100
+     * @param end   0-100
+     * @param duration The duration in milliseconds of the animation
+     * @param siblings The sibling views we use to evaluate streaks showing
      */
-    public void animateProgress(int start, int end, int duration){
+    public void animateProgress(int start, int end, int duration, List<View> siblings) {
+        mSiblings = siblings;
+        mCircularBar.setClockwiseReachedArcColor(end == 100 ? mCompletedColor : mNotCompletedColor);
+        mCircularBar.animateProgress(start, end, duration);
+    }
+
+    /**
+     * Calls {@link #animateProgress(int, int, int, List)} with showing streaks set to false
+     */
+    public void animateProgress(int start, int end, int duration) {
+        mShowStreaks = false;
         mCircularBar.setClockwiseReachedArcColor(end == 100 ? mCompletedColor : mNotCompletedColor);
         mCircularBar.animateProgress(start, end, duration);
     }
 
     /**
      * Show or hide the streaks between the view
+     *
      * @param show True if to show, false otherwise
      * @param side The side to animate and change visibility
      */
-    public void show(final boolean show, STREAK side) {
+    public void showStreak(final boolean show, STREAK side) {
         AnimatorSet set = new AnimatorSet();
         View sideView = null;
         switch (side) {
@@ -250,15 +346,19 @@ public class DayProgressView extends RelativeLayout {
         set.start();
     }
 
-    public void addAnimationListener(Animator.AnimatorListener listener){
+    public void addAnimationListener(Animator.AnimatorListener listener) {
         mCircularBar.addListener(listener);
     }
 
-    public TextView getDayOfWeek() {
+    public TypefaceTextView getDayOfWeek() {
         return mDayOfWeek;
     }
 
     public CircularBar getCircularBar() {
         return mCircularBar;
+    }
+
+    public Integer getIntTag() {
+        return Integer.parseInt((String) getTag());
     }
 }

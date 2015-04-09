@@ -11,6 +11,7 @@
         <item name="android:layout_width">match_parent</item>
 
         <item name="slide_progress_start_at_end">true</item>
+        <item name="slide_progress_show_streaks">true</item>
     </style>
 
 </resources>

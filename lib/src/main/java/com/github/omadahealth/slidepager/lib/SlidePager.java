@@ -1,7 +1,6 @@
 package com.github.omadahealth.slidepager.lib;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -10,7 +9,6 @@ import android.view.View;
 
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.views.DayProgressView;
-import com.nineoldandroids.animation.Animator;
 
 import java.util.List;
 
@@ -21,14 +19,9 @@ public class SlidePager extends ViewPager {
     /**
      * A user defined {@link OnPageChangeListener} that can
      * be added to {@link #setOnPageChangeListener(OnPageChangeListener)}. The default page listener
-     * is defined implemented by this class and set in {@link #setSlidePager(OnPageChangeListener)}
+     * is defined implemented by this class and set in {@link #setSlidePager()}
      */
     private OnSlidePageChangeListener mUserPageListener;
-
-    /**
-     * The days in a week
-     */
-    private static String[] mWeekDays;
 
     /**
      * The default animation time
@@ -41,35 +34,21 @@ public class SlidePager extends ViewPager {
     private int mProgressAnimationTime = DEFAULT_PROGRESS_ANIMATION_TIME;
 
     /**
-     * The color that is set to fill the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} at the end of the animation if the progress is 100%
-     */
-    private int mCompletedFillColor;
-
-    /**
-     * The color that is set to fill the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} at the end of the animation if the progress is less than 100%
-     */
-    private int mNotCompletedFillColor;
-
-    /**
-     * The color that is set to draw the line of the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} at the end of the animation if the progress is 100%
-     */
-    private int mCompletedColor;
-
-    /**
-     * The color that is set to draw the line of the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} at the end of the animation if the progress is less than 100%
-     */
-    private int mNotCompletedColor;
-
-    /**
-     * The color that is set to draw the line of the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar} if it represents today
-     */
-    private int mTodayColor;
-
-    /**
      * True if we should start at the last position in the {@link SlidePagerAdapter}
      */
     private boolean mStartAtEnd;
 
+    /**
+     * The attributes that this view is initialized with; need them to init the
+     * child {@link DayProgressView}s
+     */
+    private TypedArray mAttributes;
+
+    /**
+     * The last position we animated. Used to prevent double animation when we hit a wall
+     * when scrolling through pages
+     */
+    private int mLastPositionAnimated;
 
     public SlidePager(Context context) {
         this(context, null);
@@ -78,43 +57,7 @@ public class SlidePager extends ViewPager {
     public SlidePager(Context context, AttributeSet attrs) {
         super(context, attrs);
         loadStyledAttributes(attrs, 0);
-        setSlidePager(new OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (mUserPageListener != null) {
-                    mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                animatePage(position);
-
-                if (mUserPageListener != null) {
-                    mUserPageListener.onPageSelected(position);
-                }
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-
-                    View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()));
-
-                    List<View> children = (List<View>) selectedView.getTag();
-                    animateSeries(children);
-                }
-                if (state == ViewPager.SCROLL_STATE_SETTLING) {
-                    onPageSelected(getCurrentItem());
-                }
-
-                if (mUserPageListener != null) {
-                    mUserPageListener.onPageScrollStateChanged(state);
-                }
-            }
-        });
+        setSlidePager();
 
     }
 
@@ -164,124 +107,119 @@ public class SlidePager extends ViewPager {
      * @param attrs        The attributes to read from
      * @param defStyleAttr The styles to read from
      */
-    public void loadStyledAttributes(AttributeSet attrs, int defStyleAttr) {
+    private void loadStyledAttributes(AttributeSet attrs, int defStyleAttr) {
         if (attrs != null) {
-            final TypedArray attributes = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
-                    defStyleAttr, 0);
-            Resources res = getContext().getResources();
-            mWeekDays = res.getStringArray(R.array.week_days);
-            mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.circle_completed_fill_color));
-            mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.circle_not_completed_fill_color));
-            mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_color, res.getColor(R.color.default_progress_completed_color));
-            mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_color, res.getColor(R.color.default_progress_not_completed_color));
-            mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.default_progress_today_color));
-            mStartAtEnd = attributes.getBoolean(R.styleable.SlidePager_slide_progress_start_at_end, false);
+           mAttributes = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
+                   defStyleAttr, 0);
+            mStartAtEnd = mAttributes.getBoolean(R.styleable.SlidePager_slide_progress_start_at_end, false);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void animatePage(final int position) {
-        View selectedView = ((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem());
+    private void animatePage(int position) {
+        View selectedView = ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
         final List<View> children = (List<View>) selectedView.getTag();
+
         if (children != null) {
-            int i = 0;
             for (final View child : children) {
                 if (child instanceof DayProgressView) {
-                    final int index = i;
-                    final DayProgressView dayProgressView = (DayProgressView) child;
-                    dayProgressView.getDayOfWeek().setText(mWeekDays[i]);
-                    dayProgressView.addAnimationListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            if (position == getCurrentItem() && dayProgressView.getCircularBar().getProgress() >= 99.95f) {
-
-                                //Previous exists
-                                if (index - 1 >= 0) {
-                                    //Previous is complete
-                                    DayProgressView previousDay = (DayProgressView) children.get(index - 1);
-                                    if (previousDay.getCircularBar().getProgress() >= 99.95f) {
-                                        dayProgressView.show(true, DayProgressView.STREAK.LEFT_STREAK);
-                                    }
-                                }
-
-                                //Next exists
-                                if (index + 1 < children.size()) {
-                                    //Next is complete
-                                    DayProgressView nextDay = (DayProgressView) children.get(index + 1);
-                                    if (nextDay.getCircularBar().getProgress() >= 99.95f) {
-                                        dayProgressView.show(true, DayProgressView.STREAK.RIGHT_STREAK);
-                                    }
-                                }
-
-                                //Set Color
-                                dayProgressView.getCircularBar().setCircleFillColor(mCompletedFillColor);
-                                dayProgressView.getCircularBar().setClockwiseReachedArcColor(mCompletedColor);
-                            }else{
-                                //Set Color
-                                dayProgressView.getCircularBar().setCircleFillColor(mNotCompletedFillColor);
-                            }
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
-                        }
-                    });
-
-                    animateProgress(dayProgressView, i);
-
-                    i++;
+                    ((DayProgressView) child).loadStyledAttributes(mAttributes);
+                    animateProgress((DayProgressView) child, children);
                 }
             }
         }
-
     }
 
-    private void animateProgress(DayProgressView view, int index) {
+    private void animateProgress(DayProgressView view, List<View> children) {
         if (mUserPageListener != null) {
-            int progress = mUserPageListener.getDayProgress(index);
-
-            //Init colors
-            view.getCircularBar().setCircleFillColor(getResources().getColor(android.R.color.transparent));
-            view.getCircularBar().setClockwiseReachedArcColor(mNotCompletedColor);
-
-            view.animateProgress(0, progress, mProgressAnimationTime);
+            int progress = mUserPageListener.getDayProgress(view.getIntTag());
+            view.animateProgress(0, progress, mProgressAnimationTime, children);
         }
     }
 
-    private void animateSeries(List<View> children) {
+    /**
+     *
+     * @param children
+     */
+    private void animateSeries(List<View> children, boolean show) {
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof DayProgressView) {
                     final DayProgressView dayProgressView = (DayProgressView) child;
-                    dayProgressView.show(false, DayProgressView.STREAK.RIGHT_STREAK);
-                    dayProgressView.show(false, DayProgressView.STREAK.LEFT_STREAK);
+                    dayProgressView.showStreak(show, DayProgressView.STREAK.RIGHT_STREAK);
+                    dayProgressView.showStreak(show, DayProgressView.STREAK.LEFT_STREAK);
                 }
             }
         }
     }
 
+    /**
+     * Refreshes the page animation
+     */
     public void refreshPage(){
         animatePage(getCurrentItem());
     }
 
+    /**
+     * Sets the {@link #setOnPageChangeListener(OnPageChangeListener)} for this class. If the user wants
+     * to link their own {@link android.support.v4.view.ViewPager.OnPageChangeListener} then they should
+     * use {@link #setOnPageChangeListener(OnPageChangeListener)}; where we set {@link #mUserPageListener}
+     */
+    private void setSlidePager() {
+        super.setOnPageChangeListener(new OnPageChangeListener() {
 
-    private void setSlidePager(OnPageChangeListener listener) {
-        super.setOnPageChangeListener(listener);
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (mUserPageListener != null) {
+                    mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (mUserPageListener != null) {
+                    mUserPageListener.onPageSelected(position);
+                }
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()));
+
+                List<View> children = (List<View>) selectedView.getTag();
+                //page scrolled with room: drag, settle, idle
+                //page scrolled when no room: drag, idle
+                switch (state){
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                        animateSeries(children, false);
+                        break;
+                    case ViewPager.SCROLL_STATE_SETTLING:
+                        break;
+                    case ViewPager.SCROLL_STATE_IDLE://animate here onPageSelected not called when we hit a wall
+                        animatePage(getCurrentItem());
+                        break;
+                }
+
+                if (mUserPageListener != null) {
+                    mUserPageListener.onPageScrollStateChanged(state);
+                }
+            }
+        });
     }
 
-
+    /**
+     * Gets the animation duration
+     * @return Time in milliseconds
+     */
     public int getProgressAnimationTime() {
         return mProgressAnimationTime;
     }
 
+    /**
+     * Sets the animation duration
+     * @param duration Time in milliseconds
+     */
     public void setProgressAnimationTime(int duration) {
         this.mProgressAnimationTime = duration;
     }

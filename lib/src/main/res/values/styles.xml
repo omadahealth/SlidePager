@@ -11,8 +11,8 @@
         <item name="progress_arc_clockwise_width">3dp</item>
         <item name="progress_arc_counter_clockwise_width">3dp</item>
         <item name="progress_start_line_enabled">false</item>
-        <item name="progress_pager_fill_circle_color">@color/default_progress_completed_fill_color</item>
-        <item name="progress_arc_clockwise_outline_color">@color/gray</item>
+        <item name="progress_pager_fill_circle_color">@color/default_progress_not_completed_fill_color</item>
+        <item name="progress_arc_clockwise_outline_color">@color/default_progress_not_completed_color</item>
     </style>
 
 </resources>
