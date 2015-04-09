@@ -30,18 +30,18 @@
         <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-c2b4e280da1301428bc9be08b30c936e23ef39d7.jar" />
     </item>
     <item
-        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.github.omadahealth.typefaceview/typefaceview/1.0.0/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="d5d7547cc721a3862fac56f172b3d1205fabd8c5">
-        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-53771e70579400e463b6e855e2f225c47de5fff6.jar" />
-    </item>
-    <item
         jar="/Users/stoyan/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
         <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/library-2.4.0-3ea1b002f35d0b7fd6074a40794bfa429032d5f7.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.github.omadahealth.typefaceview/typefaceview/1.1.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="cb7f91adfc44cc56d2582aea90b1861d592402c7">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-039498b961d1db1384e085ec249943d5b1b0a43c.jar" />
     </item>
     <item
         jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.github.orangegangsters/library/1.2.0/classes.jar"
@@ -54,7 +54,7 @@
         jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/SlidePager/lib/unspecified/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="31cd62553c3c20442a95c24fef7366fd0d599908">
+        sha1="fffa07afdc867ed5cce5e6518ba77672832377b6">
         <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-6c0355c3bdac7859de7c9141946e486731606685.jar" />
     </item>
     <item

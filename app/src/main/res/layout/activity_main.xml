@@ -9,7 +9,7 @@
 
 
   <com.github.omadahealth.slidepager.lib.SlidePager
-      android:id="@+id/slidepager"
+      android:id="@+id/slidepager1"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       style="@style/SlidePagerStyle"/>

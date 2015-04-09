@@ -248,19 +248,24 @@ public class DayProgressView extends RelativeLayout {
                     if(mShowStreaks && mSiblings != null && mSiblings.size() > 0){
                         //Previous exists
                         if (getIntTag() - 1 >= 0) {
-                            //Previous is complete
-                            DayProgressView previousDay = (DayProgressView) mSiblings.get(index - 1);
-                            if (previousDay.getCircularBar().getProgress() >= 99.95f) {
-                                showStreak(true, DayProgressView.STREAK.LEFT_STREAK);
+                            View previousDay = mSiblings.get(index - 1);
+                            if(previousDay instanceof DayProgressView){
+                                //Previous is complete
+                                if (((DayProgressView)previousDay).getCircularBar().getProgress() >= 99.95f) {
+                                    showStreak(true, DayProgressView.STREAK.LEFT_STREAK);
+                                }
                             }
+
                         }
 
                         //Next exists
                         if (index + 1 < mSiblings.size()) {
-                            //Next is complete
-                            DayProgressView nextDay = (DayProgressView) mSiblings.get(index + 1);
-                            if (nextDay.getCircularBar().getProgress() >= 99.95f) {
-                                showStreak(true, DayProgressView.STREAK.RIGHT_STREAK);
+                            View nextDay = mSiblings.get(index + 1);
+                            if(nextDay instanceof DayProgressView){
+                                //Next is complete
+                                if (((DayProgressView)nextDay).getCircularBar().getProgress() >= 99.95f) {
+                                    showStreak(true, DayProgressView.STREAK.RIGHT_STREAK);
+                                }
                             }
                         }
                     }

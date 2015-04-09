@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.interfaces.OnWeekListener;
+import com.github.omadahealth.typefaceview.TypefaceTextView;
 
 import butterknife.ButterKnife;
 
@@ -49,9 +50,14 @@ public class WeekSlideView extends LinearLayout {
     private OnWeekListener mCallback;
 
     /**
-     *
+     * The left textview
      */
-//    private TypefaceTextView mLeft
+    private TypefaceTextView mLeftTextView;
+
+    /**
+     * The right textview
+     */
+    private TypefaceTextView mRightTextView;
 
     public WeekSlideView(Context context) {
         this(context, null);

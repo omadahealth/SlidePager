@@ -12,17 +12,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="Week 7 of 16"
+            android:text="@string/left_textview_text"
             android:textSize="19sp"
             android:paddingTop="15dp"
             android:paddingLeft="15dp"
-            app:typeface="roboto_light"/>
+            app:typeface="roboto_light"
+            app:html="true"/>
         <com.github.omadahealth.typefaceview.TypefaceTextView
             android:id="@+id/right_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="March 30 - April 6"
+            android:text="@string/right_textview_text"
             android:textSize="19sp"
             android:paddingTop="15dp"
             android:paddingRight="15dp"

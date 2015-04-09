@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">SlidePager</string>
+    <string name="left_textview_text"><![CDATA[<html><b>Week 7 </b><i>of 16</i></html>]]></string>
+    <string name="right_textview_text">March 30 - April 6</string>
+
     <string-array name="week_days">
         <item>S</item>
         <item>M</item>

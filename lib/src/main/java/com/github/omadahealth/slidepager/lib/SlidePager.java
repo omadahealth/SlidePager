@@ -67,12 +67,6 @@ public class SlidePager extends ViewPager {
      */
     private TypedArray mAttributes;
 
-    /**
-     * The last position we animated. Used to prevent double animation when we hit a wall
-     * when scrolling through pages
-     */
-    private int mLastPositionAnimated;
-
     public SlidePager(Context context) {
         this(context, null);
     }
