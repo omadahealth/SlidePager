@@ -24,17 +24,21 @@
 package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.daimajia.easing.Glider;
+import com.daimajia.easing.Skill;
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.interfaces.OnWeekListener;
 import com.github.omadahealth.slidepager.lib.interfaces.PageChildInterface;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 import butterknife.ButterKnife;
 
@@ -67,6 +71,11 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
      */
     private boolean mShowRightText;
 
+    /**
+     * The current day sliding {@link android.widget.ImageView} we display
+     * below the currently selected {@link DayProgressView} from {@link #mDays}
+     */
+    private SelectedImageView mSelectedImageView;
 
     /**
      * The callback listener for when views are clicked
@@ -86,13 +95,11 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
     @Override
     public void loadStyledAttributes(TypedArray attributes) {
         if (attributes != null) {
-            Resources res = getContext().getResources();
             mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
 
             mLeftTextView.setVisibility(mShowLeftText ? VISIBLE : GONE);
             mRightTextView.setVisibility(mShowRightText ? VISIBLE : GONE);
-
         }
     }
 
@@ -126,6 +133,41 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
 
         mLeftTextView = ButterKnife.findById(this, R.id.left_textview);
         mRightTextView = ButterKnife.findById(this, R.id.right_textview);
+
+        mSelectedImageView = ButterKnife.findById(this, R.id.selected_day_image_view);
+        mSelectedImageView.setSelectedViewId(mDays[3].getId());
+
+    }
+
+    public void animateSelectedTranslation(View view){
+        AnimatorSet set = new AnimatorSet();
+        final Float offset =  -1 * this.getWidth() + view.getWidth()/2 + view.getX();
+        mSelectedImageView.setTag(R.id.selected_day_image_view, offset);
+        mSelectedImageView.setSelectedViewId(view.getId());
+        set.playTogether(Glider.glide(Skill.QuadEaseInOut, 1000, ObjectAnimator.ofFloat(mSelectedImageView, "x", mSelectedImageView.getX(), offset)));
+        set.setDuration(1000);
+        set.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        set.start();
     }
 
     /**
@@ -138,6 +180,7 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
                     @Override
                     public void onClick(View view) {
                         int index = Integer.parseInt((String) view.getTag());
+                        animateSelectedTranslation(view);
                         if(mCallback != null){
                             mCallback.onDaySelected(index);
                         }
@@ -153,5 +196,9 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
      */
     public void setListener(OnWeekListener listener) {
         this.mCallback = listener;
+    }
+
+    public SelectedImageView getSelectedImageView() {
+        return mSelectedImageView;
     }
 }

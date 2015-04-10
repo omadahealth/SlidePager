@@ -28,6 +28,8 @@ import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import com.github.omadahealth.slidepager.lib.views.SelectedImageView;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -86,8 +88,19 @@ public class SlideTransformer implements ViewPager.PageTransformer {
 
             if (getViewRatios() != null) {
                 for (View child : children) {
-                    float ratio = getViewRatios().containsKey(child.getId()) ? getViewRatios().get(child.getId()).getRatio(swipingRight) : DEFAULT_TRANSLATION_RATIO;
-                    child.setTranslationX(position * ((float) view.getWidth() / ratio));
+                    int id = child instanceof SelectedImageView ? ((SelectedImageView) child).getSelectedViewId() : child.getId();
+                    float ratio = getViewRatios().containsKey(child.getId()) ? getViewRatios().get(id).getRatio(swipingRight) : DEFAULT_TRANSLATION_RATIO;
+                    float translation = position * ((float) view.getWidth() / ratio);
+                    if(child instanceof SelectedImageView){
+                        Float offset = (Float)child.getTag(R.id.selected_day_image_view);
+//                        translation -= view.getWidth()/2;
+                        if(offset == null){
+//                            offset = (float) view.getWidth()/2;
+                            offset = 0f;
+                        }
+                        translation += offset;
+                    }
+                    child.setTranslationX(translation);
                 }
             }
         } else {
@@ -137,7 +150,7 @@ public class SlideTransformer implements ViewPager.PageTransformer {
         ratios.put(R.id.day_progress_6, new Ratio(1.5f, 3.5f));
         ratios.put(R.id.day_progress_7, new Ratio(1.0f, 4.0f));
 
-        ratios.put(R.id.current_day_image, ratios.get(R.id.day_progress_4));
+        ratios.put(R.id.selected_day_image_view, ratios.get(R.id.day_progress_4));
 
         return ratios;
     }

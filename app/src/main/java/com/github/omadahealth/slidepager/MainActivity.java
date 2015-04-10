@@ -60,7 +60,8 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
     @Override
     public int getDayProgress(int index) {
-        return index * 20 > 100 ? 100 : index * 20 ;
+//        return index * 20 > 100 ? 100 : index * 20 ;
+        return 20;
     }
 
     @Override

@@ -167,13 +167,17 @@ public class SlidePager extends ViewPager {
                 switch (state) {
                     case ViewPager.SCROLL_STATE_DRAGGING:
                         animateSeries(getChildren(getCurrentItem()), false);
-
+//                        View selectedView1 = ((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem());
+//                        ((WeekSlideView) selectedView1).getSelectedImageView().resetView();
                         break;
                     case ViewPager.SCROLL_STATE_SETTLING:
-
+//                        View selectedView = ((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem());
+//                        ((WeekSlideView) selectedView).getSelectedImageView().resetView();
                         break;
                     case ViewPager.SCROLL_STATE_IDLE://animate here onPageSelected not called when we hit a wall
                         animatePage(getCurrentItem());
+//                        View selectedView1 = ((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem());
+//                        ((WeekSlideView) selectedView1).getSelectedImageView().resetView();
                         break;
                 }
 
@@ -194,6 +198,7 @@ public class SlidePager extends ViewPager {
     private void resetPage(int position) {
         View selectedView = ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
         ((WeekSlideView) selectedView).loadStyledAttributes(mAttributes);
+        ((WeekSlideView) selectedView).getSelectedImageView().resetView();
         final List<View> children = (List<View>) selectedView.getTag();
         animateSeries(children, false);
         if (children != null) {

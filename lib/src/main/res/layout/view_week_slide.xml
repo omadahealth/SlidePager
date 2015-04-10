@@ -84,7 +84,7 @@
             android:tag="6" />
     </LinearLayout>
 
-    <ImageView android:id="@+id/current_day_image"
+    <com.github.omadahealth.slidepager.lib.views.SelectedImageView android:id="@+id/selected_day_image_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
