@@ -84,7 +84,7 @@
             android:tag="6" />
     </LinearLayout>
 
-    <ImageView
+    <ImageView android:id="@+id/current_day_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

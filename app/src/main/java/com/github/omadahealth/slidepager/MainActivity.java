@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import com.github.omadahealth.demo.R;
+import com.github.omadahealth.slidepager.lib.SlideTransformer;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.SlidePager;
 import com.github.omadahealth.slidepager.lib.SlidePagerAdapter;
@@ -46,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
         SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(4), new Date());
         mSlidePager.setAdapter(adapterOne);
-        mSlidePager.setPageTransformer(false, new SlideTransformerImpl());
+        mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);
         mSlidePager.refreshPage();
     }

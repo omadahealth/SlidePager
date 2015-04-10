@@ -188,7 +188,8 @@ public class SlidePager extends ViewPager {
      * Resets the {@link DayProgressView} attributes to o progress and uncompleted colors.
      * Hides the series with {@link #animateSeries(List, boolean)}
      *
-     * @param position The position of the page to reset     */
+     * @param position The position of the page to reset
+     */
     @SuppressWarnings("unchecked")
     private void resetPage(int position) {
         View selectedView = ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
