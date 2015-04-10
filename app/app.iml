@@ -91,6 +91,6 @@
     <orderEntry type="library" exported="" name="butterknife-5.1.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
-    <orderEntry type="module" module-name="lib" exported="" />
+    <orderEntry type="library" exported="" name="lib-unspecified" level="project" />
   </component>
 </module>

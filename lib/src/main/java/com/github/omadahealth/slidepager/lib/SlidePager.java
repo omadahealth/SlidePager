@@ -31,7 +31,9 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
+import com.github.omadahealth.slidepager.lib.interfaces.PageChildInterface;
 import com.github.omadahealth.slidepager.lib.views.DayProgressView;
+import com.github.omadahealth.slidepager.lib.views.WeekSlideView;
 
 import java.util.List;
 
@@ -86,7 +88,7 @@ public class SlidePager extends ViewPager {
 
         super.setAdapter(adapter);
 
-        if(mStartAtEnd){
+        if (mStartAtEnd) {
             int position = adapter.getCount() - 1;
             setCurrentItem(position >= 0 ? position : 0);
         }
@@ -126,8 +128,8 @@ public class SlidePager extends ViewPager {
      */
     private void loadStyledAttributes(AttributeSet attrs, int defStyleAttr) {
         if (attrs != null) {
-           mAttributes = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
-                   defStyleAttr, 0);
+            mAttributes = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
+                    defStyleAttr, 0);
             mStartAtEnd = mAttributes.getBoolean(R.styleable.SlidePager_slide_progress_start_at_end, false);
         }
     }
@@ -145,6 +147,7 @@ public class SlidePager extends ViewPager {
                 if (mUserPageListener != null) {
                     mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
+
             }
 
             @Override
@@ -152,7 +155,8 @@ public class SlidePager extends ViewPager {
                 if (mUserPageListener != null) {
                     mUserPageListener.onPageSelected(position);
                 }
-                resetPage(getChildren(position));
+                resetPage(position);
+
             }
 
 
@@ -183,14 +187,18 @@ public class SlidePager extends ViewPager {
     /**
      * Resets the {@link DayProgressView} attributes to o progress and uncompleted colors.
      * Hides the series with {@link #animateSeries(List, boolean)}
-     * @param children The list of views
-     */
-    private void resetPage(List<View> children) {
+     *
+     * @param position The position of the page to reset     */
+    @SuppressWarnings("unchecked")
+    private void resetPage(int position) {
+        View selectedView = ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
+        ((WeekSlideView) selectedView).loadStyledAttributes(mAttributes);
+        final List<View> children = (List<View>) selectedView.getTag();
         animateSeries(children, false);
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof DayProgressView) {
-                    DayProgressView dayProgressView = (DayProgressView)child;
+                    DayProgressView dayProgressView = (DayProgressView) child;
                     dayProgressView.reset();
                 }
             }
@@ -201,11 +209,10 @@ public class SlidePager extends ViewPager {
     private void animatePage(int position) {
         View selectedView = ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
         final List<View> children = (List<View>) selectedView.getTag();
-
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof DayProgressView) {
-                    ((DayProgressView) child).loadStyledAttributes(mAttributes);
+                    ((PageChildInterface) child).loadStyledAttributes(mAttributes);
                     animateProgress((DayProgressView) child, children);
                 }
             }
@@ -220,7 +227,6 @@ public class SlidePager extends ViewPager {
     }
 
     /**
-     *
      * @param children
      */
     private void animateSeries(List<View> children, boolean show) {
@@ -238,12 +244,12 @@ public class SlidePager extends ViewPager {
     /**
      * Refreshes the page animation
      */
-    public void refreshPage(){
+    public void refreshPage() {
         animatePage(getCurrentItem());
     }
 
     @SuppressWarnings("unchecked")
-    private List<View> getChildren(int position){
+    private List<View> getChildren(int position) {
         View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(position));
 
         return (List<View>) selectedView.getTag();
@@ -251,6 +257,7 @@ public class SlidePager extends ViewPager {
 
     /**
      * Gets the animation duration
+     *
      * @return Time in milliseconds
      */
     public int getProgressAnimationTime() {
@@ -259,6 +266,7 @@ public class SlidePager extends ViewPager {
 
     /**
      * Sets the animation duration
+     *
      * @param duration Time in milliseconds
      */
     public void setProgressAnimationTime(int duration) {

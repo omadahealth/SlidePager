@@ -12,6 +12,8 @@
 
         <item name="slide_progress_start_at_end">true</item>
         <item name="slide_progress_show_streaks">true</item>
+        <item name="slide_show_week">false</item>
+        <item name="slide_show_date">true</item>
     </style>
 
 </resources>

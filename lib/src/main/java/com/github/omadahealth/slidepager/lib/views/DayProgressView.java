@@ -38,6 +38,7 @@ import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.OrangeGangsters.circularbarpager.library.CircularBar;
 import com.github.omadahealth.slidepager.lib.R;
+import com.github.omadahealth.slidepager.lib.interfaces.PageChildInterface;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -50,7 +51,7 @@ import butterknife.ButterKnife;
 /**
  * Created by stoyan on 4/2/15.
  */
-public class DayProgressView extends RelativeLayout {
+public class DayProgressView extends RelativeLayout implements PageChildInterface {
     /**
      * The tag for logging
      */
@@ -218,6 +219,7 @@ public class DayProgressView extends RelativeLayout {
      *
      * @param attributes The attributes to read from, do not pass {@link AttributeSet} as inflation needs the context of the {@link android.support.v4.view.PagerAdapter}
      */
+    @Override
     public void loadStyledAttributes(TypedArray attributes) {
         if (attributes != null) {
             Resources res = getContext().getResources();
@@ -313,6 +315,7 @@ public class DayProgressView extends RelativeLayout {
 
     public void reset(){
         mShowStreaks = false;
+        setDayText();
         mCircularBar.setClockwiseReachedArcColor(mNotCompletedColor);
         mCircularBar.setCircleFillColor(mNotCompletedFillColor);
         mCircularBar.setProgress(0);

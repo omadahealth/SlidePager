@@ -24,6 +24,8 @@
 package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,7 @@ import android.widget.LinearLayout;
 
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.interfaces.OnWeekListener;
+import com.github.omadahealth.slidepager.lib.interfaces.PageChildInterface;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 
 import butterknife.ButterKnife;
@@ -38,16 +41,11 @@ import butterknife.ButterKnife;
 /**
  * Created by stoyan on 4/7/15.
  */
-public class WeekSlideView extends LinearLayout {
+public class WeekSlideView extends LinearLayout implements PageChildInterface {
     /**
      * An array that holds all the {@link DayProgressView} for this layout
      */
     private DayProgressView[] mDays = new DayProgressView[7];
-
-    /**
-     * The callback listener for when views are clicked
-     */
-    private OnWeekListener mCallback;
 
     /**
      * The left textview
@@ -59,6 +57,23 @@ public class WeekSlideView extends LinearLayout {
      */
     private TypefaceTextView mRightTextView;
 
+    /**
+     * True of we want to show {@link #mLeftTextView}
+     */
+    private boolean mShowLeftText;
+
+    /**
+     * True of we want to show {@link #mRightTextView}
+     */
+    private boolean mShowRightText;
+
+
+    /**
+     * The callback listener for when views are clicked
+     */
+    private OnWeekListener mCallback;
+
+
     public WeekSlideView(Context context) {
         this(context, null);
     }
@@ -66,6 +81,19 @@ public class WeekSlideView extends LinearLayout {
     public WeekSlideView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
+    }
+
+    @Override
+    public void loadStyledAttributes(TypedArray attributes) {
+        if (attributes != null) {
+            Resources res = getContext().getResources();
+            mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
+            mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
+
+            mLeftTextView.setVisibility(mShowLeftText ? VISIBLE : GONE);
+            mRightTextView.setVisibility(mShowRightText ? VISIBLE : GONE);
+
+        }
     }
 
     /**
@@ -95,6 +123,9 @@ public class WeekSlideView extends LinearLayout {
         mDays[4] = ButterKnife.findById(this, R.id.day_progress_5);
         mDays[5] = ButterKnife.findById(this, R.id.day_progress_6);
         mDays[6] = ButterKnife.findById(this, R.id.day_progress_7);
+
+        mLeftTextView = ButterKnife.findById(this, R.id.left_textview);
+        mRightTextView = ButterKnife.findById(this, R.id.right_textview);
     }
 
     /**

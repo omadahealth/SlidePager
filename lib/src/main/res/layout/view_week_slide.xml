@@ -84,5 +84,11 @@
             android:tag="6" />
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@mipmap/ic_current_day"/>
+
 
 </LinearLayout>
