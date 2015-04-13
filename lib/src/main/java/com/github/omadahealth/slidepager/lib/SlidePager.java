@@ -200,7 +200,7 @@ public class SlidePager extends ViewPager {
         ((WeekSlideView) selectedView).loadStyledAttributes(mAttributes);
         ((WeekSlideView) selectedView).getSelectedImageView().resetView();
         final List<View> children = (List<View>) selectedView.getTag();
-        animateSeries(children, false);
+//        animateSeries(children, true);
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof DayProgressView) {

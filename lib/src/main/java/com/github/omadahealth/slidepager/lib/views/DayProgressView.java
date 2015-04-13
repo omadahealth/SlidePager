@@ -44,6 +44,7 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -120,7 +121,7 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
     /**
      * The sibling {@link DayProgressView} of this class
      */
-    private List<View> mSiblings;
+    private List<DayProgressView> mSiblings;
 
     /**
      * Boolean that controls if the {@link #mLeftStreak} and  {@link #mRightStreak} showed
@@ -251,11 +252,9 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
                         //Previous exists
                         if (getIntTag() - 1 >= 0) {
                             View previousDay = mSiblings.get(index - 1);
-                            if (previousDay instanceof DayProgressView) {
-                                //Previous is complete
-                                if (((DayProgressView) previousDay).getCircularBar().getProgress() >= 99.95f) {
-                                    showStreak(true, DayProgressView.STREAK.LEFT_STREAK);
-                                }
+                            //Previous is complete
+                            if (((DayProgressView) previousDay).getCircularBar().getProgress() >= 99.95f) {
+                                showStreak(true, DayProgressView.STREAK.LEFT_STREAK);
                             }
 
                         }
@@ -263,11 +262,9 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
                         //Next exists
                         if (index + 1 < mSiblings.size()) {
                             View nextDay = mSiblings.get(index + 1);
-                            if (nextDay instanceof DayProgressView) {
-                                //Next is complete
-                                if (((DayProgressView) nextDay).getCircularBar().getProgress() >= 99.95f) {
-                                    showStreak(true, DayProgressView.STREAK.RIGHT_STREAK);
-                                }
+                            //Next is complete
+                            if (((DayProgressView) nextDay).getCircularBar().getProgress() >= 99.95f) {
+                                showStreak(true, DayProgressView.STREAK.RIGHT_STREAK);
                             }
                         }
                     }
@@ -308,7 +305,7 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
      * @param siblings The sibling views we use to evaluate streaks showing
      */
     public void animateProgress(int start, int end, int duration, List<View> siblings) {
-        mSiblings = siblings;
+        setSiblings(siblings);
         mCircularBar.setClockwiseReachedArcColor(end == 100 ? mCompletedColor : mNotCompletedColor);
         mCircularBar.animateProgress(start, end, duration);
     }
@@ -398,6 +395,19 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
 
     public CircularBar getCircularBar() {
         return mCircularBar;
+    }
+
+
+    public void setSiblings(List<View> children) {
+        List<DayProgressView> siblings = new ArrayList<>();
+        if(children != null){
+            for(View view : children){
+                if(view instanceof DayProgressView){
+                    siblings.add((DayProgressView)view);
+                }
+            }
+            mSiblings = siblings;
+        }
     }
 
     public Integer getIntTag() {
