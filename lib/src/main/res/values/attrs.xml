@@ -6,6 +6,7 @@
         <attr name="slide_progress_completed_color" format="color"/>
         <attr name="slide_progress_not_completed_color" format="color"/>
         <attr name="slide_progress_today_color" format="color"/>
+        <attr name="slide_progress_today_fill_color" format="color"/>
         <attr name="slide_progress_start_at_end" format="boolean"/>
         <attr name="slide_progress_show_streaks" format="boolean"/>
         <attr name="slide_show_week" format="boolean"/>

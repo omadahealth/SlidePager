@@ -69,6 +69,11 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
     private ImageView mRightStreak;
 
     /**
+     * The completed check mark that goes inside {@link #mCircularBar}
+     */
+    private ImageView mCheckMark;
+
+    /**
      * The circular progress bar
      */
     private CircularBar mCircularBar;
@@ -112,6 +117,11 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
      * The progress color for {@link #mCircularBar} when it is today's date
      */
     private int mTodayColor;
+
+    /**
+     * The progress fill color for today's date
+     */
+    private int mTodayFillColor;
 
     /**
      * The days in a week
@@ -211,6 +221,7 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
 
         mLeftStreak = ButterKnife.findById(this, R.id.day_progress_streak_left);
         mRightStreak = ButterKnife.findById(this, R.id.day_progress_streak_right);
+        mCheckMark = ButterKnife.findById(this, R.id.check_mark);
         mCircularBar = ButterKnife.findById(this, R.id.circularbar);
         mDayOfWeek = ButterKnife.findById(this, R.id.day_of_week);
     }
@@ -230,9 +241,12 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
             mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.default_progress_not_completed_fill_color));
             mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_color, res.getColor(R.color.default_progress_completed_color));
             mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_color, res.getColor(R.color.default_progress_not_completed_color));
-            mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.default_progress_today_color));
+//            mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.default_progress_today_color));
+//            mTodayFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_fill_color, res.getColor(R.color.default_progress_today_fill_color));
 
             setDayText();
+            mCircularBar.setCircleFillColor(mNotCompletedFillColor);
+            mCircularBar.setClockwiseReachedArcColor(mNotCompletedColor);
             //Do not recycle attributes, we need them for the future views
         }
     }
@@ -251,6 +265,7 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (getCircularBar().getProgress() >= 99.95f) {
+                    showCheckMark(true);
 
                     if (mShowStreaks && mSiblings != null && mSiblings.size() > 0) {
                         //Previous exists
@@ -321,6 +336,13 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
         mCircularBar.setCircleFillColor(mNotCompletedFillColor);
         mCircularBar.setProgress(0);
 
+//        if(getIntTag() == 4){
+//            mCircularBar.setClockwiseReachedArcColor(mTodayColor);
+//            mCircularBar.setClockwiseReachedArcColor(mTodayColor);
+//            mCircularBar.setCircleFillColor(mTodayFillColor);
+//            mDayOfWeek.setTextColor(mTodayColor);
+//        }
+
     }
 
     /**
@@ -331,6 +353,22 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
         mCircularBar.setClockwiseReachedArcColor(end == 100 ? mCompletedColor : mNotCompletedColor);
         mCircularBar.animateProgress(start, end, duration);
     }
+
+
+    private void showCheckMark(boolean show) {
+        AnimatorSet set = new AnimatorSet();
+        //Immediately remove them
+        if(!show){
+            mCheckMark.setAlpha(0f);
+            return;
+        }
+        float start = 0;
+        float end = 1f;
+        set.playTogether(Glider.glide(Skill.QuadEaseInOut, EASE_IN_DURATION, ObjectAnimator.ofFloat(mCheckMark, "alpha", start, end)));
+        set.setDuration(EASE_IN_DURATION);
+        set.start();
+    }
+
 
     /**
      * Show or hide the streaks between the view
@@ -353,7 +391,7 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
         }
         //Immediately remove them
         if(!show){
-            sideView.setAlpha(0);
+            sideView.setAlpha(0f);
             return;
         }
         float start = 0;

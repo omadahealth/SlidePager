@@ -39,7 +39,7 @@
         android:layout_width="@dimen/view_day_progress_dim"
         android:layout_height="@dimen/view_day_progress_check"
         android:scaleType="centerInside"
-        android:visibility="visible"
+        android:alpha="0"
         android:layout_centerInParent="true"
         android:src="@mipmap/ic_check_black_24dp"/>
     

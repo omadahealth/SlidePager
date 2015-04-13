@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.omadahealth.slidepager.lib.R;
+import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnWeekListener;
 import com.github.omadahealth.slidepager.lib.interfaces.PageChildInterface;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
@@ -89,6 +90,16 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
      * The callback listener for when views are clicked
      */
     private OnWeekListener mCallback;
+
+    /**
+     * The default animation time
+     */
+    private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 1000;
+
+    /**
+     * The animation time in milliseconds that we animate the progress
+     */
+    private int mProgressAnimationTime = DEFAULT_PROGRESS_ANIMATION_TIME;
 
 
     public WeekSlideView(Context context) {
@@ -149,11 +160,12 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
 
     /**
      * Animates the translation of the {@link #mSelectedImageView}
+     *
      * @param view The view to use to set the animation position
      */
-    public void animateSelectedTranslation(View view){
+    public void animateSelectedTranslation(View view) {
         AnimatorSet set = new AnimatorSet();
-        final Float offset =  -1 * this.getWidth() + view.getWidth()/2 + view.getX();
+        final Float offset = -1 * this.getWidth() + view.getWidth() / 2 + view.getX();
         mSelectedImageView.setTag(R.id.selected_day_image_view, offset);
         mSelectedImageView.setSelectedViewId(view.getId());
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, 1000, ObjectAnimator.ofFloat(mSelectedImageView, "x", mSelectedImageView.getX(), offset)));
@@ -202,8 +214,59 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
+        final List<View> children = (List<View>) getTag();
+        if (children != null) {
+            for (final View child : children) {
+                if (child instanceof DayProgressView) {
+                    ((PageChildInterface) child).loadStyledAttributes(attributes);
+                    animateProgress((DayProgressView) child, children, listener);
+                }
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void animateSeries(boolean show) {
+        final List<View> children = (List<View>) getTag();
+        if (children != null) {
+            for (final View child : children) {
+                if (child instanceof DayProgressView) {
+                    final DayProgressView dayProgressView = (DayProgressView) child;
+                    dayProgressView.showStreak(show, DayProgressView.STREAK.RIGHT_STREAK);
+                    dayProgressView.showStreak(show, DayProgressView.STREAK.LEFT_STREAK);
+                }
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void resetPage(TypedArray mAttributes) {
+        loadStyledAttributes(mAttributes);
+        animateSeries(false);
+        getSelectedImageView().resetView();
+        final List<View> children = (List<View>) getTag();
+        if (children != null) {
+            for (final View child : children) {
+                if (child instanceof DayProgressView) {
+                    DayProgressView dayProgressView = (DayProgressView) child;
+                    dayProgressView.reset();
+                }
+            }
+        }
+    }
+
+    private void animateProgress(DayProgressView view, List<View> children, OnSlidePageChangeListener listener) {
+        if (listener != null) {
+            int progress = listener.getDayProgress(view.getIntTag());
+            view.animateProgress(0, progress, mProgressAnimationTime, children);
+        }
+    }
+
     /**
      * Sets the listener for click events in this view
+     *
      * @param listener
      */
     public void setListener(OnWeekListener listener) {

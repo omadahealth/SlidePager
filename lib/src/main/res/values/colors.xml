@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="default_progress_completed_fill_color">#e0fee8</color>
-    <color name="default_progress_not_completed_fill_color">#f2f6f7</color>
+    <color name="default_progress_not_completed_fill_color">#ffdee1e2</color>
     <color name="default_progress_completed_color">#00e460</color>
     <color name="default_progress_not_completed_color">#698693</color>
-    <color name="default_progress_today_color">#05a9f4</color>
+    <color name="default_progress_today_color">#00a3f4</color>
+    <color name="default_progress_today_fill_color">#ffbadefd</color>
 </resources>
