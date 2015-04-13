@@ -43,6 +43,11 @@ import java.util.Map;
  */
 public class SlideTransformer implements ViewPager.PageTransformer {
     /**
+     * The tag for logging
+     */
+    private static final String TAG = "SlideTransformer";
+
+    /**
      * The default ratio to apply translations with.
      */
     public static final Float DEFAULT_TRANSLATION_RATIO = 1.0f;
@@ -70,7 +75,7 @@ public class SlideTransformer implements ViewPager.PageTransformer {
     @SuppressWarnings("unchecked")
     @Override
     public void transformPage(View view, float position) {
-        if(view == null){
+        if (view == null) {
             return;
         }
 
@@ -91,10 +96,10 @@ public class SlideTransformer implements ViewPager.PageTransformer {
                     int id = child instanceof SelectedImageView ? ((SelectedImageView) child).getSelectedViewId() : child.getId();
                     float ratio = getViewRatios().containsKey(child.getId()) ? getViewRatios().get(id).getRatio(swipingRight) : DEFAULT_TRANSLATION_RATIO;
                     float translation = position * ((float) view.getWidth() / ratio);
-                    if(child instanceof SelectedImageView){
-                        Float offset = (Float)child.getTag(R.id.selected_day_image_view);
+                    if (child instanceof SelectedImageView) {
+                        Float offset = (Float) child.getTag(R.id.selected_day_image_view);
 //                        translation -= view.getWidth()/2;
-                        if(offset == null){
+                        if (offset == null) {
 //                            offset = (float) view.getWidth()/2;
                             offset = 0f;
                         }
@@ -116,7 +121,6 @@ public class SlideTransformer implements ViewPager.PageTransformer {
      */
     protected void initTags(View view) {
         List<View> subViews = new ArrayList<>();
-
         if (getViewRatios() != null) {
             for (Map.Entry<Integer, Ratio> entry : getViewRatios().entrySet()) {
                 View subView = view.findViewById(entry.getKey());
@@ -137,7 +141,7 @@ public class SlideTransformer implements ViewPager.PageTransformer {
      *
      * @return The map of the view-id/translation-ratio
      */
-    public LinkedHashMap<Integer, Ratio> getViewRatios(){
+    public LinkedHashMap<Integer, Ratio> getViewRatios() {
         LinkedHashMap<Integer, Ratio> ratios = new LinkedHashMap<>();
         ratios.put(R.id.left_textview, new Ratio(4.0f, 1.0f));
         ratios.put(R.id.right_textview, new Ratio(1.0f, 4.0f));
@@ -168,10 +172,13 @@ public class SlideTransformer implements ViewPager.PageTransformer {
         view.setTranslationX(view.getWidth() * -position);
         if (position <= -1.0F || position >= 1.0F) {
             view.setAlpha(0.0F);
+            view.setVisibility(View.GONE);
         } else if (position == 0.0F) {
             view.setAlpha(1.0F);
+            view.setVisibility(View.VISIBLE);
         } else {
             view.setAlpha(1.0F - (Math.abs(position) * 2));
+            view.setVisibility(View.VISIBLE);
         }
     }
 

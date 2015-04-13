@@ -319,6 +319,7 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
         mCircularBar.setClockwiseReachedArcColor(mNotCompletedColor);
         mCircularBar.setCircleFillColor(mNotCompletedFillColor);
         mCircularBar.setProgress(0);
+
     }
 
     /**
@@ -402,4 +403,5 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
     public Integer getIntTag() {
         return Integer.parseInt((String) getTag());
     }
+
 }

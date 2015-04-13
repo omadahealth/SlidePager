@@ -40,6 +40,9 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 
 /**
@@ -47,9 +50,14 @@ import butterknife.ButterKnife;
  */
 public class WeekSlideView extends LinearLayout implements PageChildInterface {
     /**
+     * The tag for logging
+     */
+    private static final String TAG = "WeekSlideView";
+
+    /**
      * An array that holds all the {@link DayProgressView} for this layout
      */
-    private DayProgressView[] mDays = new DayProgressView[7];
+    private List<DayProgressView> mDays = new ArrayList<>(7);
 
     /**
      * The left textview
@@ -123,19 +131,19 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
      * Inject the views into {@link #mDays}
      */
     private void injectDays() {
-        mDays[0] = ButterKnife.findById(this, R.id.day_progress_1);
-        mDays[1] = ButterKnife.findById(this, R.id.day_progress_2);
-        mDays[2] = ButterKnife.findById(this, R.id.day_progress_3);
-        mDays[3] = ButterKnife.findById(this, R.id.day_progress_4);
-        mDays[4] = ButterKnife.findById(this, R.id.day_progress_5);
-        mDays[5] = ButterKnife.findById(this, R.id.day_progress_6);
-        mDays[6] = ButterKnife.findById(this, R.id.day_progress_7);
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_1));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_2));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_3));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_4));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_5));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_6));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_7));
 
         mLeftTextView = ButterKnife.findById(this, R.id.left_textview);
         mRightTextView = ButterKnife.findById(this, R.id.right_textview);
 
         mSelectedImageView = ButterKnife.findById(this, R.id.selected_day_image_view);
-        mSelectedImageView.setSelectedViewId(mDays[3].getId());
+        mSelectedImageView.setSelectedViewId(mDays.get(3).getId());
 
     }
 
@@ -174,14 +182,14 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
      * Set up listeners for all the views in {@link #mDays}
      */
     private void setListeners() {
-        for (DayProgressView dayProgressView : mDays) {
+        for (final DayProgressView dayProgressView : mDays) {
             if (dayProgressView != null) {
                 dayProgressView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int index = Integer.parseInt((String) view.getTag());
+                        int index = dayProgressView.getIntTag();
                         animateSelectedTranslation(view);
-                        if(mCallback != null){
+                        if (mCallback != null) {
                             mCallback.onDaySelected(index);
                         }
                     }

@@ -25,6 +25,7 @@ package com.github.omadahealth.slidepager.lib;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -94,12 +95,13 @@ public class SlidePagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
         View currentView;
-        if (mViews.size() >= position) {
+        if (mViews.size() > position) {
             currentView = mViews.get(position);
         } else {
             currentView = getWeekSlide();
             mViews.add(currentView);
         }
+
         collection.addView(currentView);
         return currentView;
     }
@@ -158,7 +160,7 @@ public class SlidePagerAdapter extends PagerAdapter {
         week.setListener(new OnWeekListener() {
             @Override
             public void onDaySelected(int index) {
-
+               Log.i("onDaySelected", "index : " + index);
             }
         });
         return week;
