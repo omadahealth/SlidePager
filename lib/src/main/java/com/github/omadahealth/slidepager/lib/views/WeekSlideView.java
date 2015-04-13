@@ -147,6 +147,10 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
 
     }
 
+    /**
+     * Animates the translation of the {@link #mSelectedImageView}
+     * @param view The view to use to set the animation position
+     */
     public void animateSelectedTranslation(View view){
         AnimatorSet set = new AnimatorSet();
         final Float offset =  -1 * this.getWidth() + view.getWidth()/2 + view.getX();

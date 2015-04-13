@@ -237,6 +237,10 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
         }
     }
 
+    /**
+     * Initiates the animation listener for the {@link CircularBar} so we can animate the streaks in
+     * on animation end
+     */
     private void initAnimations() {
         final int index = getIntTag();
         addAnimationListener(new Animator.AnimatorListener() {
@@ -398,10 +402,15 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
     }
 
 
-    public void setSiblings(List<View> children) {
+    /**
+     * Sets the {@link #mSiblings} after removing any non {@link DayProgressView}
+     * from the list supplied
+     * @param views The views in the layout
+     */
+    public void setSiblings(List<View> views) {
         List<DayProgressView> siblings = new ArrayList<>();
-        if(children != null){
-            for(View view : children){
+        if(views != null){
+            for(View view : views){
                 if(view instanceof DayProgressView){
                     siblings.add((DayProgressView)view);
                 }
