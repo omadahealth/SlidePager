@@ -125,7 +125,6 @@ public class SlidePager extends ViewPager {
      * @param defStyleAttr The styles to read from
      */
     private void loadStyledAttributes(AttributeSet attrs, int defStyleAttr) {
-
         if (attrs != null) {
             setAttributeSet(getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
                     defStyleAttr, 0));

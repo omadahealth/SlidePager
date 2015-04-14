@@ -25,7 +25,6 @@ package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -35,7 +34,6 @@ import com.daimajia.easing.Skill;
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnWeekListener;
-import com.github.omadahealth.slidepager.lib.interfaces.PageChildInterface;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -49,7 +47,7 @@ import butterknife.ButterKnife;
 /**
  * Created by stoyan on 4/7/15.
  */
-public class WeekSlideView extends LinearLayout implements PageChildInterface {
+public class WeekSlideView extends LinearLayout{
     /**
      * The tag for logging
      */
@@ -113,12 +111,10 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
         init(context, attributes);
     }
 
-    @Override
-    public void loadStyledAttributes(TypedArray attributes) {
+    private void loadStyledAttributes(TypedArray attributes) {
         mAttributes = attributes;
         if (mAttributes != null) {
             boolean startAtEnd = attributes.getBoolean(R.styleable.SlidePager_slide_progress_start_at_end, false);
-            Log.e(TAG, "start at end : " + startAtEnd);
             mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
 
@@ -149,13 +145,13 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
      * Inject the views into {@link #mDays}
      */
     private void injectViews() {
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_1));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_2));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_3));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_4));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_5));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_6));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_7));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_1).loadStyledAttributes(mAttributes));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_2).loadStyledAttributes(mAttributes));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_3).loadStyledAttributes(mAttributes));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_4).loadStyledAttributes(mAttributes));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_5).loadStyledAttributes(mAttributes));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_6).loadStyledAttributes(mAttributes));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_7).loadStyledAttributes(mAttributes));
 
         mLeftTextView = ButterKnife.findById(this, R.id.left_textview);
         mRightTextView = ButterKnife.findById(this, R.id.right_textview);
@@ -227,7 +223,7 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof DayProgressView) {
-                    ((PageChildInterface) child).loadStyledAttributes(attributes);
+                    ((DayProgressView) child).loadStyledAttributes(attributes);
                     animateProgress((DayProgressView) child, children, listener);
                 }
             }
@@ -243,6 +239,7 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
                     final DayProgressView dayProgressView = (DayProgressView) child;
                     dayProgressView.showStreak(show, DayProgressView.STREAK.RIGHT_STREAK);
                     dayProgressView.showStreak(show, DayProgressView.STREAK.LEFT_STREAK);
+                    dayProgressView.showCheckMark(show);
                 }
             }
         }
@@ -258,6 +255,7 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
             for (final View child : children) {
                 if (child instanceof DayProgressView) {
                     DayProgressView dayProgressView = (DayProgressView) child;
+//                    dayProgressView.loadStyledAttributes(mAttributes);
                     dayProgressView.reset();
                 }
             }

@@ -5,5 +5,5 @@
     <color name="default_progress_completed_color">#00e460</color>
     <color name="default_progress_not_completed_color">#698693</color>
     <color name="default_progress_today_color">#00a3f4</color>
-    <color name="default_progress_today_fill_color">#ffbadefd</color>
+    <color name="default_progress_today_fill_color">#ecf8fd</color>
 </resources>

@@ -38,7 +38,6 @@ import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.OrangeGangsters.circularbarpager.library.CircularBar;
 import com.github.omadahealth.slidepager.lib.R;
-import com.github.omadahealth.slidepager.lib.interfaces.PageChildInterface;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -52,7 +51,7 @@ import butterknife.ButterKnife;
 /**
  * Created by stoyan on 4/2/15.
  */
-public class DayProgressView extends RelativeLayout implements PageChildInterface {
+public class DayProgressView extends RelativeLayout{
     /**
      * The tag for logging
      */
@@ -148,17 +147,20 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
         this(context, null);
     }
 
-    public DayProgressView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public DayProgressView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-
+    public DayProgressView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
         injectViews(context);
-//        loadStyledAttributes(attrs, defStyleAttr);
-        initAnimations();
+//        loadStyledAttributes(attributes);
+
     }
+
+//    public DayProgressView(Context context, AttributeSet attributeSet, TypedArray attributes){
+//        super(context, attributeSet, 0);
+//        injectViews(context);
+//        loadStyledAttributes(attributes);
+//        initAnimations();
+//    }
+
 
     @Override
     protected Parcelable onSaveInstanceState() {
@@ -224,6 +226,8 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
         mCheckMark = ButterKnife.findById(this, R.id.check_mark);
         mCircularBar = ButterKnife.findById(this, R.id.circularbar);
         mDayOfWeek = ButterKnife.findById(this, R.id.day_of_week);
+
+        loadStyledAttributes(null);
     }
 
     /**
@@ -231,11 +235,10 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
      *
      * @param attributes The attributes to read from, do not pass {@link AttributeSet} as inflation needs the context of the {@link android.support.v4.view.PagerAdapter}
      */
-    @Override
-    public void loadStyledAttributes(TypedArray attributes) {
+    public DayProgressView loadStyledAttributes(TypedArray attributes) {
+        Resources res = getContext().getResources();
+        mWeekDays = res.getStringArray(R.array.week_days);
         if (attributes != null) {
-            Resources res = getContext().getResources();
-            mWeekDays = res.getStringArray(R.array.week_days);
             mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_progress_show_streaks, true);
             mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
             mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.default_progress_not_completed_fill_color));
@@ -244,11 +247,22 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
 //            mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.default_progress_today_color));
 //            mTodayFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_fill_color, res.getColor(R.color.default_progress_today_fill_color));
 
-            setDayText();
-            mCircularBar.setCircleFillColor(mNotCompletedFillColor);
-            mCircularBar.setClockwiseReachedArcColor(mNotCompletedColor);
+
             //Do not recycle attributes, we need them for the future views
+        }else{
+            mShowStreaks = true;
+            mCompletedFillColor = res.getColor(R.color.default_progress_completed_fill_color);
+            mNotCompletedFillColor = res.getColor(R.color.default_progress_not_completed_fill_color);
+            mCompletedColor = res.getColor(R.color.default_progress_completed_color);
+            mNotCompletedColor = res.getColor(R.color.default_progress_not_completed_color);
         }
+
+        setDayText();
+        mCircularBar.setCircleFillColor(mNotCompletedFillColor);
+        mCircularBar.setClockwiseReachedArcColor(mNotCompletedColor);
+        initAnimations();
+
+        return this;
     }
 
     /**
@@ -355,7 +369,7 @@ public class DayProgressView extends RelativeLayout implements PageChildInterfac
     }
 
 
-    private void showCheckMark(boolean show) {
+    public void showCheckMark(boolean show) {
         AnimatorSet set = new AnimatorSet();
         //Immediately remove them
         if(!show){
