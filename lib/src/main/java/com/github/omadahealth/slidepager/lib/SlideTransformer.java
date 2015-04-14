@@ -53,6 +53,11 @@ public class SlideTransformer implements ViewPager.PageTransformer {
     public static final Float DEFAULT_TRANSLATION_RATIO = 1.0f;
 
     /**
+     * The {@link LinkedHashMap} that contains all the ratio to appy to the view resourceIds
+     */
+    private static LinkedHashMap<Integer, Ratio> mRatios;
+
+    /**
      * Allows to save the last position of the {@link android.view.View} to deduce the current direction of the swipe.
      * Used in {@link #transformPage(android.view.View, float)}
      */
@@ -119,7 +124,7 @@ public class SlideTransformer implements ViewPager.PageTransformer {
      *
      * @param view The {@link android.view.View} we want to search for the ids get into {@link #getViewRatios()} as the keys
      */
-    protected void initTags(View view) {
+    public static void initTags(View view) {
         List<View> subViews = new ArrayList<>();
         if (getViewRatios() != null) {
             for (Map.Entry<Integer, Ratio> entry : getViewRatios().entrySet()) {
@@ -141,22 +146,24 @@ public class SlideTransformer implements ViewPager.PageTransformer {
      *
      * @return The map of the view-id/translation-ratio
      */
-    public LinkedHashMap<Integer, Ratio> getViewRatios() {
-        LinkedHashMap<Integer, Ratio> ratios = new LinkedHashMap<>();
-        ratios.put(R.id.left_textview, new Ratio(4.0f, 1.0f));
-        ratios.put(R.id.right_textview, new Ratio(1.0f, 4.0f));
+    public static LinkedHashMap<Integer, Ratio> getViewRatios() {
+        if (mRatios == null) {
+            mRatios = new LinkedHashMap<>();
+            mRatios.put(R.id.left_textview, new Ratio(4.0f, 1.0f));
+            mRatios.put(R.id.right_textview, new Ratio(1.0f, 4.0f));
 
-        ratios.put(R.id.day_progress_1, new Ratio(4.0f, 1.0f));
-        ratios.put(R.id.day_progress_2, new Ratio(3.5f, 1.5f));
-        ratios.put(R.id.day_progress_3, new Ratio(3.0f, 2.0f));
-        ratios.put(R.id.day_progress_4, new Ratio(2.5f, 2.5f));
-        ratios.put(R.id.day_progress_5, new Ratio(2.0f, 3.0f));
-        ratios.put(R.id.day_progress_6, new Ratio(1.5f, 3.5f));
-        ratios.put(R.id.day_progress_7, new Ratio(1.0f, 4.0f));
+            mRatios.put(R.id.day_progress_1, new Ratio(4.0f, 1.0f));
+            mRatios.put(R.id.day_progress_2, new Ratio(3.5f, 1.5f));
+            mRatios.put(R.id.day_progress_3, new Ratio(3.0f, 2.0f));
+            mRatios.put(R.id.day_progress_4, new Ratio(2.5f, 2.5f));
+            mRatios.put(R.id.day_progress_5, new Ratio(2.0f, 3.0f));
+            mRatios.put(R.id.day_progress_6, new Ratio(1.5f, 3.5f));
+            mRatios.put(R.id.day_progress_7, new Ratio(1.0f, 4.0f));
 
-        ratios.put(R.id.selected_day_image_view, ratios.get(R.id.day_progress_4));
+            mRatios.put(R.id.selected_day_image_view, mRatios.get(R.id.day_progress_4));
+        }
 
-        return ratios;
+        return mRatios;
     }
 
     /**

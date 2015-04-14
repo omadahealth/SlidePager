@@ -40,6 +40,12 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     private SlidePager mSlidePager;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -51,7 +57,13 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);
-        mSlidePager.refreshPage();
+
+        mSlidePager.post(new Runnable() {
+            @Override
+            public void run() {
+                mSlidePager.refreshPage();
+            }
+        });
     }
 
     @Override

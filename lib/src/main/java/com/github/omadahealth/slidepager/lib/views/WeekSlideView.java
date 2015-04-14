@@ -97,6 +97,11 @@ public class WeekSlideView extends LinearLayout{
     private TypedArray mAttributes;
 
     /**
+     * The {@link AnimatorSet} used to animate the Slider selected day
+     */
+    private AnimatorSet mAnimationSet;
+
+    /**
      * The animation time in milliseconds that we animate the progress
      */
     private int mProgressAnimationTime = DEFAULT_PROGRESS_ANIMATION_TIME;
@@ -105,16 +110,41 @@ public class WeekSlideView extends LinearLayout{
     public WeekSlideView(Context context) {
         this(context, null);
     }
-
     public WeekSlideView(Context context, TypedArray attributes) {
         super(context, null);
         init(context, attributes);
+//        this.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+//            @Override
+//            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+//                animateSelectedTranslation(mDays.get(0));
+//            }
+//        });
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+//        animateSelectedTranslation(mDays.get(0));
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+//        animateSelectedTranslation(mDays.get(0));
+    }
+
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+//        animateSelectedTranslation(mDays.get(0));
     }
 
     private void loadStyledAttributes(TypedArray attributes) {
         mAttributes = attributes;
         if (mAttributes != null) {
-            boolean startAtEnd = attributes.getBoolean(R.styleable.SlidePager_slide_progress_start_at_end, false);
             mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
 
@@ -134,7 +164,7 @@ public class WeekSlideView extends LinearLayout{
             View view = inflater.inflate(R.layout.view_week_slide, this);
             ButterKnife.inject(this, view);
 
-
+            mAnimationSet = new AnimatorSet();
             injectViews();
             setListeners();
             loadStyledAttributes(attributes);
@@ -159,6 +189,7 @@ public class WeekSlideView extends LinearLayout{
         mSelectedImageView = ButterKnife.findById(this, R.id.selected_day_image_view);
         mSelectedImageView.setSelectedViewId(mDays.get(3).getId());
 
+
     }
 
     /**
@@ -167,13 +198,20 @@ public class WeekSlideView extends LinearLayout{
      * @param view The view to use to set the animation position
      */
     public void animateSelectedTranslation(View view) {
-        AnimatorSet set = new AnimatorSet();
         final Float offset = -1 * this.getWidth() + view.getWidth() / 2 + view.getX();
         mSelectedImageView.setTag(R.id.selected_day_image_view, offset);
         mSelectedImageView.setSelectedViewId(view.getId());
-        set.playTogether(Glider.glide(Skill.QuadEaseInOut, 1000, ObjectAnimator.ofFloat(mSelectedImageView, "x", mSelectedImageView.getX(), offset)));
-        set.setDuration(1000);
-        set.addListener(new Animator.AnimatorListener() {
+
+        if(mAnimationSet == null){
+            mAnimationSet = new AnimatorSet();
+        }
+
+        if(mAnimationSet.isRunning()){
+           return;
+        }
+        mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, 1000, ObjectAnimator.ofFloat(mSelectedImageView, "x", mSelectedImageView.getX(), offset)));
+        mAnimationSet.setDuration(1000);
+        mAnimationSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -194,7 +232,7 @@ public class WeekSlideView extends LinearLayout{
 
             }
         });
-        set.start();
+        mAnimationSet.start();
     }
 
     /**
@@ -225,6 +263,7 @@ public class WeekSlideView extends LinearLayout{
                 if (child instanceof DayProgressView) {
                     ((DayProgressView) child).loadStyledAttributes(attributes);
                     animateProgress((DayProgressView) child, children, listener);
+                    animateSelectedTranslation(mDays.get(0));
                 }
             }
         }
@@ -255,7 +294,6 @@ public class WeekSlideView extends LinearLayout{
             for (final View child : children) {
                 if (child instanceof DayProgressView) {
                     DayProgressView dayProgressView = (DayProgressView) child;
-//                    dayProgressView.loadStyledAttributes(mAttributes);
                     dayProgressView.reset();
                 }
             }

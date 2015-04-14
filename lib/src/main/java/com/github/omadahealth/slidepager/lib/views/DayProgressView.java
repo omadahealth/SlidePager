@@ -338,7 +338,7 @@ public class DayProgressView extends RelativeLayout{
      * @param siblings The sibling views we use to evaluate streaks showing
      */
     public void animateProgress(int start, int end, int duration, List<View> siblings) {
-        setSiblings(siblings);
+        mSiblings = setSiblings(siblings);
         mCircularBar.setClockwiseReachedArcColor(end == 100 ? mCompletedColor : mNotCompletedColor);
         mCircularBar.animateProgress(start, end, duration);
     }
@@ -459,7 +459,7 @@ public class DayProgressView extends RelativeLayout{
      * from the list supplied
      * @param views The views in the layout
      */
-    public void setSiblings(List<View> views) {
+    public static List<DayProgressView> setSiblings(List<View> views) {
         List<DayProgressView> siblings = new ArrayList<>();
         if(views != null){
             for(View view : views){
@@ -467,8 +467,8 @@ public class DayProgressView extends RelativeLayout{
                     siblings.add((DayProgressView)view);
                 }
             }
-            mSiblings = siblings;
         }
+        return siblings;
     }
 
     public Integer getIntTag() {

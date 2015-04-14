@@ -58,15 +58,6 @@ public class SlidePager extends ViewPager {
      */
     private TypedArray mAttributes;
 
-    public TypedArray getAttributeSet() {
-        return mAttributes;
-    }
-
-
-    public void setAttributeSet(TypedArray attributeSet) {
-        this.mAttributes = attributeSet;
-    }
-
     public SlidePager(Context context) {
         this(context, null);
     }
@@ -75,7 +66,6 @@ public class SlidePager extends ViewPager {
         super(context, attrs);
         loadStyledAttributes(attrs, 0);
         setSlidePager();
-
     }
 
     @Override
@@ -187,15 +177,22 @@ public class SlidePager extends ViewPager {
     private void resetPage(int position) {
         WeekSlideView selectedView = (WeekSlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
         selectedView.resetPage(mAttributes);
+//        selectedView.animateSelectedTranslation(DayProgressView.setSiblings(getChildren(position)).get(0));
     }
 
-
+    /**
+     *
+     * @param position
+     */
     private void animatePage(int position) {
         WeekSlideView weekSlideView = (WeekSlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
         weekSlideView.animatePage(mUserPageListener, mAttributes);
     }
 
     /**
+     *
+     * @param position
+     * @param show
      */
     private void animateSeries(int position, boolean show) {
         WeekSlideView weekSlideView = (WeekSlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
@@ -205,6 +202,12 @@ public class SlidePager extends ViewPager {
     @SuppressWarnings("unchecked")
     private List<View> getChildren(int position) {
         View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(position));
+
+
+        if (selectedView.getTag() == null) {
+            SlideTransformer.initTags(selectedView);
+        }
+
         return (List<View>) selectedView.getTag();
     }
 
@@ -213,5 +216,14 @@ public class SlidePager extends ViewPager {
      */
     public void refreshPage() {
         animatePage(getCurrentItem());
+    }
+
+    public TypedArray getAttributeSet() {
+        return mAttributes;
+    }
+
+
+    public void setAttributeSet(TypedArray attributeSet) {
+        this.mAttributes = attributeSet;
     }
 }
