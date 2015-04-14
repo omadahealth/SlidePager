@@ -167,8 +167,9 @@ public class WeekSlideView extends LinearLayout{
      * Animates the translation of the {@link #mSelectedImageView}
      *
      * @param view The view to use to set the animation position
+     * @param startPosition The starting x position for the animated view
      */
-    public void animateSelectedTranslation(View view) {
+    public void animateSelectedTranslation(View view, float startPosition){
         final Float offset = -1 * this.getWidth() + view.getWidth() / 2 + view.getX();
         mSelectedImageView.setTag(R.id.selected_day_image_view, offset);
         mSelectedImageView.setSelectedViewId(view.getId());
@@ -178,9 +179,9 @@ public class WeekSlideView extends LinearLayout{
         }
 
         if(mAnimationSet.isRunning()){
-           return;
+            return;
         }
-        mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, 1000, ObjectAnimator.ofFloat(mSelectedImageView, "x", mSelectedImageView.getX(), offset)));
+        mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, 1000, ObjectAnimator.ofFloat(mSelectedImageView, "x", startPosition, offset)));
         mAnimationSet.setDuration(1000);
         mAnimationSet.addListener(new Animator.AnimatorListener() {
             @Override
@@ -204,6 +205,15 @@ public class WeekSlideView extends LinearLayout{
             }
         });
         mAnimationSet.start();
+    }
+
+    /**
+     * Calls {@link #animateSelectedTranslation(View, float)} with the start
+     * position set to the {@link #mSelectedImageView#getX()}
+     * @param view The view to use to set the animation position
+     */
+    public void animateSelectedTranslation(View view) {
+        animateSelectedTranslation(view, mSelectedImageView.getX());
     }
 
     /**
