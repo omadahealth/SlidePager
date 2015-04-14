@@ -26,6 +26,7 @@ package com.github.omadahealth.slidepager.lib.views;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -39,6 +40,7 @@ import com.daimajia.easing.Skill;
 import com.github.OrangeGangsters.circularbarpager.library.CircularBar;
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
+import com.github.omadahealth.typefaceview.TypefaceType;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -316,6 +318,16 @@ public class DayProgressView extends RelativeLayout{
      */
     private void setDayText() {
         getDayOfWeek().setText(mWeekDays[getIntTag()]);
+    }
+
+    /**
+     * Sets the font type of {@link #mDayOfWeek}
+     * @param selected True for {@link TypefaceType#ROBOTO_BOLD}, false for {@link TypefaceType#ROBOTO_THIN}
+     */
+    public void isSelected(boolean selected){
+        Typeface typeface = TypefaceTextView.getFont(getContext(),
+                selected ? TypefaceType.ROBOTO_BOLD.getAssetFileName() : TypefaceType.ROBOTO_THIN.getAssetFileName());//TODO save default instead of assuming thin
+        mDayOfWeek.setTypeface(typeface);
     }
 
     /**
