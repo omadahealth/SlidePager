@@ -177,7 +177,6 @@ public class SlidePager extends ViewPager {
     private void resetPage(int position) {
         WeekSlideView selectedView = (WeekSlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
         selectedView.resetPage(mAttributes);
-//        selectedView.animateSelectedTranslation(DayProgressView.setSiblings(getChildren(position)).get(0));
     }
 
     /**

@@ -113,33 +113,6 @@ public class WeekSlideView extends LinearLayout{
     public WeekSlideView(Context context, TypedArray attributes) {
         super(context, null);
         init(context, attributes);
-//        this.addOnLayoutChangeListener(new OnLayoutChangeListener() {
-//            @Override
-//            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-//                animateSelectedTranslation(mDays.get(0));
-//            }
-//        });
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-//        animateSelectedTranslation(mDays.get(0));
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-
-//        animateSelectedTranslation(mDays.get(0));
-    }
-
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-//        animateSelectedTranslation(mDays.get(0));
     }
 
     private void loadStyledAttributes(TypedArray attributes) {
@@ -188,8 +161,6 @@ public class WeekSlideView extends LinearLayout{
 
         mSelectedImageView = ButterKnife.findById(this, R.id.selected_day_image_view);
         mSelectedImageView.setSelectedViewId(mDays.get(3).getId());
-
-
     }
 
     /**

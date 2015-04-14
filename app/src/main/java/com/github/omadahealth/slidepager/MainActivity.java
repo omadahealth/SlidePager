@@ -52,8 +52,6 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
         SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(4), new Date(), mSlidePager.getAttributeSet());
-//        adapterOne.setAttributeSet(mSlidePager.getAttributeSet());
-//        adapterOne.setDefStyleAttr(mSlidePager.getDefStyleAttr());
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);

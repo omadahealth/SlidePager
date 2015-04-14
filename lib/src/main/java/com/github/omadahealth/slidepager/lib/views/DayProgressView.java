@@ -150,17 +150,7 @@ public class DayProgressView extends RelativeLayout{
     public DayProgressView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         injectViews(context);
-//        loadStyledAttributes(attributes);
-
     }
-
-//    public DayProgressView(Context context, AttributeSet attributeSet, TypedArray attributes){
-//        super(context, attributeSet, 0);
-//        injectViews(context);
-//        loadStyledAttributes(attributes);
-//        initAnimations();
-//    }
-
 
     @Override
     protected Parcelable onSaveInstanceState() {

@@ -103,9 +103,7 @@ public class SlideTransformer implements ViewPager.PageTransformer {
                     float translation = position * ((float) view.getWidth() / ratio);
                     if (child instanceof SelectedImageView) {
                         Float offset = (Float) child.getTag(R.id.selected_day_image_view);
-//                        translation -= view.getWidth()/2;
                         if (offset == null) {
-//                            offset = (float) view.getWidth()/2;
                             offset = 0f;
                         }
                         translation += offset;
