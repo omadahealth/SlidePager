@@ -25,7 +25,7 @@ package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -96,6 +96,8 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
      */
     private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 1000;
 
+    private TypedArray mAttributes;
+
     /**
      * The animation time in milliseconds that we animate the progress
      */
@@ -106,14 +108,17 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
         this(context, null);
     }
 
-    public WeekSlideView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
+    public WeekSlideView(Context context, TypedArray attributes) {
+        super(context, null);
+        init(context, attributes);
     }
 
     @Override
     public void loadStyledAttributes(TypedArray attributes) {
-        if (attributes != null) {
+        mAttributes = attributes;
+        if (mAttributes != null) {
+            boolean startAtEnd = attributes.getBoolean(R.styleable.SlidePager_slide_progress_start_at_end, false);
+            Log.e(TAG, "start at end : " + startAtEnd);
             mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
 
@@ -127,21 +132,23 @@ public class WeekSlideView extends LinearLayout implements PageChildInterface {
      *
      * @param context
      */
-    private void init(Context context) {
+    private void init(Context context,TypedArray attributes) {
         if (!isInEditMode()) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.view_week_slide, this);
             ButterKnife.inject(this, view);
 
-            injectDays();
+
+            injectViews();
             setListeners();
+            loadStyledAttributes(attributes);
         }
     }
 
     /**
      * Inject the views into {@link #mDays}
      */
-    private void injectDays() {
+    private void injectViews() {
         mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_1));
         mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_2));
         mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_3));

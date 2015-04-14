@@ -24,6 +24,7 @@
 package com.github.omadahealth.slidepager.lib;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.View;
@@ -62,6 +63,13 @@ public class SlidePagerAdapter extends PagerAdapter {
      */
     private List<View> mViews;
 
+    private TypedArray mAttributeSet;
+
+    public void setAttributeSet(TypedArray attributeSet) {
+        this.mAttributeSet = attributeSet;
+    }
+
+
     /**
      * Calls {@link #SlidePagerAdapter(Context, Date, Date)} with the end date being set
      * to today
@@ -81,9 +89,15 @@ public class SlidePagerAdapter extends PagerAdapter {
      * @param endDate   The end {@link Date} for computing the number of weeks
      */
     public SlidePagerAdapter(Context context, Date startDate, Date endDate) {
+        this(context, startDate, endDate, null);
+
+    }
+
+    public SlidePagerAdapter(Context context, Date startDate, Date endDate, TypedArray attributes) {
         this.mContext = context;
         this.mStartDate = startDate;
         this.mEndDate = endDate;
+        setAttributeSet(attributes);
         this.mViews = initViews(startDate, endDate);
     }
 
@@ -156,7 +170,7 @@ public class SlidePagerAdapter extends PagerAdapter {
      * @return
      */
     private WeekSlideView getWeekSlide(){
-        WeekSlideView week = new WeekSlideView(mContext);
+        WeekSlideView week = new WeekSlideView(mContext, mAttributeSet);
         week.setListener(new OnWeekListener() {
             @Override
             public void onDaySelected(int index) {

@@ -58,6 +58,15 @@ public class SlidePager extends ViewPager {
      */
     private TypedArray mAttributes;
 
+    public TypedArray getAttributeSet() {
+        return mAttributes;
+    }
+
+
+    public void setAttributeSet(TypedArray attributeSet) {
+        this.mAttributes = attributeSet;
+    }
+
     public SlidePager(Context context) {
         this(context, null);
     }
@@ -116,9 +125,10 @@ public class SlidePager extends ViewPager {
      * @param defStyleAttr The styles to read from
      */
     private void loadStyledAttributes(AttributeSet attrs, int defStyleAttr) {
+
         if (attrs != null) {
-            mAttributes = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
-                    defStyleAttr, 0);
+            setAttributeSet(getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
+                    defStyleAttr, 0));
             mStartAtEnd = mAttributes.getBoolean(R.styleable.SlidePager_slide_progress_start_at_end, false);
         }
     }
