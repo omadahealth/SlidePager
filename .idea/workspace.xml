@@ -21,10 +21,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="81a53ce5-a2ed-451f-be88-d1dae88fba56" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/library_1_2_0.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/DayProgressView.java" afterPath="$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/DayProgressView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/WeekSlideView.java" afterPath="$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/WeekSlideView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" afterPath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/src/main/res/layout/view_week_slide.xml" afterPath="$PROJECT_DIR$/lib/src/main/res/layout/view_week_slide.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/build.gradle" afterPath="$PROJECT_DIR$/lib/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/butterknife_5_1_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/butterknife_5_1_1.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/lib.iml" afterPath="$PROJECT_DIR$/lib/lib.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/library_2_4_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/library_2_4_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_annotations_22_0_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_annotations_22_0_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_v4_22_0_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_v4_22_0_0.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="SlidePager.iws" />
@@ -63,15 +67,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DayProgressView.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DayProgressView.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/DayProgressView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="332" column="7" selection-start-line="332" selection-start-column="7" selection-end-line="332" selection-end-column="7" />
+            <state vertical-scroll-proportion="0.8073593">
+              <caret line="367" column="0" selection-start-line="367" selection-start-column="0" selection-end-line="367" selection-end-column="0" />
               <folding>
-                <element signature="e#4292#4293#0" expanded="true" />
-                <element signature="e#4327#4328#0" expanded="true" />
+                <element signature="e#4422#4423#0" expanded="true" />
+                <element signature="e#4457#4458#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-10.0">
+              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -129,10 +143,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WeekSlideView.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="WeekSlideView.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/WeekSlideView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.17257683">
+            <state vertical-scroll-proportion="-5.4074073">
               <caret line="185" column="38" selection-start-line="185" selection-start-column="22" selection-end-line="185" selection-end-column="38" />
               <folding>
                 <element signature="e#0#11177#0" expanded="true" />
@@ -160,16 +174,6 @@
                 <element signature="e#599#600#0" expanded="true" />
               </folding>
             </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ic_current_day.9.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/src/main/res/mipmap-xhdpi/ic_current_day.9.png">
-          <provider editor-type-id="images">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="ninepatcheditor">
-            <state />
           </provider>
         </entry>
       </file>
@@ -582,16 +586,6 @@
                 <option name="description" value="Prepare com.daimajia.easing:library:1.0.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="prepareComDaimajiaEasingLibrary101Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.github.omadahealth.typefaceview:typefaceview:1.1.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComGithubOmadahealthTypefaceviewTypefaceview110Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.github.orangegangsters:library:1.2.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComGithubOrangegangstersLibrary120Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
@@ -1121,16 +1115,6 @@
                 <option name="name" value="prepareComDaimajiaEasingLibrary101Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.github.omadahealth.typefaceview:typefaceview:1.1.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/lib" />
-                <option name="name" value="prepareComGithubOmadahealthTypefaceviewTypefaceview110Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.github.orangegangsters:library:1.2.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/lib" />
-                <option name="name" value="prepareComGithubOrangegangstersLibrary120Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/lib" />
                 <option name="name" value="prepareDebugAndroidTestDependencies" />
               </ExternalTaskPojo>
@@ -1228,7 +1212,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="5715039583000" />
+        <entry key="$PROJECT_DIR$" value="5715052495000" />
         <entry key="$PROJECT_DIR$/../prevent-android" value="5641085312000" />
       </map>
     </option>
@@ -1480,13 +1464,13 @@
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/commons-codec/commons-codec/1.4/commons-codec-1.4-sources.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/commons-codec/commons-codec/1.4/commons-codec-1.4.jar" />
                             <option value="$USER_HOME$/android_sdk/extras/android/m2repository/com/android/support/appcompat-v7/22.0.0/appcompat-v7-22.0.0.aar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.orangegangsters/library/1.2.0/2d04ee850aac1a9aef5e880771c859a03d5f9b75/library-1.2.0.aar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.omadahealth.typefaceview/typefaceview/1.1.0/e26b984925f01b577c2ab21e4ea8357bcfe8b80c/typefaceview-1.1.0.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.daimajia.easing/library/1.0.1/8a138655d16289aeaebe6b451ebe1ef792df155c/library-1.0.1.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/5.1.1/b3652dfd65ca0bcf18790ff1a1f7624af4cb2bb8/butterknife-5.1.1.jar" />
                             <option value="$USER_HOME$/android_sdk/extras/android/m2repository/com/android/support/support-v4/22.0.0/support-v4-22.0.0.aar" />
                             <option value="$USER_HOME$/android_sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar" />
+                            <option value="$PROJECT_DIR$/unresolved dependency - com.github.orangegangsters library 1.2.1" />
+                            <option value="$PROJECT_DIR$/unresolved dependency - com.github.omadahealth.typefaceview typefaceview 1.2.0" />
                           </list>
                         </option>
                         <option name="path" value="$PROJECT_DIR$/lib" />
@@ -1634,15 +1618,15 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/lib/src/main/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/lib/src/main/res/values/styles.xml" />
-        <option value="$PROJECT_DIR$/lib/build.gradle" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/github/omadahealth/slidepager/MainActivity.java" />
         <option value="$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/SlidePager.java" />
         <option value="$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/SlideTransformer.java" />
         <option value="$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/SelectedImageView.java" />
-        <option value="$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/DayProgressView.java" />
         <option value="$PROJECT_DIR$/lib/src/main/res/layout/view_week_slide.xml" />
         <option value="$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/WeekSlideView.java" />
+        <option value="$PROJECT_DIR$/lib/build.gradle" />
+        <option value="$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/DayProgressView.java" />
       </list>
     </option>
   </component>
@@ -1657,8 +1641,9 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
     <option name="width" value="2560" />
-    <option name="height" value="1440" />
+    <option name="height" value="1349" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -2318,10 +2303,10 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
     <property name="recentsLimit" value="5" />
-    <property name="FullScreen" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="04a53d4082919292" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus4" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CircularBarPager" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../TypefaceView" />
     <property name="settings.editor.selected.configurable" value="fileTemplates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="OverrideImplement.combined" value="true" />
@@ -2647,11 +2632,17 @@
       <option name="project" value="LOCAL" />
       <updated>1429054043360</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="added typeface change to bold on DayProgressView selection">
+      <created>1429055963445</created>
+      <option name="number" value="00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1429055963445</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="2560" height="1440" extended-state="0" />
+    <frame x="0" y="23" width="2560" height="1349" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2664,16 +2655,16 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16957903" sideWeight="0.12643678" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16957903" sideWeight="0.14761376" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16957903" sideWeight="0.14641434" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18647845" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3306092" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18572587" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36090836" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16957903" sideWeight="0.85238624" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16957903" sideWeight="0.85358566" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24591382" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -2714,7 +2705,8 @@
     <MESSAGE value="slider goes to default position on first page and after scrolls&#10;" />
     <MESSAGE value="cleaning up code" />
     <MESSAGE value="added selector view drawable toggle state" />
-    <option name="LAST_COMMIT_MESSAGE" value="added selector view drawable toggle state" />
+    <MESSAGE value="added typeface change to bold on DayProgressView selection" />
+    <option name="LAST_COMMIT_MESSAGE" value="added typeface change to bold on DayProgressView selection" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2968,14 +2960,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="53" selection-start-line="25" selection-start-column="53" selection-end-line="25" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/SlidePager/lib/unspecified/classes.jar!/com/github/omadahealth/slidepager/lib/views/WeekSlideView.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3573113">
@@ -2989,7 +2973,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="175" column="37" selection-start-line="175" selection-start-column="24" selection-end-line="175" selection-end-column="37" />
           <folding>
-            <element signature="e#5741#5742#0" expanded="true" />
+            <element signature="e#5741#5742#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3125,20 +3109,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/DayProgressView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="332" column="7" selection-start-line="332" selection-start-column="7" selection-end-line="332" selection-end-column="7" />
-          <folding>
-            <element signature="e#4292#4293#0" expanded="true" />
-            <element signature="e#4327#4328#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/WeekSlideView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17257683">
+        <state vertical-scroll-proportion="-5.4074073">
           <caret line="185" column="38" selection-start-line="185" selection-start-column="22" selection-end-line="185" selection-end-column="38" />
           <folding>
             <element signature="e#0#11177#0" expanded="true" />
@@ -3150,6 +3123,25 @@
             <element signature="e#8760#8790#0" expanded="true" />
             <element signature="e#9352#9382#0" expanded="true" />
             <element signature="e#10000#10030#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.0">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/main/java/com/github/omadahealth/slidepager/lib/views/DayProgressView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8073593">
+          <caret line="367" column="0" selection-start-line="367" selection-start-column="0" selection-end-line="367" selection-end-column="0" />
+          <folding>
+            <element signature="e#4422#4423#0" expanded="true" />
+            <element signature="e#4457#4458#0" expanded="true" />
           </folding>
         </state>
       </provider>

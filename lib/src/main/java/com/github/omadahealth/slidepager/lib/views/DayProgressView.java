@@ -85,6 +85,11 @@ public class DayProgressView extends RelativeLayout{
     private TypefaceTextView mDayOfWeek;
 
     /**
+     * The default {@link #mDayOfWeek} is initialized in its attrs
+     */
+    private TypefaceType mDefaultDayTypeface;
+
+    /**
      * The duration of the easing in of {@link #mLeftStreak} and {@link #mRightStreak}
      */
     private static final int EASE_IN_DURATION = 500;
@@ -219,6 +224,8 @@ public class DayProgressView extends RelativeLayout{
         mCircularBar = ButterKnife.findById(this, R.id.circularbar);
         mDayOfWeek = ButterKnife.findById(this, R.id.day_of_week);
 
+        mDefaultDayTypeface = mDayOfWeek.getCurrentTypeface();
+
         loadStyledAttributes(null);
     }
 
@@ -326,7 +333,7 @@ public class DayProgressView extends RelativeLayout{
      */
     public void isSelected(boolean selected){
         Typeface typeface = TypefaceTextView.getFont(getContext(),
-                selected ? TypefaceType.ROBOTO_BOLD.getAssetFileName() : TypefaceType.ROBOTO_THIN.getAssetFileName());//TODO save default instead of assuming thin
+                selected ? TypefaceType.ROBOTO_BOLD.getAssetFileName() : mDefaultDayTypeface.getAssetFileName());
         mDayOfWeek.setTypeface(typeface);
     }
 
