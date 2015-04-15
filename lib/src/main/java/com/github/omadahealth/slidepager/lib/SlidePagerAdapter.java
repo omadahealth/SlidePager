@@ -26,10 +26,12 @@ package com.github.omadahealth.slidepager.lib;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnWeekListener;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.WeekSlideView;
@@ -63,6 +65,11 @@ public class SlidePagerAdapter extends PagerAdapter {
      */
     private List<View> mViews;
 
+    /**
+     * A user defined {@link ViewPager.OnPageChangeListener}
+     */
+    private OnSlidePageChangeListener mUserPageListener;
+
     private TypedArray mAttributeSet;
 
     public void setAttributeSet(TypedArray attributeSet) {
@@ -89,14 +96,15 @@ public class SlidePagerAdapter extends PagerAdapter {
      * @param endDate   The end {@link Date} for computing the number of weeks
      */
     public SlidePagerAdapter(Context context, Date startDate, Date endDate) {
-        this(context, startDate, endDate, null);
+        this(context, startDate, endDate, null, null);
 
     }
 
-    public SlidePagerAdapter(Context context, Date startDate, Date endDate, TypedArray attributes) {
+    public SlidePagerAdapter(Context context, Date startDate, Date endDate, TypedArray attributes, OnSlidePageChangeListener pageListener) {
         this.mContext = context;
         this.mStartDate = startDate;
         this.mEndDate = endDate;
+        this.mUserPageListener = pageListener;
         setAttributeSet(attributes);
         this.mViews = initViews(startDate, endDate);
     }
@@ -112,7 +120,7 @@ public class SlidePagerAdapter extends PagerAdapter {
         if (mViews.size() > position) {
             currentView = mViews.get(position);
         } else {
-            currentView = getWeekSlide();
+            currentView = getWeekSlide(position);
             mViews.add(currentView);
         }
 
@@ -159,7 +167,7 @@ public class SlidePagerAdapter extends PagerAdapter {
         int size = weeks == 0 ? 1 : weeks;
         List<View> views = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            views.add(getWeekSlide());
+            views.add(getWeekSlide(i));
         }
         return views;
     }
@@ -167,14 +175,15 @@ public class SlidePagerAdapter extends PagerAdapter {
     /**
      * Initializes a new {@link WeekSlideView} and sets its
      * {@link OnWeekListener}
+     *
      * @return
      */
-    private WeekSlideView getWeekSlide(){
-        WeekSlideView week = new WeekSlideView(mContext, mAttributeSet);
+    private WeekSlideView getWeekSlide(int pagePosition) {
+        WeekSlideView week = new WeekSlideView(mContext, mAttributeSet, pagePosition, mUserPageListener);
         week.setListener(new OnWeekListener() {
             @Override
             public void onDaySelected(int index) {
-               Log.i("onDaySelected", "index : " + index);
+                Log.i("onDaySelected", "index : " + index);
             }
         });
         return week;

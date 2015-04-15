@@ -28,10 +28,11 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import com.github.omadahealth.demo.R;
-import com.github.omadahealth.slidepager.lib.SlideTransformer;
-import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.SlidePager;
 import com.github.omadahealth.slidepager.lib.SlidePagerAdapter;
+import com.github.omadahealth.slidepager.lib.SlideTransformer;
+import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
+import com.github.omadahealth.slidepager.lib.utils.DayProgress;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -51,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         setContentView(R.layout.activity_main);
 
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
-        SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(4), new Date(), mSlidePager.getAttributeSet());
+        SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(4), new Date(), mSlidePager.getAttributeSet(), this);
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);
@@ -71,12 +72,18 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     }
 
     @Override
-    public int getDayProgress(int index) {
-        if(index == 0){
-            return 75;
+    public DayProgress getDayProgress(int page, int index) {
+        int progress;
+        if (index == 0) {
+            progress = 75;
+        } else {
+            progress = index * 20 > 100 ? 100 : index * 20;
         }
-        return index * 20 > 100 ? 100 : index * 20 ;
-//        return 20;
+//progress = 65;
+//        Log.e("MainActivity", "page == " + page + " && index == " + index);
+
+//        return new DayProgress(progress, page == 3 && index == 5);
+        return new DayProgress(progress, page == 3 && index == 5);
     }
 
     @Override
@@ -97,10 +104,11 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
     /**
      * Returns a date from a time
+     *
      * @param weeks Number of weeks before today
      * @return
      */
-    private Date getPreviousDate(int weeks){
+    private Date getPreviousDate(int weeks) {
         Calendar cal = Calendar.getInstance();
         Date now = new Date();
         cal.setTime(now);

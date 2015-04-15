@@ -39,6 +39,7 @@ import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.OrangeGangsters.circularbarpager.library.CircularBar;
 import com.github.omadahealth.slidepager.lib.R;
+import com.github.omadahealth.slidepager.lib.utils.DayProgress;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.github.omadahealth.typefaceview.TypefaceType;
 import com.nineoldandroids.animation.Animator;
@@ -53,7 +54,7 @@ import butterknife.ButterKnife;
 /**
  * Created by stoyan on 4/2/15.
  */
-public class DayProgressView extends RelativeLayout{
+public class DayProgressView extends RelativeLayout {
     /**
      * The tag for logging
      */
@@ -101,7 +102,6 @@ public class DayProgressView extends RelativeLayout{
 
     private int mReachColor;
     private int mFillColor;
-    private int mOutineColor;
 
     /**
      * The default outline color for {@link #mCircularBar}
@@ -163,6 +163,11 @@ public class DayProgressView extends RelativeLayout{
      * be shown
      */
     private boolean mShowStreaks;
+
+    /**
+     * Boolean that controls if we should use the special today colors for this view
+     */
+    private boolean isSpecial;
 
     public enum STREAK {
         LEFT_STREAK,
@@ -245,7 +250,7 @@ public class DayProgressView extends RelativeLayout{
 
         mDefaultDayTypeface = mDayOfWeek.getCurrentTypeface();
 
-        loadStyledAttributes(null);
+        loadStyledAttributes(null, null);
     }
 
     /**
@@ -253,7 +258,9 @@ public class DayProgressView extends RelativeLayout{
      *
      * @param attributes The attributes to read from, do not pass {@link AttributeSet} as inflation needs the context of the {@link android.support.v4.view.PagerAdapter}
      */
-    public DayProgressView loadStyledAttributes(TypedArray attributes) {
+    public DayProgressView loadStyledAttributes(TypedArray attributes, DayProgress progress) {
+        isSpecial = progress == null ? false : progress.isSpecial();
+
         Resources res = getContext().getResources();
         mWeekDays = res.getStringArray(R.array.week_days);
         if (attributes != null) {
@@ -286,7 +293,7 @@ public class DayProgressView extends RelativeLayout{
             mTodayFillColor = res.getColor(R.color.default_progress_today_fill_color);
         }
 
-        setCircleColors(WeekSlideView.getSelectedProgressView());
+        setCircleColors();
 
         initAnimations();
 
@@ -312,9 +319,9 @@ public class DayProgressView extends RelativeLayout{
                     if (mShowStreaks && mSiblings != null && mSiblings.size() > 0) {
                         //Previous exists
                         if (getIntTag() - 1 >= 0) {
-                            View previousDay = mSiblings.get(index - 1);
+                            DayProgressView previousDay = mSiblings.get(index - 1);
                             //Previous is complete
-                            if (((DayProgressView) previousDay).getCircularBar().getProgress() >= 99.95f) {
+                            if (previousDay.getCircularBar().getProgress() >= 99.95f) {
                                 showStreak(true, DayProgressView.STREAK.LEFT_STREAK);
                             }
 
@@ -322,9 +329,9 @@ public class DayProgressView extends RelativeLayout{
 
                         //Next exists
                         if (index + 1 < mSiblings.size()) {
-                            View nextDay = mSiblings.get(index + 1);
+                            DayProgressView nextDay = mSiblings.get(index + 1);
                             //Next is complete
-                            if (((DayProgressView) nextDay).getCircularBar().getProgress() >= 99.95f) {
+                            if (nextDay.getCircularBar().getProgress() >= 99.95f) {
                                 showStreak(true, DayProgressView.STREAK.RIGHT_STREAK);
                             }
                         }
@@ -351,30 +358,32 @@ public class DayProgressView extends RelativeLayout{
         });
     }
 
-    public void setCircleColors(int selectedDay) {
-        mFillColor = getIntTag() == selectedDay ? mTodayFillColor : mNotCompletedFillColor;
-        mReachColor = getIntTag() == selectedDay ? mTodayReachColor : mNotCompletedReachColor;
-        mOutineColor = getIntTag() == selectedDay ? mTodayOutlineColor : mNotCompletedOutlineColor;
+    public void setCircleColors() {
+        mFillColor = isSpecial ? mTodayFillColor : mNotCompletedFillColor;
+        mReachColor =  isSpecial ? mTodayReachColor : mNotCompletedReachColor;
+        mOutlineColor = isSpecial ? mTodayOutlineColor : mNotCompletedOutlineColor;
 
         mCircularBar.setCircleFillColor(mFillColor);
         mCircularBar.setClockwiseReachedArcColor(mReachColor);
-        mCircularBar.setClockwiseOutlineArcColor(mOutineColor);
-        setDayText(selectedDay);
+        mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
+        setDayText();
 
     }
+
     /**
      * Sets the text for the {@link #mDayOfWeek}
      */
-    private void setDayText(int selectedDay) {
+    private void setDayText() {
         getDayOfWeek().setText(mWeekDays[getIntTag()]);
-        getDayOfWeek().setTextColor(getIntTag() == selectedDay ? mTodayReachColor : mNotCompletedReachColor);
+        getDayOfWeek().setTextColor(isSpecial ? mTodayReachColor : mNotCompletedReachColor);
     }
 
     /**
      * Sets the font type of {@link #mDayOfWeek}
+     *
      * @param selected True for {@link TypefaceType#ROBOTO_BOLD}, false for {@link TypefaceType#ROBOTO_THIN}
      */
-    public void isSelected(boolean selected){
+    public void isSelected(boolean selected) {
         Typeface typeface = TypefaceTextView.getFont(getContext(),
                 selected ? TypefaceType.ROBOTO_BOLD.getAssetFileName() : mDefaultDayTypeface.getAssetFileName());
         mDayOfWeek.setTypeface(typeface);
@@ -384,34 +393,41 @@ public class DayProgressView extends RelativeLayout{
      * Animate the progress from start to end for the {@link CircularBar} and the rest of the views in
      * this container
      *
-     * @param start 0-100
-     * @param end   0-100
+     * @param start    0-100
+     * @param progress A {@link DayProgress} object, containing the progress end (0-100) and the boolean to know if the day is special
      * @param duration The duration in milliseconds of the animation
      * @param siblings The sibling views we use to evaluate streaks showing
      */
-    public void animateProgress(int start, int end, int duration, List<View> siblings) {
-        mSiblings = setSiblings(siblings);
-        if(mReachColor != mNotCompletedReachColor){
-            mCircularBar.setClockwiseReachedArcColor(mReachColor);
-        }else{
-            mCircularBar.setClockwiseReachedArcColor(end == 100 ? mCompletedColor : mReachColor);
+    public void animateProgress(int start, DayProgress progress, int duration, List<View> siblings) {
+        if(progress == null) {
+            return;
         }
-        mCircularBar.animateProgress(start, end, duration);
+        isSpecial = progress.isSpecial();
+        setCircleColors();
+        mReachColor = isSpecial ? mTodayReachColor : mReachColor;
+
+        mSiblings = setSiblings(siblings);
+        if (mReachColor != mNotCompletedReachColor) {
+            mCircularBar.setClockwiseReachedArcColor(mReachColor);
+        } else {
+            mCircularBar.setClockwiseReachedArcColor(progress.getProgress() == 100 ? mCompletedColor : mReachColor);
+        }
+        mCircularBar.animateProgress(start, progress.getProgress(), duration);
     }
 
-    public void reset(){
+    public void reset() {
         mShowStreaks = false;
-        setDayText(WeekSlideView.getSelectedProgressView());
+        setDayText();
         mCircularBar.setClockwiseReachedArcColor(mReachColor);
         mCircularBar.setCircleFillColor(mFillColor);
-        mCircularBar.setClockwiseOutlineArcColor(mOutineColor);
+        mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
         mCircularBar.setProgress(0);
     }
 
     public void showCheckMark(boolean show) {
         AnimatorSet set = new AnimatorSet();
         //Immediately remove them
-        if(!show){
+        if (!show) {
             mCheckMark.setAlpha(0f);
             return;
         }
@@ -443,7 +459,7 @@ public class DayProgressView extends RelativeLayout{
                 return;
         }
         //Immediately remove them
-        if(!show){
+        if (!show) {
             sideView.setAlpha(0f);
             return;
         }
@@ -497,14 +513,15 @@ public class DayProgressView extends RelativeLayout{
     /**
      * Sets the {@link #mSiblings} after removing any non {@link DayProgressView}
      * from the list supplied
+     *
      * @param views The views in the layout
      */
     public static List<DayProgressView> setSiblings(List<View> views) {
         List<DayProgressView> siblings = new ArrayList<>();
-        if(views != null){
-            for(View view : views){
-                if(view instanceof DayProgressView){
-                    siblings.add((DayProgressView)view);
+        if (views != null) {
+            for (View view : views) {
+                if (view instanceof DayProgressView) {
+                    siblings.add((DayProgressView) view);
                 }
             }
         }

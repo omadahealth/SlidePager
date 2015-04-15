@@ -26,6 +26,7 @@ package com.github.omadahealth.slidepager.lib.interfaces;
 import android.support.v4.view.ViewPager;
 
 import com.github.omadahealth.slidepager.lib.SlidePager;
+import com.github.omadahealth.slidepager.lib.utils.DayProgress;
 
 /**
  * Created by stoyan on 4/6/15.
@@ -38,7 +39,7 @@ public interface OnSlidePageChangeListener extends ViewPager.OnPageChangeListene
      * @param index The index for the day (0-7)
      * @return The progress value for the specified day
      */
-    int getDayProgress(int index);
+    DayProgress getDayProgress(int page, int index);
 
     /**
      * Called when one of the {@link com.github.omadahealth.slidepager.lib.views.DayProgressView} is
@@ -46,5 +47,6 @@ public interface OnSlidePageChangeListener extends ViewPager.OnPageChangeListene
      * @param index
      */
     void onDaySelected(int index);
+
 
 }

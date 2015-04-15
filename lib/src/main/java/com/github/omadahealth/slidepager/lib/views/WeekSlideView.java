@@ -25,6 +25,7 @@ package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -34,6 +35,7 @@ import com.daimajia.easing.Skill;
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnWeekListener;
+import com.github.omadahealth.slidepager.lib.utils.DayProgress;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -47,7 +49,7 @@ import butterknife.ButterKnife;
 /**
  * Created by stoyan on 4/7/15.
  */
-public class WeekSlideView extends LinearLayout{
+public class WeekSlideView extends LinearLayout {
     /**
      * The tag for logging
      */
@@ -114,17 +116,27 @@ public class WeekSlideView extends LinearLayout{
     private static int mSelectedProgressView;
 
     /**
+     * The position of this page within the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     */
+    private int mPagePosition;
+
+    /**
      * The animation time in milliseconds that we animate the progress
      */
     private int mProgressAnimationTime = DEFAULT_PROGRESS_ANIMATION_TIME;
 
+    /**
+     * A user defined {@link ViewPager.OnPageChangeListener}
+     */
+    private OnSlidePageChangeListener mUserPageListener;
 
     public WeekSlideView(Context context) {
-        this(context, null);
+        this(context, null, -1, null);
     }
-    public WeekSlideView(Context context, TypedArray attributes) {
+
+    public WeekSlideView(Context context, TypedArray attributes, int pagePosition, OnSlidePageChangeListener pageListener) {
         super(context, null);
-        init(context, attributes);
+        init(context, attributes, pagePosition, pageListener);
     }
 
     private void loadStyledAttributes(TypedArray attributes) {
@@ -143,8 +155,10 @@ public class WeekSlideView extends LinearLayout{
      *
      * @param context
      */
-    private void init(Context context,TypedArray attributes) {
+    private void init(Context context, TypedArray attributes, int pagePosition, OnSlidePageChangeListener pageListener) {
         if (!isInEditMode()) {
+            this.mPagePosition = pagePosition;
+            this.mUserPageListener = pageListener;
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.view_week_slide, this);
             ButterKnife.inject(this, view);
@@ -160,13 +174,13 @@ public class WeekSlideView extends LinearLayout{
      * Inject the views into {@link #mDays}
      */
     private void injectViews() {
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_1).loadStyledAttributes(mAttributes));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_2).loadStyledAttributes(mAttributes));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_3).loadStyledAttributes(mAttributes));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_4).loadStyledAttributes(mAttributes));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_5).loadStyledAttributes(mAttributes));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_6).loadStyledAttributes(mAttributes));
-        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_7).loadStyledAttributes(mAttributes));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_1).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 0) : null));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_2).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 1) : null));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_3).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 2) : null));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_4).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 3) : null));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_5).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 4) : null));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_6).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 5) : null));
+        mDays.add(ButterKnife.<DayProgressView>findById(this, R.id.day_progress_7).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 6) : null));
 
         mLeftTextView = ButterKnife.findById(this, R.id.left_textview);
         mRightTextView = ButterKnife.findById(this, R.id.right_textview);
@@ -178,18 +192,15 @@ public class WeekSlideView extends LinearLayout{
     /**
      * Animates the translation of the {@link #mSelectedImageView}
      *
-     * @param view The view to use to set the animation position
+     * @param view          The view to use to set the animation position
      * @param startPosition The starting x position for the animated view
      */
-    public void animateSelectedTranslation(final View view, float startPosition){
+    public void animateSelectedTranslation(final View view, float startPosition) {
         final Float offset = -1 * this.getWidth() + view.getWidth() / 2 + view.getX();
         mSelectedImageView.setTag(R.id.selected_day_image_view, offset);
         mSelectedImageView.setSelectedViewId(view.getId());
 
-        if(mAnimationSet == null){
-            mAnimationSet = new AnimatorSet();
-        }
-
+        mAnimationSet = new AnimatorSet();
         mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, SELECTION_ANIMATION_DURATION, ObjectAnimator.ofFloat(mSelectedImageView, "x", startPosition, offset)));
         mAnimationSet.setDuration(SELECTION_ANIMATION_DURATION);
         mAnimationSet.removeAllListeners();
@@ -201,7 +212,7 @@ public class WeekSlideView extends LinearLayout{
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                setSelectedDay(((DayProgressView)view).getIntTag());
+                setSelectedDay(((DayProgressView) view).getIntTag());
             }
 
             @Override
@@ -220,6 +231,7 @@ public class WeekSlideView extends LinearLayout{
     /**
      * Calls {@link #animateSelectedTranslation(View, float)} with the start
      * position set to the {@link #mSelectedImageView#getX()}
+     *
      * @param view The view to use to set the animation position
      */
     public void animateSelectedTranslation(View view) {
@@ -254,10 +266,9 @@ public class WeekSlideView extends LinearLayout{
     public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
         final List<View> children = (List<View>) getTag();
         if (children != null) {
-//            WeekSlideView.setSelectedProgressView(6);
             for (final View child : children) {
                 if (child instanceof DayProgressView) {
-                    ((DayProgressView) child).loadStyledAttributes(attributes);
+                    ((DayProgressView) child).loadStyledAttributes(attributes, listener.getDayProgress(mPagePosition, ((DayProgressView) child).getIntTag()));
                     animateProgress((DayProgressView) child, children, listener);
                     animateSelectedTranslation(mDays.get(mSelectedProgressView));
                 }
@@ -298,15 +309,15 @@ public class WeekSlideView extends LinearLayout{
 
     private void animateProgress(DayProgressView view, List<View> children, OnSlidePageChangeListener listener) {
         if (listener != null) {
-            int progress = listener.getDayProgress(view.getIntTag());
+            DayProgress progress = listener.getDayProgress(mPagePosition, view.getIntTag());
             view.animateProgress(0, progress, mProgressAnimationTime, children);
         }
     }
 
-    private void setSelectedDay(int selected){
+    private void setSelectedDay(int selected) {
         mSelectedProgressView = selected;
-        for(DayProgressView day : mDays){
-            if(day.getIntTag() == mSelectedProgressView){
+        for (DayProgressView day : mDays) {
+            if (day.getIntTag() == mSelectedProgressView) {
                 day.isSelected(true);
                 continue;
             }
@@ -327,11 +338,11 @@ public class WeekSlideView extends LinearLayout{
         return mSelectedImageView;
     }
 
-    public static int getSelectedProgressView() {
+    public synchronized static int getSelectedProgressView() {
         return mSelectedProgressView;
     }
 
-    public static void setSelectedProgressView(int selectedProgressView) {
+    public synchronized static void setSelectedProgressView(int selectedProgressView) {
         WeekSlideView.mSelectedProgressView = selectedProgressView;
     }
 }

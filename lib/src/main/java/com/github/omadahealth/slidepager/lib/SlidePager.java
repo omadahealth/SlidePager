@@ -180,7 +180,6 @@ public class SlidePager extends ViewPager {
     }
 
     /**
-     *
      * @param position
      */
     private void animatePage(int position) {
@@ -189,7 +188,6 @@ public class SlidePager extends ViewPager {
     }
 
     /**
-     *
      * @param position
      * @param show
      */
