@@ -92,7 +92,7 @@ public class DayProgressView extends RelativeLayout{
     /**
      * The duration of the easing in of {@link #mLeftStreak} and {@link #mRightStreak}
      */
-    private static final int EASE_IN_DURATION = 500;
+    private static final int EASE_IN_DURATION = 350;
 
     /**
      * For save and restore instance of progressbar

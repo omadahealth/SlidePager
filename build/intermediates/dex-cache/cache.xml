@@ -37,25 +37,25 @@
         <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/library-2.4.0-3ea1b002f35d0b7fd6074a40794bfa429032d5f7.jar" />
     </item>
     <item
-        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.github.omadahealth.typefaceview/typefaceview/1.1.0/classes.jar"
+        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.github.omadahealth.typefaceview/typefaceview/1.2.0/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="cb7f91adfc44cc56d2582aea90b1861d592402c7">
-        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-039498b961d1db1384e085ec249943d5b1b0a43c.jar" />
-    </item>
-    <item
-        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.github.orangegangsters/library/1.2.0/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="b905b81dc20a719fd3ee3d99f9b4bfbbee272db5">
-        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-70eb3f1b66e77bcf794bdbf21713fdd0558824f6.jar" />
+        sha1="50254cf703ef0fb6d6f0a0a1055786d83585ec0b">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-80a869b65b06bd84e47c61557b06946cb0188140.jar" />
     </item>
     <item
         jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/SlidePager/lib/unspecified/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="11d3467d0a88fb907191dc501cca276b48d815bc">
+        sha1="fd2636203c70247cc8a8eab4d85f838b02694756">
         <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-6c0355c3bdac7859de7c9141946e486731606685.jar" />
+    </item>
+    <item
+        jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.github.orangegangsters/library/1.2.1/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3d74887c479073f3a49b18a8a9ee4be2e6b563b6">
+        <dex dex="/Users/stoyan/git/SlidePager/app/build/intermediates/pre-dexed/debug/classes-f84d0ab89b2e815cee9e3f642dcdbfa320813e45.jar" />
     </item>
     <item
         jar="/Users/stoyan/git/SlidePager/app/build/intermediates/exploded-aar/com.daimajia.easing/library/1.0.1/classes.jar"

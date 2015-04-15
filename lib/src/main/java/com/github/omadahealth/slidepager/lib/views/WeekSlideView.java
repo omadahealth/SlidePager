@@ -56,7 +56,7 @@ public class WeekSlideView extends LinearLayout{
     /**
      * The duration for the animation for {@link #mSelectedImageView}
      */
-    private static final float SELECTION_ANIMATION_DURATION = 500;
+    private static final int SELECTION_ANIMATION_DURATION = 500;
 
     /**
      * An array that holds all the {@link DayProgressView} for this layout
@@ -105,6 +105,13 @@ public class WeekSlideView extends LinearLayout{
      * The {@link AnimatorSet} used to animate the Slider selected day
      */
     private AnimatorSet mAnimationSet;
+
+    /**
+     * The int tag of the selected {@link DayProgressView} we store so that we can
+     * translate the {@link #mSelectedImageView} to the same day when we transition between
+     * different instances of this class
+     */
+    private static int mSelectedProgressView;
 
     /**
      * The animation time in milliseconds that we animate the progress
@@ -174,7 +181,7 @@ public class WeekSlideView extends LinearLayout{
      * @param view The view to use to set the animation position
      * @param startPosition The starting x position for the animated view
      */
-    public void animateSelectedTranslation(View view, float startPosition){
+    public void animateSelectedTranslation(final View view, float startPosition){
         final Float offset = -1 * this.getWidth() + view.getWidth() / 2 + view.getX();
         mSelectedImageView.setTag(R.id.selected_day_image_view, offset);
         mSelectedImageView.setSelectedViewId(view.getId());
@@ -184,7 +191,7 @@ public class WeekSlideView extends LinearLayout{
         }
 
         mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, SELECTION_ANIMATION_DURATION, ObjectAnimator.ofFloat(mSelectedImageView, "x", startPosition, offset)));
-        mAnimationSet.setDuration(1000);
+        mAnimationSet.setDuration(SELECTION_ANIMATION_DURATION);
         mAnimationSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -193,7 +200,7 @@ public class WeekSlideView extends LinearLayout{
 
             @Override
             public void onAnimationEnd(Animator animation) {
-
+                setSelectedDay(((DayProgressView)view).getIntTag());
             }
 
             @Override
@@ -229,10 +236,9 @@ public class WeekSlideView extends LinearLayout{
                     @Override
                     public void onClick(View view) {
                         int index = dayProgressView.getIntTag();
-                        for(DayProgressView day : mDays){
-                            day.isSelected(false);
-                        }
-                        dayProgressView.isSelected(true);
+
+                        setSelectedDay(index);
+
                         animateSelectedTranslation(view);
                         if (mCallback != null) {
                             mCallback.onDaySelected(index);
@@ -251,7 +257,7 @@ public class WeekSlideView extends LinearLayout{
                 if (child instanceof DayProgressView) {
                     ((DayProgressView) child).loadStyledAttributes(attributes);
                     animateProgress((DayProgressView) child, children, listener);
-                    animateSelectedTranslation(mDays.get(0));
+                    animateSelectedTranslation(mDays.get(mSelectedProgressView));
                 }
             }
         }
@@ -292,6 +298,17 @@ public class WeekSlideView extends LinearLayout{
         if (listener != null) {
             int progress = listener.getDayProgress(view.getIntTag());
             view.animateProgress(0, progress, mProgressAnimationTime, children);
+        }
+    }
+
+    private void setSelectedDay(int selected){
+        mSelectedProgressView = selected;
+        for(DayProgressView day : mDays){
+            if(day.getIntTag() == mSelectedProgressView){
+                day.isSelected(true);
+                continue;
+            }
+            day.isSelected(false);
         }
     }
 
