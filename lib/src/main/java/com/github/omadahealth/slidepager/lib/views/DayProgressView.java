@@ -99,6 +99,15 @@ public class DayProgressView extends RelativeLayout{
      */
     private static final String INSTANCE_STATE = "saved_instance";
 
+    private int mReachColor;
+    private int mFillColor;
+    private int mOutineColor;
+
+    /**
+     * The default outline color for {@link #mCircularBar}
+     */
+    private int mOutlineColor;
+
     /**
      * The default fill color for {@link #mCircularBar} when progress is 100
      */
@@ -115,14 +124,24 @@ public class DayProgressView extends RelativeLayout{
     private int mCompletedColor;
 
     /**
-     * The progress color for {@link #mCircularBar} when progress is below 100
+     * The progress reached color for {@link #mCircularBar} when progress is below 100
      */
-    private int mNotCompletedColor;
+    private int mNotCompletedReachColor;
 
     /**
-     * The progress color for {@link #mCircularBar} when it is today's date
+     * The progress color outline for {@link #mCircularBar} when progress is below 100
      */
-    private int mTodayColor;
+    private int mNotCompletedOutlineColor;
+
+    /**
+     * The progress reached color for {@link #mCircularBar} when it is today's date
+     */
+    private int mTodayReachColor;
+
+    /**
+     * The progress color outline for {@link #mCircularBar} when it is today's date
+     */
+    private int mTodayOutlineColor;
 
     /**
      * The progress fill color for today's date
@@ -238,27 +257,37 @@ public class DayProgressView extends RelativeLayout{
         Resources res = getContext().getResources();
         mWeekDays = res.getStringArray(R.array.week_days);
         if (attributes != null) {
-            mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_progress_show_streaks, true);
-            mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
-            mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.default_progress_not_completed_fill_color));
-            mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_color, res.getColor(R.color.default_progress_completed_color));
-            mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_color, res.getColor(R.color.default_progress_not_completed_color));
-//            mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_color, res.getColor(R.color.default_progress_today_color));
-//            mTodayFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_fill_color, res.getColor(R.color.default_progress_today_fill_color));
+            mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_show_streaks, true);
 
+            mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_reach_color, res.getColor(R.color.default_progress_completed_reach_color));
+            mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
+
+            mNotCompletedReachColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_reach_color, res.getColor(R.color.default_progress_not_completed_reach_color));
+            mNotCompletedOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_outline_color, res.getColor(R.color.default_progress_not_completed_outline_color));
+            mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.default_progress_not_completed_fill_color));
+
+            mTodayReachColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_reach_color, res.getColor(R.color.default_progress_today_reach_color));
+            mTodayOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_outline_color, res.getColor(R.color.default_progress_today_outline_color));
+            mTodayFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_fill_color, res.getColor(R.color.default_progress_today_fill_color));
 
             //Do not recycle attributes, we need them for the future views
-        }else{
+        } else {
             mShowStreaks = true;
+
+            mCompletedColor = res.getColor(R.color.default_progress_completed_reach_color);
             mCompletedFillColor = res.getColor(R.color.default_progress_completed_fill_color);
+
+            mNotCompletedReachColor = res.getColor(R.color.default_progress_not_completed_reach_color);
+            mNotCompletedOutlineColor = res.getColor(R.color.default_progress_not_completed_outline_color);
             mNotCompletedFillColor = res.getColor(R.color.default_progress_not_completed_fill_color);
-            mCompletedColor = res.getColor(R.color.default_progress_completed_color);
-            mNotCompletedColor = res.getColor(R.color.default_progress_not_completed_color);
+
+            mTodayReachColor = res.getColor(R.color.default_progress_today_reach_color);
+            mTodayOutlineColor = res.getColor(R.color.default_progress_today_outline_color);
+            mTodayFillColor = res.getColor(R.color.default_progress_today_fill_color);
         }
 
-        setDayText();
-        mCircularBar.setCircleFillColor(mNotCompletedFillColor);
-        mCircularBar.setClockwiseReachedArcColor(mNotCompletedColor);
+        setCircleColors(WeekSlideView.getSelectedProgressView());
+
         initAnimations();
 
         return this;
@@ -306,7 +335,9 @@ public class DayProgressView extends RelativeLayout{
                     mCircularBar.setClockwiseReachedArcColor(mCompletedColor);
                 } else {
                     //Set Color
-                    mCircularBar.setCircleFillColor(mNotCompletedFillColor);
+                    mCircularBar.setCircleFillColor(mFillColor);
+                    mCircularBar.setClockwiseReachedArcColor(mReachColor);
+
                 }
             }
 
@@ -320,11 +351,23 @@ public class DayProgressView extends RelativeLayout{
         });
     }
 
+    public void setCircleColors(int selectedDay) {
+        mFillColor = getIntTag() == selectedDay ? mTodayFillColor : mNotCompletedFillColor;
+        mReachColor = getIntTag() == selectedDay ? mTodayReachColor : mNotCompletedReachColor;
+        mOutineColor = getIntTag() == selectedDay ? mTodayOutlineColor : mNotCompletedOutlineColor;
+
+        mCircularBar.setCircleFillColor(mFillColor);
+        mCircularBar.setClockwiseReachedArcColor(mReachColor);
+        mCircularBar.setClockwiseOutlineArcColor(mOutineColor);
+        setDayText(selectedDay);
+
+    }
     /**
      * Sets the text for the {@link #mDayOfWeek}
      */
-    private void setDayText() {
+    private void setDayText(int selectedDay) {
         getDayOfWeek().setText(mWeekDays[getIntTag()]);
+        getDayOfWeek().setTextColor(getIntTag() == selectedDay ? mTodayReachColor : mNotCompletedReachColor);
     }
 
     /**
@@ -348,35 +391,22 @@ public class DayProgressView extends RelativeLayout{
      */
     public void animateProgress(int start, int end, int duration, List<View> siblings) {
         mSiblings = setSiblings(siblings);
-        mCircularBar.setClockwiseReachedArcColor(end == 100 ? mCompletedColor : mNotCompletedColor);
+        if(mReachColor != mNotCompletedReachColor){
+            mCircularBar.setClockwiseReachedArcColor(mReachColor);
+        }else{
+            mCircularBar.setClockwiseReachedArcColor(end == 100 ? mCompletedColor : mReachColor);
+        }
         mCircularBar.animateProgress(start, end, duration);
     }
 
     public void reset(){
         mShowStreaks = false;
-        setDayText();
-        mCircularBar.setClockwiseReachedArcColor(mNotCompletedColor);
-        mCircularBar.setCircleFillColor(mNotCompletedFillColor);
+        setDayText(WeekSlideView.getSelectedProgressView());
+        mCircularBar.setClockwiseReachedArcColor(mReachColor);
+        mCircularBar.setCircleFillColor(mFillColor);
+        mCircularBar.setClockwiseOutlineArcColor(mOutineColor);
         mCircularBar.setProgress(0);
-
-//        if(getIntTag() == 4){
-//            mCircularBar.setClockwiseReachedArcColor(mTodayColor);
-//            mCircularBar.setClockwiseReachedArcColor(mTodayColor);
-//            mCircularBar.setCircleFillColor(mTodayFillColor);
-//            mDayOfWeek.setTextColor(mTodayColor);
-//        }
-
     }
-
-    /**
-     * Calls {@link #animateProgress(int, int, int, List)} with showing streaks set to false
-     */
-    public void animateProgress(int start, int end, int duration) {
-        mShowStreaks = false;
-        mCircularBar.setClockwiseReachedArcColor(end == 100 ? mCompletedColor : mNotCompletedColor);
-        mCircularBar.animateProgress(start, end, duration);
-    }
-
 
     public void showCheckMark(boolean show) {
         AnimatorSet set = new AnimatorSet();
@@ -451,6 +481,7 @@ public class DayProgressView extends RelativeLayout{
     }
 
     public void addAnimationListener(Animator.AnimatorListener listener) {
+        mCircularBar.removeAllListeners();
         mCircularBar.addListener(listener);
     }
 

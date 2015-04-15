@@ -172,7 +172,7 @@ public class WeekSlideView extends LinearLayout{
         mRightTextView = ButterKnife.findById(this, R.id.right_textview);
 
         mSelectedImageView = ButterKnife.findById(this, R.id.selected_day_image_view);
-        mSelectedImageView.setSelectedViewId(mDays.get(3).getId());
+        mSelectedImageView.setSelectedViewId(mDays.get(WeekSlideView.getSelectedProgressView()).getId());
     }
 
     /**
@@ -192,6 +192,7 @@ public class WeekSlideView extends LinearLayout{
 
         mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, SELECTION_ANIMATION_DURATION, ObjectAnimator.ofFloat(mSelectedImageView, "x", startPosition, offset)));
         mAnimationSet.setDuration(SELECTION_ANIMATION_DURATION);
+        mAnimationSet.removeAllListeners();
         mAnimationSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -253,6 +254,7 @@ public class WeekSlideView extends LinearLayout{
     public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
         final List<View> children = (List<View>) getTag();
         if (children != null) {
+//            WeekSlideView.setSelectedProgressView(6);
             for (final View child : children) {
                 if (child instanceof DayProgressView) {
                     ((DayProgressView) child).loadStyledAttributes(attributes);
@@ -323,5 +325,13 @@ public class WeekSlideView extends LinearLayout{
 
     public SelectedImageView getSelectedImageView() {
         return mSelectedImageView;
+    }
+
+    public static int getSelectedProgressView() {
+        return mSelectedProgressView;
+    }
+
+    public static void setSelectedProgressView(int selectedProgressView) {
+        WeekSlideView.mSelectedProgressView = selectedProgressView;
     }
 }

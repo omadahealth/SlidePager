@@ -46,10 +46,10 @@ public class SelectedImageView extends ImageView {
     private void init() {
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
             mDividerDrawable = getResources().getDrawable(R.mipmap.day_divider, null);
-            mSelectedDrawable = getResources().getDrawable(R.mipmap.ic_current_day, null);
+            mSelectedDrawable = getResources().getDrawable(R.mipmap.arrow_selected, null);
         }else{
             mDividerDrawable = getResources().getDrawable(R.mipmap.day_divider);
-            mSelectedDrawable = getResources().getDrawable(R.mipmap.ic_current_day);
+            mSelectedDrawable = getResources().getDrawable(R.mipmap.arrow_selected);
         }
     }
 

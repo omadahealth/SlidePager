@@ -118,7 +118,7 @@ public class SlidePager extends ViewPager {
         if (attrs != null) {
             setAttributeSet(getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
                     defStyleAttr, 0));
-            mStartAtEnd = mAttributes.getBoolean(R.styleable.SlidePager_slide_progress_start_at_end, false);
+            mStartAtEnd = mAttributes.getBoolean(R.styleable.SlidePager_slide_start_at_end, false);
         }
     }
 
@@ -214,6 +214,7 @@ public class SlidePager extends ViewPager {
      * Refreshes the page animation
      */
     public void refreshPage() {
+
         animatePage(getCurrentItem());
     }
 
