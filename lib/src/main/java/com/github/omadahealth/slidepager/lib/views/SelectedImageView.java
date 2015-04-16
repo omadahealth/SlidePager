@@ -44,10 +44,10 @@ public class SelectedImageView extends ImageView {
      * Initiate the view and drawables
      */
     private void init() {
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             mDividerDrawable = getResources().getDrawable(R.mipmap.day_divider, null);
             mSelectedDrawable = getResources().getDrawable(R.mipmap.arrow_selected, null);
-        }else{
+        } else {
             mDividerDrawable = getResources().getDrawable(R.mipmap.day_divider);
             mSelectedDrawable = getResources().getDrawable(R.mipmap.arrow_selected);
         }
@@ -56,11 +56,12 @@ public class SelectedImageView extends ImageView {
     /**
      * Sets the drawable resource for {@link #setBackground(Drawable)} depending on the
      * state of the view
+     *
      * @param selected True to set background to {@link #mSelectedDrawable}, false for {@link #mDividerDrawable}
      */
-    public void setSelectedDrawable(boolean selected){
+    public void setSelectedDrawable(boolean selected) {
         Drawable drawable = selected ? mSelectedDrawable : mDividerDrawable;
-        if(Build.VERSION.SDK_INT  > android.os.Build.VERSION_CODES.JELLY_BEAN) {
+        if (Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.JELLY_BEAN) {
             setBackground(drawable);
         } else {
             setBackgroundDrawable(drawable);
@@ -70,7 +71,7 @@ public class SelectedImageView extends ImageView {
     /**
      * Resets the {@link #getLayoutParams()}  of the view
      */
-    public void resetView(){
+    public void resetView() {
         setX(getLayoutParams().width / -4);
         requestLayout();
     }

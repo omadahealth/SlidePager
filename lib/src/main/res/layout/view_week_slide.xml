@@ -1,87 +1,95 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.github.omadahealth.typefaceview.TypefaceTextView
             android:id="@+id/left_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="@string/left_textview_text"
+            android:singleLine="true"
             android:textSize="19sp"
             android:paddingTop="15dp"
             android:paddingLeft="15dp"
             app:typeface="roboto_light"
             app:html="true"/>
+
         <com.github.omadahealth.typefaceview.TypefaceTextView
             android:id="@+id/right_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="@string/right_textview_text"
+            android:singleLine="true"
             android:textSize="19sp"
             android:paddingTop="15dp"
             android:paddingRight="15dp"
             app:typeface="roboto_light"/>
+
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="@dimen/view_day_progress_margin_padding"
+        android:paddingRight="@dimen/view_day_progress_margin_padding">
 
         <com.github.omadahealth.slidepager.lib.views.DayProgressView
             android:id="@+id/day_progress_1"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:tag="0" />
+            android:tag="0"/>
 
         <com.github.omadahealth.slidepager.lib.views.DayProgressView
             android:id="@+id/day_progress_2"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:tag="1" />
+            android:tag="1"/>
 
         <com.github.omadahealth.slidepager.lib.views.DayProgressView
             android:id="@+id/day_progress_3"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:tag="2" />
+            android:tag="2"/>
 
         <com.github.omadahealth.slidepager.lib.views.DayProgressView
             android:id="@+id/day_progress_4"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:tag="3" />
+            android:tag="3"/>
 
         <com.github.omadahealth.slidepager.lib.views.DayProgressView
             android:id="@+id/day_progress_5"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:tag="4" />
+            android:tag="4"/>
 
         <com.github.omadahealth.slidepager.lib.views.DayProgressView
             android:id="@+id/day_progress_6"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:tag="5" />
+            android:tag="5"/>
 
         <com.github.omadahealth.slidepager.lib.views.DayProgressView
             android:id="@+id/day_progress_7"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:tag="6" />
+            android:tag="6"/>
     </LinearLayout>
 
     <com.github.omadahealth.slidepager.lib.views.SelectedImageView android:id="@+id/selected_day_image_view"

@@ -33,6 +33,7 @@ import com.github.omadahealth.slidepager.lib.SlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.DayProgress;
+import com.github.omadahealth.slidepager.lib.views.WeekSlideView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -53,6 +54,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
         SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(4), new Date(), mSlidePager.getAttributeSet(), this);
+        WeekSlideView.setSelectedProgressView(5);
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);
@@ -74,10 +76,12 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     @Override
     public DayProgress getDayProgress(int page, int index) {
         int progress;
-        if (index == 0) {
-            progress = 75;
-        } else {
-            progress = index * 20 > 100 ? 100 : index * 20;
+        if(page == 3 && index == 6){
+            progress = 0;
+        }
+        else {
+//            progress = index * 20 > 100 ? 100 : index * 20;
+            progress = 100;
         }
 //progress = 65;
 //        Log.e("MainActivity", "page == " + page + " && index == " + index);

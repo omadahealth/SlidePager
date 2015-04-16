@@ -375,7 +375,7 @@ public class DayProgressView extends RelativeLayout {
      */
     private void setDayText() {
         getDayOfWeek().setText(mWeekDays[getIntTag()]);
-        getDayOfWeek().setTextColor(isSpecial ? mTodayReachColor : mNotCompletedReachColor);
+        getDayOfWeek().setTextColor(mNotCompletedReachColor);
     }
 
     /**
