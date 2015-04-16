@@ -73,14 +73,22 @@ public class Utilities {
         cal.setTime(date);
         cal.add(Calendar.WEEK_OF_YEAR, -weeksSince);
 
-        //get beginning of week
+        //Get the start of the week
         cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
         String dateString = df.format(cal.getTime()) + " - ";
 
+        //Get the end of the week
         cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
         dateString += df.format(cal.getTime());
 
         return dateString;
+    }
+
+    public static String getWeekOfText(int position, int totalWeeks) {
+        String start = "<html><b>Week ";// "7 </b>of 16</html>";
+        String mid = " </b>of ";
+        String end = "</html>";
+        return start + (position + 1) + mid + totalWeeks + end;
     }
 }

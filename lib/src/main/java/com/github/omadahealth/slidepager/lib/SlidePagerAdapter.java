@@ -183,7 +183,7 @@ public class SlidePagerAdapter extends PagerAdapter {
      */
     private WeekSlideView getWeekSlide(int pagePosition, int weeks) {
         int weeksSince = weeks - (pagePosition + 1);
-        WeekSlideView week = new WeekSlideView(mContext, mAttributeSet, pagePosition, mUserPageListener, getLeftText(weeksSince), getRightText(weeksSince));
+        WeekSlideView week = new WeekSlideView(mContext, mAttributeSet, pagePosition, mUserPageListener, getLeftText(pagePosition, mWeeks), getRightText(weeksSince));
         week.setListener(new OnWeekListener() {
             @Override
             public void onDaySelected(int index) {
@@ -197,9 +197,9 @@ public class SlidePagerAdapter extends PagerAdapter {
      * Returns the left text for the {@link WeekSlideView}
      * @return
      */
-    private String getLeftText(int weeksSince) {
+    private String getLeftText(int pagePosition, int totalWeeks) {
 
-        return null;
+        return Utilities.getWeekOfText(pagePosition, totalWeeks);
     }
 
     /**

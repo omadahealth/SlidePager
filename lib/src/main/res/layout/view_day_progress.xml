@@ -63,5 +63,6 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:text="M"
+        android:textSize="@dimen/week_text_size"
         app:typeface="roboto_light" />
 </RelativeLayout>

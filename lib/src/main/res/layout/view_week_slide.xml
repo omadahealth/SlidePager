@@ -15,7 +15,7 @@
             android:layout_alignParentLeft="true"
             android:text="@string/left_textview_text"
             android:singleLine="true"
-            android:textSize="19sp"
+            android:textSize="@dimen/week_text_size"
             android:paddingTop="15dp"
             android:paddingLeft="15dp"
             app:typeface="roboto_light"
@@ -28,7 +28,7 @@
             android:layout_alignParentRight="true"
             android:text="@string/right_textview_text"
             android:singleLine="true"
-            android:textSize="19sp"
+            android:textSize="@dimen/week_text_size"
             android:paddingTop="15dp"
             android:paddingRight="15dp"
             app:typeface="roboto_light"/>

@@ -53,7 +53,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         setContentView(R.layout.activity_main);
 
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
-        SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(4), new Date(), mSlidePager.getAttributeSet(), this);
+        SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(16), new Date(), mSlidePager.getAttributeSet(), this);
         WeekSlideView.setSelectedProgressView(5);
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
