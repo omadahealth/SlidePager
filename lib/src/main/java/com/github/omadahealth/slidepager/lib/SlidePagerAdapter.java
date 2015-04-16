@@ -66,6 +66,11 @@ public class SlidePagerAdapter extends PagerAdapter {
     private List<View> mViews;
 
     /**
+     * Weeks that this view represents
+     */
+    private int mWeeks;
+
+    /**
      * A user defined {@link ViewPager.OnPageChangeListener}
      */
     private OnSlidePageChangeListener mUserPageListener;
@@ -106,7 +111,7 @@ public class SlidePagerAdapter extends PagerAdapter {
         this.mEndDate = endDate;
         this.mUserPageListener = pageListener;
         setAttributeSet(attributes);
-        this.mViews = initViews(startDate, endDate);
+        this.mViews = initViews();
     }
 
     @Override
@@ -120,7 +125,7 @@ public class SlidePagerAdapter extends PagerAdapter {
         if (mViews.size() > position) {
             currentView = mViews.get(position);
         } else {
-            currentView = getWeekSlide(position);
+            currentView = getWeekSlide(position, mWeeks);
             mViews.add(currentView);
         }
 
@@ -155,19 +160,17 @@ public class SlidePagerAdapter extends PagerAdapter {
      * Initializes an array the size of the number of weeks between the to parameters.
      * Throws {@link IllegalArgumentException} if startDate is after endDate
      *
-     * @param startDate The start date
-     * @param endDate   The end date
      * @return The number of weeks between the two dates
      */
-    private List<View> initViews(Date startDate, Date endDate) {
-        if (endDate.before(startDate)) {
+    private List<View> initViews() {
+        if (mEndDate.before(mStartDate)) {
             throw new IllegalArgumentException("Start date must be before end date");
         }
-        int weeks = Utilities.getWeeksBetween(startDate, endDate);
-        int size = weeks == 0 ? 1 : weeks;
-        List<View> views = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            views.add(getWeekSlide(i));
+        mWeeks= Utilities.getWeeksBetween(mStartDate, mEndDate);
+        mWeeks = mWeeks == 0 ? 1 : mWeeks;
+        List<View> views = new ArrayList<>(mWeeks);
+        for (int i = 0; i < mWeeks; i++) {
+            views.add(getWeekSlide(i, mWeeks));
         }
         return views;
     }
@@ -178,8 +181,9 @@ public class SlidePagerAdapter extends PagerAdapter {
      *
      * @return
      */
-    private WeekSlideView getWeekSlide(int pagePosition) {
-        WeekSlideView week = new WeekSlideView(mContext, mAttributeSet, pagePosition, mUserPageListener);
+    private WeekSlideView getWeekSlide(int pagePosition, int weeks) {
+        int weeksSince = weeks - (pagePosition + 1);
+        WeekSlideView week = new WeekSlideView(mContext, mAttributeSet, pagePosition, mUserPageListener, getLeftText(weeksSince), getRightText(weeksSince));
         week.setListener(new OnWeekListener() {
             @Override
             public void onDaySelected(int index) {
@@ -187,5 +191,22 @@ public class SlidePagerAdapter extends PagerAdapter {
             }
         });
         return week;
+    }
+
+    /**
+     * Returns the left text for the {@link WeekSlideView}
+     * @return
+     */
+    private String getLeftText(int weeksSince) {
+
+        return null;
+    }
+
+    /**
+     * Returns the right text for the {@link WeekSlideView}
+     * @return
+     */
+    public String getRightText(int weeksSince) {
+        return Utilities.getWeekRangeText(mEndDate, weeksSince);
     }
 }

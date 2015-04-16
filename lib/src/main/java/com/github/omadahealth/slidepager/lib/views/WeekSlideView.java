@@ -121,6 +121,16 @@ public class WeekSlideView extends LinearLayout {
     private int mPagePosition;
 
     /**
+     * The text for the {@link #mLeftTextView}
+     */
+    private String mLeftText;
+
+    /**
+     * The text for the {@link #mRightTextView}
+     */
+    private String mRightText;
+
+    /**
      * The animation time in milliseconds that we animate the progress
      */
     private int mProgressAnimationTime = DEFAULT_PROGRESS_ANIMATION_TIME;
@@ -131,11 +141,13 @@ public class WeekSlideView extends LinearLayout {
     private OnSlidePageChangeListener mUserPageListener;
 
     public WeekSlideView(Context context) {
-        this(context, null, -1, null);
+        this(context, null, -1, null, null, null);
     }
 
-    public WeekSlideView(Context context, TypedArray attributes, int pagePosition, OnSlidePageChangeListener pageListener) {
+    public WeekSlideView(Context context, TypedArray attributes, int pagePosition, OnSlidePageChangeListener pageListener, String leftText, String rightText) {
         super(context, null);
+        this.mLeftText = leftText;
+        this.mRightText = rightText;
         init(context, attributes, pagePosition, pageListener);
     }
 
@@ -145,8 +157,16 @@ public class WeekSlideView extends LinearLayout {
             mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
 
-            mLeftTextView.setVisibility(mShowLeftText ? VISIBLE : GONE);
-            mRightTextView.setVisibility(mShowRightText ? VISIBLE : GONE);
+            mLeftTextView.setVisibility(mShowLeftText && mLeftText != null ? VISIBLE : GONE);
+            mRightTextView.setVisibility(mShowRightText && mRightText != null? VISIBLE : GONE);
+
+            if(mShowLeftText && mLeftText != null){
+                mLeftTextView.setText(mLeftText);
+            }
+
+            if(mShowRightText && mRightText != null){
+                mRightTextView.setText(mRightText);
+            }
         }
     }
 
@@ -159,6 +179,7 @@ public class WeekSlideView extends LinearLayout {
         if (!isInEditMode()) {
             this.mPagePosition = pagePosition;
             this.mUserPageListener = pageListener;
+
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.view_week_slide, this);
             ButterKnife.inject(this, view);

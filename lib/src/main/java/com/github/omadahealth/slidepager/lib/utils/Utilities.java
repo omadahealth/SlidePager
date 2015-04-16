@@ -23,14 +23,20 @@
  */
 package com.github.omadahealth.slidepager.lib.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * Created by stoyan on 4/6/15.
  */
 public class Utilities {
+    /**
+     * Day in month: March 30
+     */
+    private static final String MONTH_IN_YEAR_STRING_FORMAT = "LLLL d";
 
     public static int getWeeksBetween(Date start, Date end) {
 
@@ -59,5 +65,22 @@ public class Utilities {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
+    }
+
+    public static String getWeekRangeText(Date date, int weeksSince) {
+        SimpleDateFormat df = new SimpleDateFormat(MONTH_IN_YEAR_STRING_FORMAT, Locale.US);
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        cal.add(Calendar.WEEK_OF_YEAR, -weeksSince);
+
+        //get beginning of week
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+
+        String dateString = df.format(cal.getTime()) + " - ";
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        dateString += df.format(cal.getTime());
+
+        return dateString;
     }
 }
