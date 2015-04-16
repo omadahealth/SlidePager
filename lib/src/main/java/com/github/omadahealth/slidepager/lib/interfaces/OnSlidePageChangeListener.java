@@ -46,7 +46,7 @@ public interface OnSlidePageChangeListener extends ViewPager.OnPageChangeListene
      * clicked by the user
      * @param index
      */
-    void onDaySelected(int index);
+    void onDaySelected(int page, int index);
 
 
 }

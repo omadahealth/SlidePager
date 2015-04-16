@@ -41,6 +41,9 @@ import java.util.Date;
 public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener {
     private SlidePager mSlidePager;
 
+
+    private static final int DEFAULT_PROGRAM_WEEKS = 16;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -53,7 +56,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         setContentView(R.layout.activity_main);
 
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
-        SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(16), new Date(), mSlidePager.getAttributeSet(), this);
+        SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(17), new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
         WeekSlideView.setSelectedProgressView(5);
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
@@ -80,18 +83,14 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
             progress = 0;
         }
         else {
-//            progress = index * 20 > 100 ? 100 : index * 20;
             progress = 100;
         }
-//progress = 65;
-//        Log.e("MainActivity", "page == " + page + " && index == " + index);
 
-//        return new DayProgress(progress, page == 3 && index == 5);
         return new DayProgress(progress, page == 3 && index == 5);
     }
 
     @Override
-    public void onDaySelected(int index) {
+    public void onDaySelected(int page, int index) {
     }
 
     @Override

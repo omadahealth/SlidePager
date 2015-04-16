@@ -38,6 +38,7 @@ public class Utilities {
      */
     private static final String MONTH_IN_YEAR_STRING_FORMAT = "LLLL d";
 
+
     public static int getWeeksBetween(Date start, Date end) {
 
         if (end.before(start)) {
@@ -85,10 +86,14 @@ public class Utilities {
         return dateString;
     }
 
-    public static String getWeekOfText(int position, int totalWeeks) {
-        String start = "<html><b>Week ";// "7 </b>of 16</html>";
+    public static String getWeekOfText(int position, int totalWeeks, int maxWeeks) {
+        String start = "<html><b>Week ";
         String mid = " </b>of ";
         String end = "</html>";
+        if(totalWeeks > maxWeeks){
+            return "<html><b>Week " + (position + 1);
+        }
+
         return start + (position + 1) + mid + totalWeeks + end;
     }
 }

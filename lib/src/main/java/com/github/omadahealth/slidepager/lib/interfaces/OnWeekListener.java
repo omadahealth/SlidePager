@@ -32,5 +32,5 @@ public interface OnWeekListener {
      * Called when a day is clicked in the view
      * @param index The index of the day, ie. Sunday = 0, Monday = 1...
      */
-    void onDaySelected(int index);
+    void onDaySelected(int page, int index);
 }

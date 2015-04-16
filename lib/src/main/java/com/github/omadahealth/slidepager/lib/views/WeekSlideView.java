@@ -275,7 +275,7 @@ public class WeekSlideView extends LinearLayout {
 
                         animateSelectedTranslation(view);
                         if (mCallback != null) {
-                            mCallback.onDaySelected(index);
+                            mCallback.onDaySelected(mPagePosition, index);
                         }
                     }
                 });
