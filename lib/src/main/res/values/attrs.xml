@@ -6,9 +6,9 @@
         <attr name="slide_progress_not_completed_reach_color" format="color" />
         <attr name="slide_progress_not_completed_outline_color" format="color" />
         <attr name="slide_progress_not_completed_fill_color" format="color" />
-        <attr name="slide_progress_today_reach_color" format="color" />
-        <attr name="slide_progress_today_outline_color" format="color" />
-        <attr name="slide_progress_today_fill_color" format="color" />
+        <attr name="slide_progress_special_reach_color" format="color" />
+        <attr name="slide_progress_special_outline_color" format="color" />
+        <attr name="slide_progress_special_fill_color" format="color" />
         <attr name="slide_start_at_end" format="boolean" />
         <attr name="slide_show_streaks" format="boolean" />
         <attr name="slide_show_week" format="boolean" />

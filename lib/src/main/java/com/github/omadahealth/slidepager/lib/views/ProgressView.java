@@ -287,9 +287,9 @@ public class ProgressView extends RelativeLayout {
             mNotCompletedOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_outline_color, res.getColor(R.color.default_progress_not_completed_outline_color));
             mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.default_progress_not_completed_fill_color));
 
-            mSpecialReachColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_reach_color, res.getColor(R.color.default_progress_special_reach_color));
-            mSpecialOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_outline_color, res.getColor(R.color.default_progress_special_outline_color));
-            mSpecialFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_today_fill_color, res.getColor(R.color.default_progress_special_fill_color));
+            mSpecialReachColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_reach_color, res.getColor(R.color.default_progress_special_reach_color));
+            mSpecialOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_outline_color, res.getColor(R.color.default_progress_special_outline_color));
+            mSpecialFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_fill_color, res.getColor(R.color.default_progress_special_fill_color));
 
             //Do not recycle attributes, we need them for the future views
         } else {

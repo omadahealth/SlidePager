@@ -14,9 +14,6 @@ buildscript {
 
 allprojects {
     repositories {
-//        maven {
-//            url "https://github.com/omadahealth/omada-nexus/raw/master/release"
-//        }
 
         jcenter()
     }
