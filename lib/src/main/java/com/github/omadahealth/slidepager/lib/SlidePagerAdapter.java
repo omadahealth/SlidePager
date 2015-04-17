@@ -66,7 +66,7 @@ public class SlidePagerAdapter extends PagerAdapter {
     /**
      * The list of {@link View} used to retain inflated views
      */
-    private List<View> mViews;
+    private List<SlideView> mViews;
 
     /**
      * Weeks that this view represents
@@ -133,7 +133,7 @@ public class SlidePagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
-        View currentView;
+        SlideView currentView;
         if (mViews.size() > position) {
             currentView = mViews.get(position);
         } else {
@@ -161,7 +161,7 @@ public class SlidePagerAdapter extends PagerAdapter {
      * @param position The position to get the view from
      * @return The view for the given position, if created yet
      */
-    public View getCurrentView(int position) {
+    public SlideView getCurrentView(int position) {
         if (mViews == null || position > mViews.size() - 1) {
             return null;
         }
@@ -174,13 +174,13 @@ public class SlidePagerAdapter extends PagerAdapter {
      *
      * @return The number of weeks between the two dates
      */
-    private List<View> initViews() {
+    private List<SlideView> initViews() {
         if (mEndDate.before(mStartDate)) {
             throw new IllegalArgumentException("Start date must be before end date");
         }
         mWeeks = Utilities.getWeeksBetween(mStartDate, mEndDate);
         mWeeks = mWeeks == 0 ? 1 : mWeeks;
-        List<View> views = new ArrayList<>(mWeeks);
+        List<SlideView> views = new ArrayList<>(mWeeks);
         for (int i = 0; i < mWeeks; i++) {
             views.add(getWeekSlide(i, mWeeks));
         }
