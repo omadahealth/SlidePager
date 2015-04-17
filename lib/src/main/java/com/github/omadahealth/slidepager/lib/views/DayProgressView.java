@@ -100,7 +100,14 @@ public class DayProgressView extends RelativeLayout {
      */
     private static final String INSTANCE_STATE = "saved_instance";
 
+    /**
+     * The color of the progress already achieved for {@link #mCircularBar}
+     */
     private int mReachColor;
+
+    /**
+     * The fill color for {@link #mCircularBar}
+     */
     private int mFillColor;
 
     /**
@@ -169,6 +176,9 @@ public class DayProgressView extends RelativeLayout {
      */
     private boolean isSpecial;
 
+    /**
+     * The left and right streaks
+     */
     public enum STREAK {
         LEFT_STREAK,
         RIGHT_STREAK
@@ -358,6 +368,9 @@ public class DayProgressView extends RelativeLayout {
         });
     }
 
+    /**
+     * Sets the colors of {@link #mCircularBar}
+     */
     public void setCircleColors() {
         mFillColor = isSpecial ? mTodayFillColor : mNotCompletedFillColor;
         mReachColor =  isSpecial ? mTodayReachColor : mNotCompletedReachColor;
@@ -415,6 +428,10 @@ public class DayProgressView extends RelativeLayout {
         mCircularBar.animateProgress(start, progress.getProgress(), duration);
     }
 
+    /**
+     * Resets the progress and animations that have occurred on the
+     * {@link #mCircularBar} and {@link #mShowStreaks}
+     */
     public void reset() {
         mShowStreaks = false;
         setDayText();
@@ -424,6 +441,10 @@ public class DayProgressView extends RelativeLayout {
         mCircularBar.setProgress(0);
     }
 
+    /**
+     * Animates the display and hiding of {@link #mCheckMark}
+     * @param show True to show, false to hide
+     */
     public void showCheckMark(boolean show) {
         AnimatorSet set = new AnimatorSet();
         //Immediately remove them
@@ -496,6 +517,10 @@ public class DayProgressView extends RelativeLayout {
         set.start();
     }
 
+    /**
+     * Sets the animation listener on {@link #mCircularBar}
+     * @param listener
+     */
     public void addAnimationListener(Animator.AnimatorListener listener) {
         mCircularBar.removeAllListeners();
         mCircularBar.addListener(listener);

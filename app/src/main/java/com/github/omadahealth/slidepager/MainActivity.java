@@ -39,9 +39,16 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener {
+
+    /**
+     * The slide pager we use
+     */
     private SlidePager mSlidePager;
 
-
+    /**
+     * Max number of weeks in 'a program', could be set to the number of weeks if. Simply causes
+     * slightly different output of the text displaying what week we are in
+     */
     private static final int DEFAULT_PROGRAM_WEEKS = 16;
 
     @Override

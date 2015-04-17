@@ -44,7 +44,9 @@ import java.util.List;
  * Created by stoyan on 4/3/15.
  */
 public class SlidePagerAdapter extends PagerAdapter {
-
+    /**
+     * The maximum number of weeks before we change the {@link #getLeftText(int, int)}
+     */
     private static final int DEFAULT_MAX_WEEKS = 10;
     /**
      * The start date of the {@link SlidePager}
@@ -81,6 +83,9 @@ public class SlidePagerAdapter extends PagerAdapter {
      */
     private OnSlidePageChangeListener mUserPageListener;
 
+    /**
+     * The attribute set from xml
+     */
     private TypedArray mAttributeSet;
 
     public void setAttributeSet(TypedArray attributeSet) {
@@ -107,7 +112,7 @@ public class SlidePagerAdapter extends PagerAdapter {
      * @param endDate   The end {@link Date} for computing the number of weeks
      */
     public SlidePagerAdapter(Context context, Date startDate, Date endDate) {
-        this(context, startDate, endDate, null, null, DEFAULT_MAX_WEEKS);
+        this(context, startDate, endDate, null, null, -1);
 
     }
 
@@ -115,8 +120,8 @@ public class SlidePagerAdapter extends PagerAdapter {
         this.mContext = context;
         this.mStartDate = startDate;
         this.mEndDate = endDate;
-        this.mUserPageListener = pageListener;
         this.mMaxWeeks = maxWeeks;
+        this.mUserPageListener = pageListener;
         setAttributeSet(attributes);
         this.mViews = initViews();
     }

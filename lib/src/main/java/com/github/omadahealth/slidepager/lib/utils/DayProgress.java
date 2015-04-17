@@ -5,10 +5,18 @@ package com.github.omadahealth.slidepager.lib.utils;
  */
 public class DayProgress {
 
+    /**
+     * Progress from 0-100
+     */
     private int mProgress;
 
-
-
+    /**
+     * Whether this is a special day, and is colored in differently
+     * when the page translates. Check :
+     * {@link com.github.omadahealth.slidepager.lib.views.DayProgressView#mTodayFillColor}
+     * {@link com.github.omadahealth.slidepager.lib.views.DayProgressView#mTodayOutlineColor}
+     * {@link com.github.omadahealth.slidepager.lib.views.DayProgressView#mTodayReachColor}
+     */
     private boolean mSpecial;
 
     public DayProgress(int progress, boolean special) {

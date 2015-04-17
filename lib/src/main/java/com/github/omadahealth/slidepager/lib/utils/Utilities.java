@@ -38,7 +38,12 @@ public class Utilities {
      */
     private static final String MONTH_IN_YEAR_STRING_FORMAT = "LLLL d";
 
-
+    /**
+     * Calculates the number of weeks between two dates
+     * @param start The start date
+     * @param end The end date
+     * @return Number of weeks the end date is after the start date, could be negative
+     */
     public static int getWeeksBetween(Date start, Date end) {
 
         if (end.before(start)) {
@@ -58,9 +63,14 @@ public class Utilities {
         return weeks;
     }
 
-    public static Date resetTime(Date d) {
+    /**
+     * Sets the time of date to midnight
+     * @param date the date
+     * @return the start of that date
+     */
+    public static Date resetTime(Date date) {
         Calendar cal = new GregorianCalendar();
-        cal.setTime(d);
+        cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
@@ -68,11 +78,17 @@ public class Utilities {
         return cal.getTime();
     }
 
-    public static String getWeekRangeText(Date date, int weeksSince) {
+    /**
+     * Generates a string representing the date range of, ie. April 5 - April 11
+     * @param date The initial date
+     * @param weeksBefore Number of weeks before the date
+     * @return ie. April 5 - April 11
+     */
+    public static String getWeekRangeText(Date date, int weeksBefore) {
         SimpleDateFormat df = new SimpleDateFormat(MONTH_IN_YEAR_STRING_FORMAT, Locale.US);
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
-        cal.add(Calendar.WEEK_OF_YEAR, -weeksSince);
+        cal.add(Calendar.WEEK_OF_YEAR, -weeksBefore);
 
         //Get the start of the week
         cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
@@ -86,12 +102,19 @@ public class Utilities {
         return dateString;
     }
 
+    /**
+     * Generates a string representing the current week compared to the total weeks represented
+     * @param position The current View in the {@link com.github.omadahealth.slidepager.lib.SlidePagerAdapter}
+     * @param totalWeeks The total number of weeks the {@link com.github.omadahealth.slidepager.lib.SlidePagerAdapter}
+     * @param maxWeeks The number of set weeks, could be the same as maxWeeks
+     * @return Html string of what week we are in
+     */
     public static String getWeekOfText(int position, int totalWeeks, int maxWeeks) {
         String start = "<html><b>Week ";
         String mid = " </b>of ";
         String end = "</html>";
         if(totalWeeks > maxWeeks){
-            return "<html><b>Week " + (position + 1);
+            return "<html><b>Week " + (position + 1) + "</b></html>";
         }
 
         return start + (position + 1) + mid + totalWeeks + end;
