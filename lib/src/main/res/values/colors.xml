@@ -5,7 +5,7 @@
     <color name="default_progress_not_completed_reach_color">#78909C</color>
     <color name="default_progress_not_completed_outline_color">#CFD8DC</color>
     <color name="default_progress_not_completed_fill_color">#F2F6F7</color>
-    <color name="default_progress_today_reach_color">#03A9F4</color>
-    <color name="default_progress_today_outline_color">#81D7FF</color>
-    <color name="default_progress_today_fill_color">#EDF8FC</color>
+    <color name="default_progress_special_reach_color">#03A9F4</color>
+    <color name="default_progress_special_outline_color">#81D7FF</color>
+    <color name="default_progress_special_fill_color">#EDF8FC</color>
 </resources>

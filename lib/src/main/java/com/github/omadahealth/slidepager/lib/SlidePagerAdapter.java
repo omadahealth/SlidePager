@@ -32,9 +32,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
-import com.github.omadahealth.slidepager.lib.interfaces.OnWeekListener;
+import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
-import com.github.omadahealth.slidepager.lib.views.WeekSlideView;
+import com.github.omadahealth.slidepager.lib.views.SlideView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -188,15 +188,15 @@ public class SlidePagerAdapter extends PagerAdapter {
     }
 
     /**
-     * Initializes a new {@link WeekSlideView} and sets its
-     * {@link OnWeekListener}
+     * Initializes a new {@link SlideView} and sets its
+     * {@link OnSlideListener}
      *
      * @return
      */
-    private WeekSlideView getWeekSlide(int pagePosition, int weeks) {
+    private SlideView getWeekSlide(int pagePosition, int weeks) {
         int weeksSince = weeks - (pagePosition + 1);
-        WeekSlideView week = new WeekSlideView(mContext, mAttributeSet, pagePosition, mUserPageListener, getLeftText(pagePosition, mWeeks), getRightText(weeksSince));
-        week.setListener(new OnWeekListener() {
+        SlideView week = new SlideView(mContext, mAttributeSet, pagePosition, mUserPageListener, getLeftText(pagePosition, mWeeks), getRightText(weeksSince));
+        week.setListener(new OnSlideListener() {
             @Override
             public void onDaySelected(int page, int index) {
                 Log.i("onDaySelected", "page : " + page + ", index : " + index);
@@ -209,7 +209,7 @@ public class SlidePagerAdapter extends PagerAdapter {
     }
 
     /**
-     * Returns the left text for the {@link WeekSlideView}
+     * Returns the left text for the {@link SlideView}
      *
      * @return
      */
@@ -219,7 +219,7 @@ public class SlidePagerAdapter extends PagerAdapter {
     }
 
     /**
-     * Returns the right text for the {@link WeekSlideView}
+     * Returns the right text for the {@link SlideView}
      *
      * @return
      */

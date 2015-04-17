@@ -7,26 +7,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/view_day_progress_dim"
-        android:paddingTop="@dimen/view_day_progress_margin_padding"
-        android:paddingBottom="@dimen/view_day_progress_margin_padding">
+        >
 
         <ImageView
-            android:id="@+id/day_progress_streak_left"
+            android:id="@+id/progress_streak_left"
             android:layout_width="0dp"
             android:layout_height="@dimen/view_day_progress_dim"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:src="@color/default_progress_completed_fill_color"
             android:alpha="0"
             android:visibility="invisible" />
 
         <ImageView
-            android:id="@+id/day_progress_streak_right"
+            android:id="@+id/progress_streak_right"
             android:layout_width="0dp"
             android:layout_height="@dimen/view_day_progress_dim"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:src="@color/default_progress_completed_fill_color"
             android:alpha="0"
-            android:visibility="invisible" />
+            android:visibility="visible" />
     </LinearLayout>
 
     <RelativeLayout
@@ -55,7 +56,7 @@
     </RelativeLayout>
 
     <com.github.omadahealth.typefaceview.TypefaceTextView
-        android:id="@+id/day_of_week"
+        android:id="@+id/progress_text"
         android:layout_below="@+id/circularbar_layout"
         android:layout_marginTop="5dp"
         android:layout_centerHorizontal="true"

@@ -31,8 +31,8 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
-import com.github.omadahealth.slidepager.lib.views.DayProgressView;
-import com.github.omadahealth.slidepager.lib.views.WeekSlideView;
+import com.github.omadahealth.slidepager.lib.views.ProgressView;
+import com.github.omadahealth.slidepager.lib.views.SlideView;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class SlidePager extends ViewPager {
 
     /**
      * The attributes that this view is initialized with; need them to init the
-     * child {@link DayProgressView}s
+     * child {@link ProgressView}s
      */
     private TypedArray mAttributes;
 
@@ -168,14 +168,14 @@ public class SlidePager extends ViewPager {
     }
 
     /**
-     * Resets the {@link DayProgressView} attributes to o progress and uncompleted colors.
+     * Resets the {@link ProgressView} attributes to o progress and uncompleted colors.
      * Hides the series with {@link #animateSeries(int, boolean)}
      *
      * @param position The position of the page to reset
      */
     @SuppressWarnings("unchecked")
     private void resetPage(int position) {
-        WeekSlideView selectedView = (WeekSlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
+        SlideView selectedView = (SlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
         selectedView.resetPage(mAttributes);
     }
 
@@ -183,8 +183,8 @@ public class SlidePager extends ViewPager {
      * @param position
      */
     private void animatePage(int position) {
-        WeekSlideView weekSlideView = (WeekSlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
-        weekSlideView.animatePage(mUserPageListener, mAttributes);
+        SlideView slideView = (SlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
+        slideView.animatePage(mUserPageListener, mAttributes);
     }
 
     /**
@@ -192,8 +192,8 @@ public class SlidePager extends ViewPager {
      * @param show
      */
     private void animateSeries(int position, boolean show) {
-        WeekSlideView weekSlideView = (WeekSlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
-        weekSlideView.animateSeries(show);
+        SlideView slideView = (SlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
+        slideView.animateSeries(show);
     }
 
     @SuppressWarnings("unchecked")

@@ -26,7 +26,7 @@ package com.github.omadahealth.slidepager.lib.interfaces;
 /**
  * Created by stoyan on 4/7/15.
  */
-public interface OnWeekListener {
+public interface OnSlideListener {
 
     /**
      * Called when a day is clicked in the view

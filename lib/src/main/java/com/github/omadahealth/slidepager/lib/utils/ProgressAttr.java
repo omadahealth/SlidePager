@@ -3,7 +3,7 @@ package com.github.omadahealth.slidepager.lib.utils;
 /**
  * Created by stoyan on 4/15/15.
  */
-public class DayProgress {
+public class ProgressAttr {
 
     /**
      * Progress from 0-100
@@ -13,13 +13,13 @@ public class DayProgress {
     /**
      * Whether this is a special day, and is colored in differently
      * when the page translates. Check :
-     * {@link com.github.omadahealth.slidepager.lib.views.DayProgressView#mTodayFillColor}
-     * {@link com.github.omadahealth.slidepager.lib.views.DayProgressView#mTodayOutlineColor}
-     * {@link com.github.omadahealth.slidepager.lib.views.DayProgressView#mTodayReachColor}
+     * {@link com.github.omadahealth.slidepager.lib.views.ProgressView#mSpecialFillColor}
+     * {@link com.github.omadahealth.slidepager.lib.views.ProgressView#mSpecialOutlineColor}
+     * {@link com.github.omadahealth.slidepager.lib.views.ProgressView#mSpecialReachColor}
      */
     private boolean mSpecial;
 
-    public DayProgress(int progress, boolean special) {
+    public ProgressAttr(int progress, boolean special) {
         this.mProgress = progress;
         this.mSpecial = special;
     }

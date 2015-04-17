@@ -23,8 +23,7 @@
  */
 package com.github.omadahealth.slidepager.lib;
 
-import android.annotation.TargetApi;
-import android.os.Build;
+import android.content.res.TypedArray;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
@@ -76,7 +75,6 @@ public class SlideTransformer implements ViewPager.PageTransformer {
      * @param view     The {@link android.view.View} currently animating
      * @param position The position reached by this view
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @SuppressWarnings("unchecked")
     @Override
     public void transformPage(View view, float position) {
@@ -150,15 +148,15 @@ public class SlideTransformer implements ViewPager.PageTransformer {
             mRatios.put(R.id.left_textview, new Ratio(4.0f, 1.0f));
             mRatios.put(R.id.right_textview, new Ratio(1.0f, 4.0f));
 
-            mRatios.put(R.id.day_progress_1, new Ratio(4.0f, 1.0f));
-            mRatios.put(R.id.day_progress_2, new Ratio(3.5f, 1.5f));
-            mRatios.put(R.id.day_progress_3, new Ratio(3.0f, 2.0f));
-            mRatios.put(R.id.day_progress_4, new Ratio(2.5f, 2.5f));
-            mRatios.put(R.id.day_progress_5, new Ratio(2.0f, 3.0f));
-            mRatios.put(R.id.day_progress_6, new Ratio(1.5f, 3.5f));
-            mRatios.put(R.id.day_progress_7, new Ratio(1.0f, 4.0f));
+            mRatios.put(R.id.progress_1, new Ratio(4.0f, 1.0f));
+            mRatios.put(R.id.progress_2, new Ratio(3.5f, 1.5f));
+            mRatios.put(R.id.progress_3, new Ratio(3.0f, 2.0f));
+            mRatios.put(R.id.progress_4, new Ratio(2.5f, 2.5f));
+            mRatios.put(R.id.progress_5, new Ratio(2.0f, 3.0f));
+            mRatios.put(R.id.progress_6, new Ratio(1.5f, 3.5f));
+            mRatios.put(R.id.progress_7, new Ratio(1.0f, 4.0f));
 
-            mRatios.put(R.id.selected_day_image_view, mRatios.get(R.id.day_progress_4));
+            mRatios.put(R.id.selected_day_image_view, mRatios.get(R.id.progress_4));
         }
 
         return mRatios;
@@ -168,14 +166,15 @@ public class SlideTransformer implements ViewPager.PageTransformer {
      * Stops the {@link android.support.v4.view.ViewPager} from scrolling the root frame
      * while we perform animations on its children
      * </p>
+     * This method can sometimes have an issue, not resetting the alpha and visibility to visible.
+     * A fix has been applied to this issue in {@link com.github.omadahealth.slidepager.lib.views.SlideView#resetPage(TypedArray)}.
      *
      * @param view     The root view
      * @param position The position the ViewPager is in
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void lockPage(View view, float position) {
         view.setTranslationX(view.getWidth() * -position);
-        if (position <= -1.0F || position >= 1.0F) {
+        if (position < -1.0F || position > 1.0F) {
             view.setAlpha(0.0F);
             view.setVisibility(View.GONE);
         } else if (position == 0.0F) {
