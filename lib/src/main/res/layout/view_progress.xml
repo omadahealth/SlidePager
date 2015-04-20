@@ -6,8 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/view_day_progress_dim"
-        >
+        android:layout_height="@dimen/view_day_progress_dim">
 
         <ImageView
             android:id="@+id/progress_streak_left"
@@ -65,5 +64,5 @@
         android:textColor="@android:color/white"
         android:text="M"
         android:textSize="@dimen/week_text_size"
-        app:typeface="roboto_light" />
+        app:tv_typeface="roboto_light" />
 </RelativeLayout>

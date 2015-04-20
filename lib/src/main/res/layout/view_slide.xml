@@ -18,8 +18,8 @@
             android:textSize="@dimen/week_text_size"
             android:paddingTop="15dp"
             android:paddingLeft="15dp"
-            app:typeface="roboto_light"
-            app:html="true"/>
+            app:tv_typeface="roboto_light"
+            app:tv_html="true"/>
 
         <com.github.omadahealth.typefaceview.TypefaceTextView
             android:id="@+id/right_textview"
@@ -31,7 +31,7 @@
             android:textSize="@dimen/week_text_size"
             android:paddingTop="15dp"
             android:paddingRight="15dp"
-            app:typeface="roboto_light"/>
+            app:tv_typeface="roboto_light"/>
 
     </RelativeLayout>
 
