@@ -156,6 +156,11 @@ public class ProgressView extends RelativeLayout {
     private int mSpecialFillColor;
 
     /**
+     * The width of the reached progress
+     */
+    private float mReachedWidth;
+
+    /**
      * The strings that we set in {@link #mProgressText}
      */
     private static String[] mProgressStrings;
@@ -193,6 +198,7 @@ public class ProgressView extends RelativeLayout {
     private static String INSTANCE_SPECIAL_COMPLETED_COLOR = "special_color";
     private static String INSTANCE_SPECIAL_COMPLETED_OUTLINE_COLOR = "special_outline_color";
     private static String INSTANCE_SPECIAL_COMPLETED_FILL_COLOR = "special_fill_color";
+    private static String INSTANCE_REACHED_WIDTH = "reached_width";
 
     public ProgressView(Context context) {
         this(context, null);
@@ -217,6 +223,7 @@ public class ProgressView extends RelativeLayout {
         bundle.putInt(INSTANCE_SPECIAL_COMPLETED_COLOR, mSpecialReachColor);
         bundle.putInt(INSTANCE_SPECIAL_COMPLETED_OUTLINE_COLOR, mSpecialOutlineColor);
         bundle.putInt(INSTANCE_SPECIAL_COMPLETED_FILL_COLOR, mSpecialFillColor);
+        bundle.putFloat(INSTANCE_REACHED_WIDTH, mReachedWidth);
 
 
         return bundle;
@@ -239,6 +246,8 @@ public class ProgressView extends RelativeLayout {
             mSpecialReachColor = bundle.getInt(INSTANCE_SPECIAL_COMPLETED_COLOR, res.getColor(R.color.default_progress_special_reach_color));
             mSpecialOutlineColor = bundle.getInt(INSTANCE_SPECIAL_COMPLETED_OUTLINE_COLOR, res.getColor(R.color.default_progress_special_outline_color));
             mSpecialFillColor = bundle.getInt(INSTANCE_SPECIAL_COMPLETED_FILL_COLOR, res.getColor(R.color.default_progress_special_fill_color));
+
+            mReachedWidth = bundle.getFloat(INSTANCE_REACHED_WIDTH, res.getDimension(R.dimen.default_progress_reached_witdth));
 
             super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATE));
             return;
@@ -263,7 +272,8 @@ public class ProgressView extends RelativeLayout {
         mProgressText = ButterKnife.findById(this, R.id.progress_text);
 
         mDefaultProgressTypeface = mProgressText.getCurrentTypeface();
-
+        mCircularBar.setStartLineEnabled(false);
+        mProgressText.setTypeface(TypefaceTextView.getFont(context, TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
         loadStyledAttributes(null, null);
     }
 
@@ -291,6 +301,8 @@ public class ProgressView extends RelativeLayout {
             mSpecialOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_outline_color, res.getColor(R.color.default_progress_special_outline_color));
             mSpecialFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_fill_color, res.getColor(R.color.default_progress_special_fill_color));
 
+            mReachedWidth = attributes.getDimension(R.styleable.SlidePager_slide_progress_reached_width, res.getDimension(R.dimen.default_progress_reached_witdth));
+
             //Do not recycle attributes, we need them for the future views
         } else {
             mShowStreaks = true;
@@ -305,6 +317,8 @@ public class ProgressView extends RelativeLayout {
             mSpecialReachColor = res.getColor(R.color.default_progress_special_reach_color);
             mSpecialOutlineColor = res.getColor(R.color.default_progress_special_outline_color);
             mSpecialFillColor = res.getColor(R.color.default_progress_special_fill_color);
+
+            mReachedWidth = res.getDimension(R.dimen.default_progress_reached_witdth);
         }
 
         setCircleColors();
@@ -380,6 +394,7 @@ public class ProgressView extends RelativeLayout {
         mReachColor = isSpecial ? mSpecialReachColor : mNotCompletedReachColor;
         mOutlineColor = isSpecial ? mSpecialOutlineColor : mNotCompletedOutlineColor;
 
+        mCircularBar.setClockwiseReachedArcWidth(mReachedWidth);
         mCircularBar.setCircleFillColor(mFillColor);
         mCircularBar.setClockwiseReachedArcColor(mReachColor);
         mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);

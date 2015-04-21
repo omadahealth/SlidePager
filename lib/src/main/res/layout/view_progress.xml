@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -40,8 +39,7 @@
             android:layout_height="@dimen/view_day_progress_dim"
             android:layout_width="@dimen/view_day_progress_dim"
             android:layout_marginLeft="@dimen/view_day_progress_margin_padding"
-            android:layout_marginRight="@dimen/view_day_progress_margin_padding"
-            style="@style/CircularBarPagerStyle" />
+            android:layout_marginRight="@dimen/view_day_progress_margin_padding"/>
 
         <ImageView
             android:id="@+id/check_mark"
@@ -63,6 +61,5 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:text="M"
-        android:textSize="@dimen/week_text_size"
-        app:tv_typeface="roboto_light" />
+        android:textSize="@dimen/week_text_size"/>
 </RelativeLayout>

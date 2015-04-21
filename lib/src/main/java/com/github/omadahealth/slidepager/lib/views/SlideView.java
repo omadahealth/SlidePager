@@ -37,6 +37,7 @@ import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListene
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
+import com.github.omadahealth.typefaceview.TypefaceType;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -164,7 +165,7 @@ public class SlideView extends LinearLayout {
             mRightTextView.setVisibility(mShowRightText && mRightText != null? VISIBLE : GONE);
 
             if(mShowLeftText && mLeftTextView != null && mLeftText != null){
-                mLeftTextView.setText(mLeftText);
+                mLeftTextView.setText(mLeftText, true);
             }
 
             if(mShowRightText && mRightTextView != null && mRightText != null){
@@ -208,6 +209,9 @@ public class SlideView extends LinearLayout {
 
         mLeftTextView = ButterKnife.findById(this, R.id.left_textview);
         mRightTextView = ButterKnife.findById(this, R.id.right_textview);
+
+        mLeftTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
+        mRightTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
 
         mSelectedImageView = ButterKnife.findById(this, R.id.selected_day_image_view);
         mSelectedImageView.setSelectedViewId(mProgressList.get(SlideView.getSelectedView()).getId());

@@ -5,10 +5,11 @@
         <!-- Customize your theme here. -->
     </style>
 
-
     <style name="SlidePagerStyle">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
+
+        <item name="slide_progress_reached_width">3dp</item>
 
         <item name="slide_start_at_end">true</item>
         <item name="slide_show_streaks">true</item>
