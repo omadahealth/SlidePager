@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 7
-        versionName "1.1.9"
+        versionCode 8
+        versionName "1.2.0"
     }
     buildTypes {
         release {
@@ -23,7 +23,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
 
     //CircularBarPager
-    compile 'com.github.orangegangsters:library:1.2.4@aar'
+    compile 'com.github.orangegangsters:library:1.2.5@aar'
     //Typefaces
     compile 'com.github.omadahealth.typefaceview:typefaceview:1.2.5@aar'
 
@@ -35,25 +35,25 @@ dependencies {
 
 
 //gradle clean build uploadArchives
-//apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
 
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
-}
-artifacts {
-    archives androidSourcesJar
-}
-
-apply plugin: 'maven'
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri("../../omada-nexus/release"))
-            snapshotRepository(url: uri("../../omada-nexus/release"))
-            pom.groupId = GROUP
-            pom.artifactId = POM_ARTIFACT_ID
-            pom.version = VERSION_NAME
-        }
-    }
-}
+//task androidSourcesJar(type: Jar) {
+//    classifier = 'sources'
+//    from android.sourceSets.main.java.sourceFiles
+//}
+//artifacts {
+//    archives androidSourcesJar
+//}
+//
+//apply plugin: 'maven'
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: uri("../../omada-nexus/release"))
+//            snapshotRepository(url: uri("../../omada-nexus/release"))
+//            pom.groupId = GROUP
+//            pom.artifactId = POM_ARTIFACT_ID
+//            pom.version = VERSION_NAME
+//        }
+//    }
+//}
