@@ -27,18 +27,15 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
+import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by stoyan on 4/3/15.
@@ -66,7 +63,7 @@ public class SlidePagerAdapter extends PagerAdapter {
     /**
      * The list of {@link View} used to retain inflated views
      */
-    private List<SlideView> mViews;
+    private SlideView[] mViews;
 
     /**
      * Weeks that this view represents
@@ -128,20 +125,34 @@ public class SlidePagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mViews.size();
+        return mViews.length;
     }
 
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
         SlideView currentView;
-        if (mViews.size() > position) {
-            currentView = mViews.get(position);
+        if (mViews.length > position) {
+            currentView = getViewForPosition(position);
         } else {
-            currentView = getWeekSlide(position, mWeeks);
-            mViews.add(currentView);
+            return null;
         }
 
         collection.addView(currentView);
+        return currentView;
+    }
+
+    private SlideView getViewForPosition(int position) {
+        if (mViews == null) {
+            return getWeekSlide(position, mWeeks);
+        }
+
+        SlideView currentView = mViews[position];
+
+        if (currentView == null) {
+            currentView = getWeekSlide(position, mWeeks);
+            mViews[position] = currentView;
+        }
+
         return currentView;
     }
 
@@ -162,10 +173,11 @@ public class SlidePagerAdapter extends PagerAdapter {
      * @return The view for the given position, if created yet
      */
     public SlideView getCurrentView(int position) {
-        if (mViews == null || position > mViews.size() - 1) {
+        if (mViews == null || position > mViews.length - 1) {
             return null;
         }
-        return mViews.get(position);
+
+        return getViewForPosition(position);
     }
 
     /**
@@ -174,17 +186,14 @@ public class SlidePagerAdapter extends PagerAdapter {
      *
      * @return The number of weeks between the two dates
      */
-    private List<SlideView> initViews() {
+    private SlideView[] initViews() {
         if (mEndDate.before(mStartDate)) {
             throw new IllegalArgumentException("Start date must be before end date");
         }
         mWeeks = Utilities.getWeeksBetween(mStartDate, mEndDate);
         mWeeks = mWeeks == 0 ? 1 : mWeeks;
-        List<SlideView> views = new ArrayList<>(mWeeks);
-        for (int i = 0; i < mWeeks; i++) {
-            views.add(getWeekSlide(i, mWeeks));
-        }
-        return views;
+
+        return new SlideView[mWeeks];
     }
 
     /**
@@ -199,7 +208,7 @@ public class SlidePagerAdapter extends PagerAdapter {
         week.setListener(new OnSlideListener() {
             @Override
             public void onDaySelected(int page, int index) {
-                Log.i("onDaySelected", "page : " + page + ", index : " + index);
+//                Log.i("onDaySelected", "page : " + page + ", index : " + index);
                 if (mUserPageListener != null) {
                     mUserPageListener.onDaySelected(page, index);
                 }
