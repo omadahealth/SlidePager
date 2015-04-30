@@ -26,6 +26,7 @@ package com.github.omadahealth.slidepager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 import com.github.omadahealth.demo.R;
 import com.github.omadahealth.slidepager.lib.SlidePager;
@@ -98,6 +99,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
     @Override
     public void onDaySelected(int page, int index) {
+        Log.i("MainActivity", "onDaySelected : " + page + ", " + index);
     }
 
     @Override

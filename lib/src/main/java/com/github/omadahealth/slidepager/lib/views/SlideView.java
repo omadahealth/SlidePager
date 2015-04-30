@@ -162,13 +162,13 @@ public class SlideView extends LinearLayout {
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
 
             mLeftTextView.setVisibility(mShowLeftText && mLeftText != null ? VISIBLE : GONE);
-            mRightTextView.setVisibility(mShowRightText && mRightText != null? VISIBLE : GONE);
+            mRightTextView.setVisibility(mShowRightText && mRightText != null ? VISIBLE : GONE);
 
-            if(mShowLeftText && mLeftTextView != null && mLeftText != null){
+            if (mShowLeftText && mLeftTextView != null && mLeftText != null) {
                 mLeftTextView.setText(mLeftText, true);
             }
 
-            if(mShowRightText && mRightTextView != null && mRightText != null){
+            if (mShowRightText && mRightTextView != null && mRightText != null) {
                 mRightTextView.setText(mRightText);
             }
         }
@@ -300,6 +300,9 @@ public class SlideView extends LinearLayout {
                     animateProgress((ProgressView) child, children, listener);
                     animateSelectedTranslation(mProgressList.get(mSelectedView));
                 }
+            }
+            if (mCallback != null) {
+                mCallback.onDaySelected(mPagePosition, mSelectedView);
             }
         }
     }
