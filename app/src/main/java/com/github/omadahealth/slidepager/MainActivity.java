@@ -63,6 +63,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
         SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(16), new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
         SlideView.setSelectedView(5);

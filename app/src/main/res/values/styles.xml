@@ -13,8 +13,8 @@
 
         <item name="slide_start_at_end">true</item>
         <item name="slide_show_streaks">true</item>
-        <item name="slide_show_week">true</item>
-        <item name="slide_show_date">true</item>
+        <item name="slide_show_week">false</item>
+        <item name="slide_show_date">false</item>
     </style>
 
 </resources>
