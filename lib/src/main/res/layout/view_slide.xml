@@ -6,7 +6,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="15dp">
+        android:paddingTop="15dp"
+        android:visibility="gone">
 
         <com.github.omadahealth.typefaceview.TypefaceTextView
             android:id="@+id/left_textview"
@@ -33,7 +34,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:paddingTop="5dp"
         android:paddingLeft="@dimen/view_day_progress_margin_padding"
         android:paddingRight="@dimen/view_day_progress_margin_padding">
 
@@ -90,7 +91,7 @@
     <com.github.omadahealth.slidepager.lib.views.SelectedImageView android:id="@+id/selected_day_image_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="12dp"
         android:background="@mipmap/arrow_selected"/>
 
 
