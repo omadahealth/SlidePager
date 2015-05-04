@@ -292,7 +292,9 @@ public class SlideView extends LinearLayout {
                         }
                         if(allowed){
 //                            Log.d(TAG, "allowed");
-                            mCallback.onDaySelected(mPagePosition, index);
+                            if(mCallback != null){
+                                mCallback.onDaySelected(mPagePosition, index);
+                            }
                             toggleSelectedViews(index);
                             animateSelectedTranslation(view);
                         }else{
@@ -409,9 +411,11 @@ public class SlideView extends LinearLayout {
         }
 
         //Try any position greater
-        for(int i = mProgressList.size() - 1; i >= mSelectedView; i--){
-            if(mCallback.isDaySelectable(mPagePosition, i)){
-                return i;
+        if(mProgressList != null){
+            for(int i = mProgressList.size() - 1; i >= mSelectedView; i--){
+                if(mCallback.isDaySelectable(mPagePosition, i)){
+                    return i;
+                }
             }
         }
 
