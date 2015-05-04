@@ -57,9 +57,10 @@
         android:layout_below="@+id/circularbar_layout"
         android:layout_marginTop="5dp"
         android:layout_centerHorizontal="true"
+        android:singleLine="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:text="M"
-        android:textSize="@dimen/week_text_size"/>
+        android:textSize="@dimen/not_selected_progress_view_text_size"/>
 </RelativeLayout>

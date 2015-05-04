@@ -249,7 +249,7 @@ public class SlideView extends LinearLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                toggleSelectedViews(((ProgressView) view).getIntTag());
+//                toggleSelectedViews(((ProgressView) view).getIntTag());
             }
 
             @Override
@@ -290,14 +290,14 @@ public class SlideView extends LinearLayout {
                         if (mCallback != null) {
                             allowed = mCallback.isDaySelectable(mPagePosition, index);
                         }
-                        if(allowed){
+                        if (allowed) {
 //                            Log.d(TAG, "allowed");
-                            if(mCallback != null){
+                            if (mCallback != null) {
                                 mCallback.onDaySelected(mPagePosition, index);
                             }
                             toggleSelectedViews(index);
                             animateSelectedTranslation(view);
-                        }else{
+                        } else {
 //                            Log.d(TAG, "NOT allowed");
                             YoYo.with(Techniques.Shake)
                                     .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
@@ -348,6 +348,7 @@ public class SlideView extends LinearLayout {
 
         loadStyledAttributes(mAttributes);
         mSelectedView = getSelectableIndex();
+
         animateSeries(false);
         getSelectedImageView().resetView();
         final List<View> children = (List<View>) getTag();
@@ -359,11 +360,14 @@ public class SlideView extends LinearLayout {
                 }
             }
         }
+        toggleSelectedViews(mSelectedView);
+
     }
 
     /**
      * Animates the progress of a {@link ProgressView}
-     * @param view The view to animate
+     *
+     * @param view     The view to animate
      * @param children The sibling views we use to evaluate streaks showing
      * @param listener The listener to call to {@link OnSlidePageChangeListener#getDayProgress(int, int)}
      */
@@ -376,6 +380,7 @@ public class SlideView extends LinearLayout {
 
     /**
      * Sets the selected {@link ProgressView}
+     *
      * @param selected The index of the selected view in {@link #mProgressList}
      */
     private void toggleSelectedViews(int selected) {
@@ -383,37 +388,49 @@ public class SlideView extends LinearLayout {
         for (ProgressView day : mProgressList) {
             if (day.getIntTag() == mSelectedView) {
                 day.isSelected(true);
+                if (mCallback != null) {
+                    String label = mCallback.getDayTextLabel(mPagePosition, day.getIntTag());
+                    if (label != null) {
+                        day.setProgressText(label);
+                    } else {
+                        day.setProgressText();
+                    }
+
+                } else {
+                    day.setProgressText();
+                }
                 continue;
             }
             day.isSelected(false);
+            day.setProgressText();
         }
     }
-
 
     /**
      * Checks to see what index is selectable on {@link #animatePage(OnSlidePageChangeListener, TypedArray)}
      * so that we don't automatically select a non selectable date in {@link com.github.omadahealth.slidepager.lib.SlidePager#resetPage(int)}
+     *
      * @return The largest index selectable before {#mSelectedView}, if not the largest index selectable in {@link SlideView} or 0 if non are
      */
     public int getSelectableIndex() {
-        if(mCallback == null){
+        if (mCallback == null) {
             return mSelectedView;
         }
-        if(mCallback.isDaySelectable(mPagePosition, mSelectedView)){
+        if (mCallback.isDaySelectable(mPagePosition, mSelectedView)) {
             return mSelectedView;
         }
 
         //Try any position lower than the current one
-        for(int i = mSelectedView; i >= 0; i--){
-            if(mCallback.isDaySelectable(mPagePosition, i)){
+        for (int i = mSelectedView; i >= 0; i--) {
+            if (mCallback.isDaySelectable(mPagePosition, i)) {
                 return i;
             }
         }
 
         //Try any position greater
-        if(mProgressList != null){
-            for(int i = mProgressList.size() - 1; i >= mSelectedView; i--){
-                if(mCallback.isDaySelectable(mPagePosition, i)){
+        if (mProgressList != null) {
+            for (int i = mProgressList.size() - 1; i >= mSelectedView; i--) {
+                if (mCallback.isDaySelectable(mPagePosition, i)) {
                     return i;
                 }
             }

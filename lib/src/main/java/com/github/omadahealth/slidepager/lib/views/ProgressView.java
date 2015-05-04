@@ -30,6 +30,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -247,7 +248,7 @@ public class ProgressView extends RelativeLayout {
             mSpecialOutlineColor = bundle.getInt(INSTANCE_SPECIAL_COMPLETED_OUTLINE_COLOR, res.getColor(R.color.default_progress_special_outline_color));
             mSpecialFillColor = bundle.getInt(INSTANCE_SPECIAL_COMPLETED_FILL_COLOR, res.getColor(R.color.default_progress_special_fill_color));
 
-            mReachedWidth = bundle.getFloat(INSTANCE_REACHED_WIDTH, res.getDimension(R.dimen.default_progress_reached_witdth));
+            mReachedWidth = bundle.getFloat(INSTANCE_REACHED_WIDTH, res.getDimension(R.dimen.default_progress_reached_width));
 
             super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATE));
             return;
@@ -301,7 +302,7 @@ public class ProgressView extends RelativeLayout {
             mSpecialOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_outline_color, res.getColor(R.color.default_progress_special_outline_color));
             mSpecialFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_fill_color, res.getColor(R.color.default_progress_special_fill_color));
 
-            mReachedWidth = attributes.getDimension(R.styleable.SlidePager_slide_progress_reached_width, res.getDimension(R.dimen.default_progress_reached_witdth));
+            mReachedWidth = attributes.getDimension(R.styleable.SlidePager_slide_progress_reached_width, res.getDimension(R.dimen.default_progress_reached_width));
 
             //Do not recycle attributes, we need them for the future views
         } else {
@@ -318,7 +319,7 @@ public class ProgressView extends RelativeLayout {
             mSpecialOutlineColor = res.getColor(R.color.default_progress_special_outline_color);
             mSpecialFillColor = res.getColor(R.color.default_progress_special_fill_color);
 
-            mReachedWidth = res.getDimension(R.dimen.default_progress_reached_witdth);
+            mReachedWidth = res.getDimension(R.dimen.default_progress_reached_width);
         }
 
         setCircleColors();
@@ -398,15 +399,21 @@ public class ProgressView extends RelativeLayout {
         mCircularBar.setCircleFillColor(mFillColor);
         mCircularBar.setClockwiseReachedArcColor(mReachColor);
         mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
-        setProgressText();
+    }
 
+    /**
+     * Calls {@link #setProgressText(String)} )} with {@link #mProgressStrings}
+     * array position for this view
+     */
+    public void setProgressText() {
+        setProgressText(mProgressStrings[getIntTag()]);
     }
 
     /**
      * Sets the text for the {@link #mProgressText}
      */
-    private void setProgressText() {
-        getProgressTextView().setText(mProgressStrings[getIntTag()]);
+    public void setProgressText(String text){
+        getProgressTextView().setText(text);
         getProgressTextView().setTextColor(mNotCompletedReachColor);
     }
 
@@ -416,9 +423,11 @@ public class ProgressView extends RelativeLayout {
      * @param selected True for {@link TypefaceType#ROBOTO_BOLD}, false for {@link TypefaceType#ROBOTO_THIN}
      */
     public void isSelected(boolean selected) {
+        Resources res = getContext().getResources();
         Typeface typeface = TypefaceTextView.getFont(getContext(),
                 selected ? TypefaceType.ROBOTO_BOLD.getAssetFileName() : mDefaultProgressTypeface.getAssetFileName());
         mProgressText.setTypeface(typeface);
+        mProgressText.setTextSize(TypedValue.COMPLEX_UNIT_PX, selected ? res.getDimension(R.dimen.selected_progress_view_text_size) : res.getDimension(R.dimen.not_selected_progress_view_text_size));
     }
 
     /**

@@ -42,4 +42,13 @@ public interface OnSlideListener {
      * @return True if selected page index is allowed, false otherwise
      */
     boolean isDaySelectable(int page, int index);
+
+    /**
+     * Called when the {@link com.github.omadahealth.slidepager.lib.views.ProgressView} has been
+     * selected, returns the text it should display as its label
+     * @param page The page of the view
+     * @param index The index of the view
+     * @return The text label
+     */
+    String getDayTextLabel(int page, int index);
 }

@@ -36,8 +36,11 @@ import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListene
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener {
 
@@ -50,7 +53,14 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
      * Max number of weeks in 'a program', could be set to the number of weeks if. Simply causes
      * slightly different output of the text displaying what week we are in
      */
-    private static final int DEFAULT_PROGRAM_WEEKS = 16;
+    private static final int DEFAULT_PROGRAM_WEEKS = 52;
+
+    /**
+     * Short month day:   Jan 20
+     */
+    public static final String DATE_SHORT_MONTH_DAY_STRING_FORMAT = "LLL d";
+
+    private Date mStartDate;
 
     @Override
     protected void onResume() {
@@ -62,10 +72,14 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Calendar cal = new GregorianCalendar();
+
+        //TODO function
+        mStartDate = getPreviousDate(DEFAULT_PROGRAM_WEEKS);
 
 
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
-        SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(16), new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
+        SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, mStartDate, new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
         SlideView.setSelectedView(5);
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
@@ -113,6 +127,11 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     }
 
     @Override
+    public String getDayTextLabel(int page, int index) {
+        return getSelectedDayText(mStartDate.getTime(), page, index);
+    }
+
+    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
     }
 
@@ -127,15 +146,31 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     /**
      * Returns a date from a time
      *
-     * @param weeks Number of weeks before today
+     * @param weeksBefore Number of weeksBefore before today
      * @return
      */
-    private Date getPreviousDate(int weeks) {
-        Calendar cal = Calendar.getInstance();
+    private Date getPreviousDate(int weeksBefore) {
+        weeksBefore--;
+        Calendar cal = new GregorianCalendar();
         Date now = new Date();
-        cal.setTime(now);
 
-        cal.add(Calendar.DAY_OF_YEAR, -1 * 7 * weeks);
-        return new Date(cal.getTimeInMillis());
+        cal.setTime(now);
+        //Get the start of the week
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+
+        cal.add(Calendar.WEEK_OF_YEAR, -weeksBefore);
+
+        return cal.getTime();
+    }
+
+    public static String getSelectedDayText(long start, int page, int index) {
+        SimpleDateFormat sf = new SimpleDateFormat(DATE_SHORT_MONTH_DAY_STRING_FORMAT, Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+        Date startDate = new Date(start);
+        cal.setTime(startDate);
+
+        cal.add(Calendar.WEEK_OF_YEAR, page);
+        cal.add(Calendar.DAY_OF_YEAR, index);
+        return sf.format(new Date(cal.getTimeInMillis())).toUpperCase();
     }
 }

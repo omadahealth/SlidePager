@@ -221,6 +221,15 @@ public class SlidePagerAdapter extends PagerAdapter {
                 //Allow by default, let user disable by choice
                 return true;
             }
+
+            @Override
+            public String getDayTextLabel(int page, int index) {
+                if (mUserPageListener != null) {
+                    return mUserPageListener.getDayTextLabel(page, index);
+                }
+                //Null causes default text to be set
+                return null;
+            }
         });
         return week;
     }
