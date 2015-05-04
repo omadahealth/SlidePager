@@ -453,6 +453,10 @@ public class ProgressView extends RelativeLayout {
         } else {
             mCircularBar.setClockwiseReachedArcColor(progress.getProgress() == 100 ? mCompletedColor : mReachColor);
         }
+        if(progress.isSpecial() && progress.getProgress() < 0.01){
+            mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.ic_add_plus));
+            mCheckMark.setAlpha(1f);
+        }
         mCircularBar.animateProgress(start, progress.getProgress(), duration);
     }
 

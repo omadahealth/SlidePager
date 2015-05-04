@@ -39,6 +39,11 @@ public class Utilities {
     private static final String MONTH_IN_YEAR_STRING_FORMAT = "LLLL d";
 
     /**
+     * Short month day:   Jan 20
+     */
+    public static final String DATE_SHORT_MONTH_DAY_STRING_FORMAT = "LLL d";
+
+    /**
      * Calculates the number of weeks between two dates
      * @param start The start date
      * @param end The end date
@@ -118,5 +123,36 @@ public class Utilities {
         }
 
         return start + (position + 1) + mid + totalWeeks + end;
+    }
+
+    /**
+     * Returns a date from a time
+     *
+     * @param weeksBefore Number of weeksBefore before today
+     * @return
+     */
+    public static Date getPreviousDate(int weeksBefore) {
+        weeksBefore--;
+        Calendar cal = new GregorianCalendar();
+        Date now = new Date();
+
+        cal.setTime(now);
+        //Get the start of the week
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+
+        cal.add(Calendar.WEEK_OF_YEAR, -weeksBefore);
+
+        return cal.getTime();
+    }
+
+    public static String getSelectedDayText(long start, int page, int index) {
+        SimpleDateFormat sf = new SimpleDateFormat(DATE_SHORT_MONTH_DAY_STRING_FORMAT, Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+        Date startDate = new Date(start);
+        cal.setTime(startDate);
+
+        cal.add(Calendar.WEEK_OF_YEAR, page);
+        cal.add(Calendar.DAY_OF_YEAR, index);
+        return sf.format(new Date(cal.getTimeInMillis())).toUpperCase();
     }
 }
