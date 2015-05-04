@@ -26,10 +26,13 @@ package com.github.omadahealth.slidepager.lib.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.omadahealth.slidepager.lib.R;
@@ -57,9 +60,16 @@ public class SlideView extends LinearLayout {
     private static final String TAG = "SlideView";
 
     /**
-     * The duration for the animation for {@link #mSelectedImageView}
+     * The duration for the animation for {@link #mSelectedImageView} when {@link OnSlideListener#onDaySelected(int, int)}
+     * is allowed
      */
     private static final int SELECTION_ANIMATION_DURATION = 500;
+
+    /**
+     * The duration for the animation for {@link #mSelectedImageView} when {@link OnSlideListener#onDaySelected(int, int)}
+     * is not allowed
+     */
+    private static final long NOT_ALLOWED_SHAKE_ANIMATION_DURATION = 500;
 
     /**
      * An array that holds all the {@link ProgressView} for this layout
@@ -277,12 +287,20 @@ public class SlideView extends LinearLayout {
                     @Override
                     public void onClick(View view) {
                         int index = progressView.getIntTag();
-
-                        toggleSelectedViews(index);
-
-                        animateSelectedTranslation(view);
+                        boolean allowed = true;
                         if (mCallback != null) {
+                            allowed = mCallback.isDaySelectable(mPagePosition, index);
+                        }
+                        if(allowed){
+                            Log.d(TAG, "allowed");
                             mCallback.onDaySelected(mPagePosition, index);
+                            toggleSelectedViews(index);
+                            animateSelectedTranslation(view);
+                        }else{
+                            Log.d(TAG, "NOT allowed");
+                            YoYo.with(Techniques.Shake)
+                                    .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
+                                    .playOn(SlideView.this);
                         }
                     }
                 });

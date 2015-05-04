@@ -29,8 +29,17 @@ package com.github.omadahealth.slidepager.lib.interfaces;
 public interface OnSlideListener {
 
     /**
-     * Called when a day is clicked in the view
+     * Called when one of the {@link com.github.omadahealth.slidepager.lib.views.ProgressView} is
+     * clicked by the user
      * @param index The index of the day, ie. Sunday = 0, Monday = 1...
      */
     void onDaySelected(int page, int index);
+
+    /**
+     * Called when one of the {@link com.github.omadahealth.slidepager.lib.views.ProgressView} is
+     * clicked by the user
+     * @param index The index of the day, ie. Sunday = 0, Monday = 1...
+     * @return True if selected page index is allowed, false otherwise
+     */
+    boolean isDaySelectable(int page, int index);
 }

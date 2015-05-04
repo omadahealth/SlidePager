@@ -100,6 +100,15 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     @Override
     public void onDaySelected(int page, int index) {
         Log.i("MainActivity", "onDaySelected : " + page + ", " + index);
+
+    }
+
+    @Override
+    public boolean isDaySelectable(int page, int index) {
+        if(index < 4){
+            return true;
+        }
+        return false;
     }
 
     @Override

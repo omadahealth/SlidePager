@@ -208,10 +208,17 @@ public class SlidePagerAdapter extends PagerAdapter {
         week.setListener(new OnSlideListener() {
             @Override
             public void onDaySelected(int page, int index) {
-//                Log.i("onDaySelected", "page : " + page + ", index : " + index);
                 if (mUserPageListener != null) {
                     mUserPageListener.onDaySelected(page, index);
                 }
+            }
+
+            @Override
+            public boolean isDaySelectable(int page, int index) {
+                if (mUserPageListener != null) {
+                    return mUserPageListener.isDaySelectable(page, index);
+                }
+                return true;
             }
         });
         return week;
