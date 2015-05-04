@@ -218,6 +218,7 @@ public class SlidePagerAdapter extends PagerAdapter {
                 if (mUserPageListener != null) {
                     return mUserPageListener.isDaySelectable(page, index);
                 }
+                //Allow by default, let user disable by choice
                 return true;
             }
         });

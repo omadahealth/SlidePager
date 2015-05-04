@@ -26,7 +26,6 @@ package com.github.omadahealth.slidepager.lib.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -292,12 +291,12 @@ public class SlideView extends LinearLayout {
                             allowed = mCallback.isDaySelectable(mPagePosition, index);
                         }
                         if(allowed){
-                            Log.d(TAG, "allowed");
+//                            Log.d(TAG, "allowed");
                             mCallback.onDaySelected(mPagePosition, index);
                             toggleSelectedViews(index);
                             animateSelectedTranslation(view);
                         }else{
-                            Log.d(TAG, "NOT allowed");
+//                            Log.d(TAG, "NOT allowed");
                             YoYo.with(Techniques.Shake)
                                     .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
                                     .playOn(SlideView.this);
@@ -346,6 +345,7 @@ public class SlideView extends LinearLayout {
         this.setAlpha(1f);
 
         loadStyledAttributes(mAttributes);
+        mSelectedView = getSelectableIndex();
         animateSeries(false);
         getSelectedImageView().resetView();
         final List<View> children = (List<View>) getTag();
@@ -359,6 +359,12 @@ public class SlideView extends LinearLayout {
         }
     }
 
+    /**
+     * Animates the progress of a {@link ProgressView}
+     * @param view The view to animate
+     * @param children The sibling views we use to evaluate streaks showing
+     * @param listener The listener to call to {@link OnSlidePageChangeListener#getDayProgress(int, int)}
+     */
     private void animateProgress(ProgressView view, List<View> children, OnSlidePageChangeListener listener) {
         if (listener != null) {
             ProgressAttr progress = listener.getDayProgress(mPagePosition, view.getIntTag());
@@ -366,6 +372,10 @@ public class SlideView extends LinearLayout {
         }
     }
 
+    /**
+     * Sets the selected {@link ProgressView}
+     * @param selected The index of the selected view in {@link #mProgressList}
+     */
     private void toggleSelectedViews(int selected) {
         mSelectedView = selected;
         for (ProgressView day : mProgressList) {
@@ -375,6 +385,38 @@ public class SlideView extends LinearLayout {
             }
             day.isSelected(false);
         }
+    }
+
+
+    /**
+     * Checks to see what index is selectable on {@link #animatePage(OnSlidePageChangeListener, TypedArray)}
+     * so that we don't automatically select a non selectable date in {@link com.github.omadahealth.slidepager.lib.SlidePager#resetPage(int)}
+     * @return The largest index selectable before {#mSelectedView}, if not the largest index selectable in {@link SlideView} or 0 if non are
+     */
+    public int getSelectableIndex() {
+        if(mCallback == null){
+            return mSelectedView;
+        }
+        if(mCallback.isDaySelectable(mPagePosition, mSelectedView)){
+            return mSelectedView;
+        }
+
+        //Try any position lower than the current one
+        for(int i = mSelectedView; i >= 0; i--){
+            if(mCallback.isDaySelectable(mPagePosition, i)){
+                return i;
+            }
+        }
+
+        //Try any position greater
+        for(int i = mProgressList.size() - 1; i >= mSelectedView; i--){
+            if(mCallback.isDaySelectable(mPagePosition, i)){
+                return i;
+            }
+        }
+
+        //Default to 0
+        return 0;
     }
 
     /**

@@ -87,14 +87,14 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     @Override
     public ProgressAttr getDayProgress(int page, int index) {
         int progress;
-        if(page == 3 && index == 6){
+        if(page == 15 && index > 4){
             progress = 0;
         }
         else {
             progress = 100;
         }
 
-        return new ProgressAttr(progress, page == 3 && index == 5);
+        return new ProgressAttr(progress, page == 15 && index == 4);
     }
 
     @Override
@@ -105,10 +105,10 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
     @Override
     public boolean isDaySelectable(int page, int index) {
-        if(index < 4){
-            return true;
+        if(page == 15 && index > 4){
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override
