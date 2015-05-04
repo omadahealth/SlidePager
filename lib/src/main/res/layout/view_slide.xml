@@ -6,8 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="15dp"
-        android:visibility="gone">
+        android:paddingTop="15dp">
 
         <com.github.omadahealth.typefaceview.TypefaceTextView
             android:id="@+id/left_textview"
