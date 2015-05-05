@@ -14,6 +14,10 @@
         <attr name="slide_show_streaks" format="boolean" />
         <attr name="slide_show_week" format="boolean" />
         <attr name="slide_show_date" format="boolean" />
+        <attr name="slide_progress_text_label" format="enum">
+            <enum name="slide_progress_text_short" value="0"/>
+            <enum name="slide_progress_text_long" value="1"/>
+        </attr>
     </declare-styleable>
 
 </resources>

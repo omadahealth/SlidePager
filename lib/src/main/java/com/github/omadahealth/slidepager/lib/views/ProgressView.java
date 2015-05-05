@@ -287,7 +287,6 @@ public class ProgressView extends RelativeLayout {
         isSpecial = progress == null ? false : progress.isSpecial();
 
         Resources res = getContext().getResources();
-        mProgressStrings = res.getStringArray(R.array.slide_progress_text);
         if (attributes != null) {
             mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_show_streaks, true);
 
@@ -303,6 +302,7 @@ public class ProgressView extends RelativeLayout {
             mSpecialFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_fill_color, res.getColor(R.color.default_progress_special_fill_color));
 
             mReachedWidth = attributes.getDimension(R.styleable.SlidePager_slide_progress_reached_width, res.getDimension(R.dimen.default_progress_reached_width));
+
 
             //Do not recycle attributes, we need them for the future views
         } else {
@@ -321,12 +321,17 @@ public class ProgressView extends RelativeLayout {
 
             mReachedWidth = res.getDimension(R.dimen.default_progress_reached_width);
         }
+        loadProgressTextLabels(res);
 
         setCircleColors();
 
         initAnimations();
 
         return this;
+    }
+
+    private void loadProgressTextLabels(Resources res) {
+        mProgressStrings = res.getStringArray(R.array.slide_progress_long_text);
     }
 
     /**
