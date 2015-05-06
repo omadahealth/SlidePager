@@ -12,6 +12,11 @@ import com.github.omadahealth.slidepager.lib.R;
  * Created by stoyan on 4/10/15.
  */
 public class SelectedImageView extends ImageView {
+    /**
+     * The tag for logging
+     */
+    private static final String TAG = "SelectedImageView";
+
     private boolean resetWidth = false;
 
     private Drawable mDividerDrawable;

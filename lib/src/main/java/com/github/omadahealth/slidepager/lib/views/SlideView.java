@@ -233,11 +233,14 @@ public class SlideView extends LinearLayout {
      * @param startPosition The starting x position for the animated view
      */
     public void animateSelectedTranslation(final View view, float startPosition) {
-        final Float offset = -1 * this.getWidth() + view.getWidth() / 2 + view.getX();
+        final Float offset = -1f * this.getWidth() + view.getWidth() / 2 + view.getX();
         mSelectedImageView.setTag(R.id.selected_day_image_view, offset);
         mSelectedImageView.setSelectedViewId(view.getId());
 
-        mAnimationSet = new AnimatorSet();
+
+        if(mAnimationSet == null){
+            mAnimationSet = new AnimatorSet();
+        }
         mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, SELECTION_ANIMATION_DURATION, ObjectAnimator.ofFloat(mSelectedImageView, "x", startPosition, offset)));
         mAnimationSet.setDuration(SELECTION_ANIMATION_DURATION);
         mAnimationSet.removeAllListeners();
@@ -249,12 +252,10 @@ public class SlideView extends LinearLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-//                toggleSelectedViews(((ProgressView) view).getIntTag());
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
             }
 
             @Override
@@ -317,9 +318,11 @@ public class SlideView extends LinearLayout {
                 if (child instanceof ProgressView) {
                     ((ProgressView) child).loadStyledAttributes(attributes, listener.getDayProgress(mPagePosition, ((ProgressView) child).getIntTag()));
                     animateProgress((ProgressView) child, children, listener);
-                    animateSelectedTranslation(mProgressList.get(mSelectedView));
+
                 }
             }
+            animateSelectedTranslation(mProgressList.get(mSelectedView));
+
             if (mCallback != null) {
                 mCallback.onDaySelected(mPagePosition, mSelectedView);
             }

@@ -41,6 +41,11 @@ import java.util.List;
  */
 public class SlidePager extends ViewPager {
     /**
+     * The tag for logging
+     */
+    private static final String TAG = "SlidePager";
+
+    /**
      * A user defined {@link OnPageChangeListener} that can
      * be added to {@link #setOnPageChangeListener(OnPageChangeListener)}. The default page listener
      * is defined implemented by this class and set in {@link #setSlidePager()}
@@ -135,6 +140,9 @@ public class SlidePager extends ViewPager {
                 if (mUserPageListener != null) {
                     mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
+                if(positionOffset == 0){
+                    resetPage(position);
+                }
             }
 
             @Override
@@ -142,7 +150,7 @@ public class SlidePager extends ViewPager {
                 if (mUserPageListener != null) {
                     mUserPageListener.onPageSelected(position);
                 }
-                resetPage(position);
+
             }
 
             @Override

@@ -50,7 +50,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
      * Max number of weeks in 'a program', could be set to the number of weeks if. Simply causes
      * slightly different output of the text displaying what week we are in
      */
-    private static final int DEFAULT_PROGRAM_WEEKS = 16;
+    private static final int DEFAULT_PROGRAM_WEEKS = 32;
 
     private Date mStartDate;
 
@@ -69,7 +69,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
         SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, mStartDate, new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
-        SlideView.setSelectedView(5);
+        SlideView.setSelectedView(2);
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);
