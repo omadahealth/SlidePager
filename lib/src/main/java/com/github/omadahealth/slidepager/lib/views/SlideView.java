@@ -382,6 +382,20 @@ public class SlideView extends LinearLayout {
     }
 
     /**
+     * Public method for animating an individual {@link ProgressView}
+     * @param index The index from [0,6] of the view
+     * @param progress The {@link ProgressAttr} to animate
+     */
+    @SuppressWarnings("unchecked")
+    public void animateProgressView(int index, ProgressAttr progress){
+        final List<View> children = (List<View>) getTag();
+        ProgressView view = getProgressView(index);
+        if(view != null){
+            view.animateProgress(view.getProgress(), progress, mProgressAnimationTime, children);
+        }
+    }
+
+    /**
      * Sets the selected {@link ProgressView}
      *
      * @param selected The index of the selected view in {@link #mProgressList}
@@ -462,5 +476,12 @@ public class SlideView extends LinearLayout {
 
     public synchronized static void setSelectedView(int selectedView) {
         SlideView.mSelectedView = selectedView;
+    }
+
+    public ProgressView getProgressView(int index){
+        if(mProgressList == null){
+            return null;
+        }
+        return mProgressList.get(index);
     }
 }

@@ -204,8 +204,13 @@ public class SlidePager extends ViewPager {
         slideView.animateSeries(show);
     }
 
+    /**
+     * Returns the initiated child views in {@link SlideTransformer#initTags(View)}
+     * @param position
+     * @return
+     */
     @SuppressWarnings("unchecked")
-    private List<View> getChildren(int position) {
+    public List<View> getChildren(int position) {
         View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(position));
 
 

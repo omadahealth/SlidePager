@@ -27,6 +27,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.github.omadahealth.demo.R;
 import com.github.omadahealth.slidepager.lib.SlidePager;
@@ -50,10 +52,14 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
      * Max number of weeks in 'a program', could be set to the number of weeks if. Simply causes
      * slightly different output of the text displaying what week we are in
      */
-    private static final int DEFAULT_PROGRAM_WEEKS = 32;
+    private static final int DEFAULT_PROGRAM_WEEKS = 16;
 
     private Date mStartDate;
 
+    private int mCurrentPage;
+    private int mCurrentIndex;
+
+    private ProgressAttr progressAttr = new ProgressAttr(0, false);
     @Override
     protected void onResume() {
         super.onResume();
@@ -65,14 +71,25 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mStartDate = Utilities.getPreviousDate(DEFAULT_PROGRAM_WEEKS);
 
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
-        SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, mStartDate, new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
+        final SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, mStartDate, new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
         SlideView.setSelectedView(2);
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);
+
+
+        Button change = (Button) findViewById(R.id.change_button);
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressAttr = new ProgressAttr(progressAttr.getProgress() == 100 ? 0 : 100, mCurrentPage == 15 && mCurrentIndex == 4);
+                adapterOne.getCurrentView(mCurrentPage).animateProgressView(mCurrentIndex, progressAttr);
+            }
+        });
 
         mSlidePager.post(new Runnable() {
             @Override
@@ -94,7 +111,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         if (page == 15 && index > 4) {
             progress = 0;
         } else if (page == 15 && index == 4) {
-            return new ProgressAttr(0, true);
+            return progressAttr;
         } else {
             progress = 100;
         }
@@ -105,7 +122,8 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     @Override
     public void onDaySelected(int page, int index) {
         Log.i("MainActivity", "onDaySelected : " + page + ", " + index);
-
+        mCurrentPage = page;
+        mCurrentIndex = index;
     }
 
     @Override

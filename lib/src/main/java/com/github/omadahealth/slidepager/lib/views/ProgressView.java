@@ -339,7 +339,6 @@ public class ProgressView extends RelativeLayout {
      * on animation end
      */
     private void initAnimations() {
-        final int index = getIntTag();
         addAnimationListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -347,39 +346,7 @@ public class ProgressView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (getCircularBar().getProgress() >= 99.95f) {
-                    showCheckMark(true);
-
-                    if (mShowStreaks && mSiblings != null && mSiblings.size() > 0) {
-                        //Previous exists
-                        if (getIntTag() - 1 >= 0) {
-                            ProgressView previousDay = mSiblings.get(index - 1);
-                            //Previous is complete
-                            if (previousDay.getCircularBar().getProgress() >= 99.95f) {
-                                showStreak(true, ProgressView.STREAK.LEFT_STREAK);
-                            }
-
-                        }
-
-                        //Next exists
-                        if (index + 1 < mSiblings.size()) {
-                            ProgressView nextDay = mSiblings.get(index + 1);
-                            //Next is complete
-                            if (nextDay.getCircularBar().getProgress() >= 99.95f) {
-                                showStreak(true, ProgressView.STREAK.RIGHT_STREAK);
-                            }
-                        }
-                    }
-
-                    //Set Color
-                    mCircularBar.setCircleFillColor(mCompletedFillColor);
-                    mCircularBar.setClockwiseReachedArcColor(mCompletedColor);
-                } else {
-                    //Set Color
-                    mCircularBar.setCircleFillColor(mFillColor);
-                    mCircularBar.setClockwiseReachedArcColor(mReachColor);
-
-                }
+                animateStreaks();
             }
 
             @Override
@@ -390,6 +357,47 @@ public class ProgressView extends RelativeLayout {
             public void onAnimationRepeat(Animator animation) {
             }
         });
+    }
+
+    public void animateStreaks() {
+        int index = getIntTag();
+        if (getCircularBar().getProgress() >= 99.95f) {
+            showCheckMark(true);
+
+            if (mShowStreaks && mSiblings != null && mSiblings.size() > 0) {
+                //Previous exists
+                if (getIntTag() - 1 >= 0) {
+                    ProgressView previousDay = mSiblings.get(index - 1);
+                    //Previous is complete
+                    boolean complete = previousDay.getProgress() >= 99.95f;
+                    showStreak(complete, ProgressView.STREAK.LEFT_STREAK);
+
+                }
+
+                //Next exists
+                if (index + 1 < mSiblings.size()) {
+                    ProgressView nextDay = mSiblings.get(index + 1);
+                    //Next is complete
+                    boolean complete = nextDay.getProgress() >= 99.95f;
+                    showStreak(complete, ProgressView.STREAK.RIGHT_STREAK);
+                }
+            }
+
+            //Set Color
+            mCircularBar.setCircleFillColor(mCompletedFillColor);
+            mCircularBar.setClockwiseReachedArcColor(mCompletedColor);
+        } else {
+            if (!isSpecial) {
+                showCheckMark(false);
+            }
+
+            //Set Color
+            mCircularBar.setCircleFillColor(mFillColor);
+            mCircularBar.setClockwiseReachedArcColor(mReachColor);
+
+            showStreak(false, STREAK.RIGHT_STREAK);
+            showStreak(false, STREAK.LEFT_STREAK);
+        }
     }
 
     /**
@@ -417,7 +425,7 @@ public class ProgressView extends RelativeLayout {
     /**
      * Sets the text for the {@link #mProgressText}
      */
-    public void setProgressText(String text){
+    public void setProgressText(String text) {
         getProgressTextView().setText(text);
         getProgressTextView().setTextColor(mNotCompletedReachColor);
     }
@@ -444,7 +452,7 @@ public class ProgressView extends RelativeLayout {
      * @param duration The duration in milliseconds of the animation
      * @param siblings The sibling views we use to evaluate streaks showing
      */
-    public void animateProgress(int start, ProgressAttr progress, int duration, List<View> siblings) {
+    public void animateProgress(int start, ProgressAttr progress, int duration, final List<View> siblings) {
         if (progress == null) {
             return;
         }
@@ -458,11 +466,39 @@ public class ProgressView extends RelativeLayout {
         } else {
             mCircularBar.setClockwiseReachedArcColor(progress.getProgress() == 100 ? mCompletedColor : mReachColor);
         }
-        if(progress.isSpecial() && progress.getProgress() < 0.01){
+        if (progress.isSpecial() && progress.getProgress() < 0.01) {
             mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.ic_add_plus));
             mCheckMark.setAlpha(1f);
         }
+
+        mCircularBar.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                for (View view : siblings) {
+                    if (view instanceof ProgressView) {
+                        ((ProgressView) view).animateStreaks();
+                    }
+                }
+                animateStreaks();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         mCircularBar.animateProgress(start, progress.getProgress(), duration);
+
     }
 
     /**
@@ -490,6 +526,12 @@ public class ProgressView extends RelativeLayout {
             mCheckMark.setAlpha(0f);
             return;
         }
+
+        //Return if sideView already shown
+        if (mCheckMark.getAlpha() == 1f) {
+            return;
+        }
+
         float start = 0;
         float end = 1f;
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, EASE_IN_DURATION, ObjectAnimator.ofFloat(mCheckMark, "alpha", start, end)));
@@ -521,6 +563,13 @@ public class ProgressView extends RelativeLayout {
         //Immediately remove them
         if (!show) {
             sideView.setAlpha(0f);
+            sideView.setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        //Return if sideView already shown
+        if (sideView.getAlpha() == 1f) {
+            sideView.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -585,10 +634,23 @@ public class ProgressView extends RelativeLayout {
         return mProgressText;
     }
 
+    /**
+     * Returns the contained {@link CircularBar}
+     *
+     * @return The {@link CircularBar}
+     */
     public CircularBar getCircularBar() {
         return mCircularBar;
     }
 
+    /**
+     * Returns the current {@link #mCircularBar#getProgress()} using {@link Math#round(float)}
+     *
+     * @return The {@link #mCircularBar#getProgress()}
+     */
+    public int getProgress() {
+        return Math.round(mCircularBar != null ? mCircularBar.getProgress() : 0f);
+    }
 
     /**
      * Sets the {@link #mSiblings} after removing any non {@link ProgressView}
