@@ -54,9 +54,20 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
      */
     private static final int DEFAULT_PROGRAM_WEEKS = 16;
 
+    /**
+     * Start date of the {@link #mSlidePager}
+     */
     private Date mStartDate;
 
+    /**
+     * The current index of the {@link SlidePagerAdapter} we set on {@link #mSlidePager}
+     */
     private int mCurrentPage;
+
+    /**
+     * The current index of the {@link com.github.omadahealth.slidepager.lib.views.ProgressView}
+     * in the displaying {@link android.transition.Slide}
+     */
     private int mCurrentIndex;
 
     private ProgressAttr progressAttr = new ProgressAttr(0, false);

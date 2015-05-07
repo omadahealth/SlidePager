@@ -1,12 +1,8 @@
 package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-
-import com.github.omadahealth.slidepager.lib.R;
 
 /**
  * Created by stoyan on 4/10/15.
@@ -17,11 +13,16 @@ public class SelectedImageView extends ImageView {
      */
     private static final String TAG = "SelectedImageView";
 
+    /**
+     * Whether we should reset the width of this view to be twice the width of the screen.
+     * Needed to prevent the view from clipping when we animate to left and right positions
+     */
     private boolean resetWidth = false;
 
-    private Drawable mDividerDrawable;
-    private Drawable mSelectedDrawable;
-
+    /**
+     * The resource id of the {@link ProgressView} that this view is set to, used to control
+     * the translation of this view at the same rate in {@link com.github.omadahealth.slidepager.lib.SlideTransformer}
+     */
     private int mSelectedViewId;
 
     public SelectedImageView(Context context) {
@@ -30,8 +31,6 @@ public class SelectedImageView extends ImageView {
 
     public SelectedImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        init();
     }
 
     @Override
@@ -46,34 +45,6 @@ public class SelectedImageView extends ImageView {
     }
 
     /**
-     * Initiate the view and drawables
-     */
-    private void init() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            mDividerDrawable = getResources().getDrawable(R.mipmap.day_divider, null);
-            mSelectedDrawable = getResources().getDrawable(R.mipmap.arrow_selected, null);
-        } else {
-            mDividerDrawable = getResources().getDrawable(R.mipmap.day_divider);
-            mSelectedDrawable = getResources().getDrawable(R.mipmap.arrow_selected);
-        }
-    }
-
-    /**
-     * Sets the drawable resource for {@link #setBackground(Drawable)} depending on the
-     * state of the view
-     *
-     * @param selected True to set background to {@link #mSelectedDrawable}, false for {@link #mDividerDrawable}
-     */
-    public void setSelectedDrawable(boolean selected) {
-        Drawable drawable = selected ? mSelectedDrawable : mDividerDrawable;
-        if (Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            setBackground(drawable);
-        } else {
-            setBackgroundDrawable(drawable);
-        }
-    }
-
-    /**
      * Resets the {@link #getLayoutParams()}  of the view
      */
     public void resetView() {
@@ -81,11 +52,21 @@ public class SelectedImageView extends ImageView {
         requestLayout();
     }
 
-
+    /**
+     * Returns the resource id of the {@link ProgressView} that this view is set to, used to control
+     * the translation of this view at the same rate in {@link com.github.omadahealth.slidepager.lib.SlideTransformer}
+     *
+     * @return Returns the resource id of the {@link ProgressView} that this view is set to
+     */
     public int getSelectedViewId() {
         return mSelectedViewId;
     }
 
+    /**
+     * Sets {@link #mSelectedViewId}
+     *
+     * @param selectedViewId the resource id of the {@link ProgressView} that this view is ot be set to
+     */
     public void setSelectedViewId(int selectedViewId) {
         this.mSelectedViewId = selectedViewId;
     }

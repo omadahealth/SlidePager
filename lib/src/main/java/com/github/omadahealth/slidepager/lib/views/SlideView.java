@@ -292,14 +292,12 @@ public class SlideView extends LinearLayout {
                             allowed = mCallback.isDaySelectable(mPagePosition, index);
                         }
                         if (allowed) {
-//                            Log.d(TAG, "allowed");
                             if (mCallback != null) {
                                 mCallback.onDaySelected(mPagePosition, index);
                             }
                             toggleSelectedViews(index);
                             animateSelectedTranslation(view);
                         } else {
-//                            Log.d(TAG, "NOT allowed");
                             YoYo.with(Techniques.Shake)
                                     .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
                                     .playOn(SlideView.this);
@@ -310,6 +308,11 @@ public class SlideView extends LinearLayout {
         }
     }
 
+    /**
+     * Animates the {@link ProgressView}s of this page and sets their attributes.
+     * @param listener A listener to get {@link OnSlidePageChangeListener#getDayProgress(int, int)}
+     * @param attributes The attributes to use
+     */
     @SuppressWarnings("unchecked")
     public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
         final List<View> children = (List<View>) getTag();
@@ -329,6 +332,10 @@ public class SlideView extends LinearLayout {
         }
     }
 
+    /**
+     * Displays or hides the streaks of all the {@link ProgressView}s
+     * @param show True to animate them visible, false to immediately hide them
+     */
     @SuppressWarnings("unchecked")
     public void animateSeries(boolean show) {
         final List<View> children = (List<View>) getTag();
@@ -344,6 +351,10 @@ public class SlideView extends LinearLayout {
         }
     }
 
+    /**
+     * Resets the state of this page, usually called when we change pages in the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     * @param mAttributes The attributes to reset the views to
+     */
     @SuppressWarnings("unchecked")
     public void resetPage(TypedArray mAttributes) {
         this.setVisibility(View.VISIBLE);
@@ -466,22 +477,39 @@ public class SlideView extends LinearLayout {
         this.mCallback = listener;
     }
 
-    public SelectedImageView getSelectedImageView() {
-        return mSelectedImageView;
-    }
-
-    public synchronized static int getSelectedView() {
-        return mSelectedView;
-    }
-
-    public synchronized static void setSelectedView(int selectedView) {
-        SlideView.mSelectedView = selectedView;
-    }
-
+    /**
+     * Returns the {@link ProgressView} at the given index
+     * @param index The index from [0,6]
+     * @return The view
+     */
     public ProgressView getProgressView(int index){
         if(mProgressList == null){
             return null;
         }
         return mProgressList.get(index);
+    }
+
+    /**
+     * Returns the view that displays the currently selected {@link ProgressView}
+     * @return
+     */
+    public SelectedImageView getSelectedImageView() {
+        return mSelectedImageView;
+    }
+
+    /**
+     * Gets the currently selected index
+     * @return
+     */
+    public synchronized static int getSelectedView() {
+        return mSelectedView;
+    }
+
+    /**
+     * Sets the currently selected index
+     * @param selectedView From [0,6]
+     */
+    public synchronized static void setSelectedView(int selectedView) {
+        SlideView.mSelectedView = selectedView;
     }
 }

@@ -225,14 +225,22 @@ public class SlidePager extends ViewPager {
      * Refreshes the page animation
      */
     public void refreshPage() {
-
         animatePage(getCurrentItem());
     }
 
+    /**
+     * Gets the attribute set that we pass from xml attr in {@link R.styleable#SlidePager}
+     * in {@link #loadStyledAttributes(AttributeSet, int)}
+     * @return
+     */
     public TypedArray getAttributeSet() {
         return mAttributes;
     }
 
+    /**
+     * Sets the {@link #mAttributes} that are passed on to the {@link ProgressView} and {@link android.transition.Slide}
+     * @param attributeSet
+     */
 
     public void setAttributeSet(TypedArray attributeSet) {
         this.mAttributes = attributeSet;

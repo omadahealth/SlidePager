@@ -36,7 +36,8 @@ public interface OnSlidePageChangeListener extends ViewPager.OnPageChangeListene
     /**
      * Override this method to get all the progress for the current {@link SlidePager} page.
      *
-     * @param index The index for the day (0-7)
+     * @param page The index of the page
+     * @param index The index for the day (0-6)
      * @return The progress value for the specified day
      */
     ProgressAttr getDayProgress(int page, int index);

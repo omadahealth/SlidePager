@@ -330,6 +330,10 @@ public class ProgressView extends RelativeLayout {
         return this;
     }
 
+    /**
+     * Loads the {@link #mProgressStrings} from {@link com.github.omadahealth.slidepager.lib.R.array#slide_progress_long_text}
+     * @param res
+     */
     private void loadProgressTextLabels(Resources res) {
         mProgressStrings = res.getStringArray(R.array.slide_progress_long_text);
     }
@@ -359,6 +363,10 @@ public class ProgressView extends RelativeLayout {
         });
     }
 
+    /**
+     * Animates the display of the {@link #mLeftStreak} and {@link #mRightStreak} depending
+     * on the values of neighboring {@link ProgressView}s
+     */
     public void animateStreaks() {
         int index = getIntTag();
         if (getCircularBar().getProgress() >= 99.95f) {
@@ -614,8 +622,6 @@ public class ProgressView extends RelativeLayout {
      * @param streakHeight The streak we want to set the dimension to
      */
     public void setStreakHeight(View streakHeight) {
-        MarginLayoutParams circularParams = (MarginLayoutParams) mCircularBar.getLayoutParams();
-
         streakHeight.getLayoutParams().height = (int) mCircularBar.getDiameter();
         streakHeight.requestLayout();
     }
@@ -670,6 +676,10 @@ public class ProgressView extends RelativeLayout {
         return siblings;
     }
 
+    /**
+     * Gets the tag of this view, which are from [1,7]
+     * @return
+     */
     public Integer getIntTag() {
         return Integer.parseInt((String) getTag());
     }

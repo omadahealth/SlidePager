@@ -145,6 +145,13 @@ public class Utilities {
         return cal.getTime();
     }
 
+    /**
+     * Returns the selected day text in  'Jan 20' format
+     * @param start The start date of the {@link com.github.omadahealth.slidepager.lib.SlidePager} in milliseconds
+     * @param page The index of the page
+     * @param index The index of the view inside the page
+     * @return The formated date string
+     */
     public static String getSelectedDayText(long start, int page, int index) {
         SimpleDateFormat sf = new SimpleDateFormat(DATE_SHORT_MONTH_DAY_STRING_FORMAT, Locale.getDefault());
         Calendar cal = Calendar.getInstance();

@@ -141,6 +141,12 @@ public class SlidePagerAdapter extends PagerAdapter {
         return currentView;
     }
 
+    /**
+     * Gets the {@link SlideView} for the current pager position, uses lazy initialization
+     * to instantiate new views
+     * @param position The position in the pager
+     * @return The existing slide view, or a new one
+     */
     private SlideView getViewForPosition(int position) {
         if (mViews == null) {
             return getWeekSlide(position, mWeeks);
