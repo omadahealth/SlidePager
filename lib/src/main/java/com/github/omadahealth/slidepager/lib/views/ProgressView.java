@@ -474,11 +474,14 @@ public class ProgressView extends RelativeLayout {
         } else {
             mCircularBar.setClockwiseReachedArcColor(progress.getProgress() == 100 ? mCompletedColor : mReachColor);
         }
-        if (progress.isSpecial() && progress.getProgress() < 0.01) {
+        if (progress.isSpecial()) {
             mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.ic_add_plus));
-            mCheckMark.setAlpha(1f);
+            if (progress.getProgress() < 0.01) {
+                mCheckMark.setAlpha(1f);
+            } else {
+                mCheckMark.setAlpha(0f);
+            }
         }
-
         mCircularBar.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -540,6 +543,7 @@ public class ProgressView extends RelativeLayout {
             return;
         }
 
+        mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.checkmark_green));
         float start = 0;
         float end = 1f;
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, EASE_IN_DURATION, ObjectAnimator.ofFloat(mCheckMark, "alpha", start, end)));
