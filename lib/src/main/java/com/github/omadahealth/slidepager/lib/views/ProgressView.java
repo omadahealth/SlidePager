@@ -490,11 +490,14 @@ public class ProgressView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                for (View view : siblings) {
-                    if (view instanceof ProgressView) {
-                        ((ProgressView) view).animateStreaks();
+                if(siblings != null){
+                    for (View view : siblings) {
+                        if (view instanceof ProgressView) {
+                            ((ProgressView) view).animateStreaks();
+                        }
                     }
                 }
+
                 animateStreaks();
             }
 
