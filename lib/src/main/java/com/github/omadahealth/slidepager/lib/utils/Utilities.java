@@ -39,6 +39,11 @@ public class Utilities {
     private static final String MONTH_IN_YEAR_STRING_FORMAT = "LLLL d";
 
     /**
+     * Day:  Tuesday
+     */
+    public static final String DATE_FULL_STRING_FORMAT = "EEEE";
+
+    /**
      * Short month day:   Jan 20
      */
     public static final String DATE_SHORT_MONTH_DAY_STRING_FORMAT = "LLL d";
@@ -50,17 +55,23 @@ public class Utilities {
      * @return Number of weeks the end date is after the start date, could be negative
      */
     public static int getWeeksBetween(Date start, Date end) {
-
+        //if end is before start
         if (end.before(start)) {
             return -getWeeksBetween(end, start);
         }
+
         start = resetTime(start);
         end = resetTime(end);
+
+        //if same day
+        if(start.compareTo(end) == 0){
+            return 0;
+        }
 
         Calendar cal = new GregorianCalendar();
         cal.setTime(start);
         int weeks = 0;
-        while (cal.getTime().before(end)) {
+        while (cal.getTime().compareTo(end) <= 0) {
             // add another week
             cal.add(Calendar.WEEK_OF_YEAR, 1);
             weeks++;
@@ -150,7 +161,7 @@ public class Utilities {
      * @param start The start date of the {@link com.github.omadahealth.slidepager.lib.SlidePager} in milliseconds
      * @param page The index of the page
      * @param index The index of the view inside the page
-     * @return The formated date string
+     * @return The formatted date string
      */
     public static String getSelectedDayText(long start, int page, int index) {
         SimpleDateFormat sf = new SimpleDateFormat(DATE_SHORT_MONTH_DAY_STRING_FORMAT, Locale.getDefault());

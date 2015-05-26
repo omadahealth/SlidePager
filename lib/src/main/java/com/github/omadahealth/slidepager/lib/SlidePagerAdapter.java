@@ -149,7 +149,7 @@ public class SlidePagerAdapter extends PagerAdapter {
      */
     private SlideView getViewForPosition(int position) {
         if (mViews == null) {
-            return getWeekSlide(position, mWeeks);
+            this.mViews = initViews();
         }
 
         SlideView currentView = mViews[position];
