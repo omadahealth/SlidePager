@@ -28,6 +28,7 @@ import android.content.res.TypedArray;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
@@ -68,6 +69,11 @@ public class SlideChartView extends AbstractSlideView {
     private List<TypefaceTextView> mProgressBottomTextList = new ArrayList<>(7);
 
     /**
+     * An array that holds all the {@link android.widget.ImageView} that are part of the chart bar
+     */
+    private List<ImageView> mChartBarList = new ArrayList<>(15);
+
+    /**
      * The strings that we set in {@link #mProgressBottomTextList}
      */
     private static String[] mProgressStrings;
@@ -99,6 +105,21 @@ public class SlideChartView extends AbstractSlideView {
     private int mSpecialBottomTextColor;
 
     /**
+     * The {@link android.graphics.Color} link of the top texts: {@link SlideChartView#mProgressTopTextList}
+     */
+    private int mTopTextColor;
+
+    /**
+     * The {@link android.graphics.Color} link of the Bottom texts: {@link SlideChartView#mProgressBottomTextList}
+     */
+    private int mBottomTextColor;
+
+    /**
+     * The {@link android.graphics.Color} link of the Bar: {@link SlideChartView#mProgressBottomTextList}
+     */
+    private int mChartBarColor;
+
+    /**
      * The position of this page within the {@link com.github.omadahealth.slidepager.lib.SlidePager}
      */
     private int mPagePosition;
@@ -125,7 +146,10 @@ public class SlideChartView extends AbstractSlideView {
     private void loadStyledAttributes(TypedArray attributes) {
         mAttributes = attributes;
         if (mAttributes != null) {
-            mSpecialBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_text_color, getResources().getColor(R.color.default_progress_chart_bar_special_bottom_text));
+            mTopTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_top_text_color, getResources().getColor(R.color.default_progress_chart_bar_top_text));
+            mSpecialBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_special_text_color, getResources().getColor(R.color.default_progress_chart_bar_special_bottom_text));
+            mBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_text_color, getResources().getColor(R.color.default_progress_chart_bar_bottom_text));
+            mChartBarColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_color, getResources().getColor(R.color.default_progress_chart_bar_color));
         }
     }
 
@@ -195,11 +219,31 @@ public class SlideChartView extends AbstractSlideView {
         mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_6));
         mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_7));
 
+        //Chart bars
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_1_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_2_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_3_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_4_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_5_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_6_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_7_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_1_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_2_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_3_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_4_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_5_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_6_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_7_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_bottom_axis));
+
         //Init the tags of the subviews
         SlideTransformer.initTags(this);
 
         //Init values and days text
         initTopAndBottomTexts();
+
+        //Init bar colors
+        initBarColors();
     }
 
     /**
@@ -210,15 +254,23 @@ public class SlideChartView extends AbstractSlideView {
         for (int i = 0; i < mProgressTopTextList.size(); i++) {
             String oneDecimal = Utilities.formatWeight(mProgressAttr.get(i).getValue());
             mProgressTopTextList.get(i).setText(oneDecimal);
+            mProgressTopTextList.get(i).setTextColor(mTopTextColor);
         }
 
         //Set the bottom texts to be the day values and set the color if special
         for (int i = 0; i < mProgressBottomTextList.size(); i++) {
             TypefaceTextView currentTextView = mProgressBottomTextList.get(i);
-            if (mProgressAttr.get(i).isSpecial()) {
-                currentTextView.setTextColor(mSpecialBottomTextColor);
-            }
+            currentTextView.setTextColor(mProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mBottomTextColor);
             currentTextView.setText(mProgressAttr.get(i).getBottomText());
+        }
+    }
+
+    /**
+     * Init the {@link android.graphics.Color} of the {@link #mChartBarList}
+     */
+    private void initBarColors() {
+        for(ImageView imageView : mChartBarList) {
+            imageView.setBackgroundColor(mChartBarColor);
         }
     }
 

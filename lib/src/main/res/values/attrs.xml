@@ -11,11 +11,15 @@
         <attr name="slide_progress_special_reach_color" format="color" />
         <attr name="slide_progress_special_outline_color" format="color" />
         <attr name="slide_progress_special_fill_color" format="color" />
-        <attr name="slide_progress_special_text_color" format="color" />
         <attr name="slide_start_at_end" format="boolean" />
         <attr name="slide_show_streaks" format="boolean" />
         <attr name="slide_show_progress_text" format="boolean" />
         <attr name="slide_show_week" format="boolean" />
         <attr name="slide_show_date" format="boolean" />
+
+        <attr name="slide_progress_chart_bar_top_text_color" format="color"/>
+        <attr name="slide_progress_chart_bar_bottom_text_color" format="color"/>
+        <attr name="slide_progress_chart_bar_bottom_special_text_color" format="color" />
+        <attr name="slide_progress_chart_color" format="color" />
     </declare-styleable>
 </resources>
