@@ -3,7 +3,7 @@
     <color name="default_progress_completed_fill_color">#E0FFE8</color>
     <color name="default_progress_completed_reach_color">#00E677</color>
     <color name="default_progress_not_completed_reach_color">#78909C</color>
-    <color name="default_progress_not_completed_outline_color">#4b7185</color>
+    <color name="default_progress_not_completed_outline_color">#CFD8DC</color>
     <color name="default_progress_not_completed_fill_color">#F2F6F7</color>
     <color name="default_progress_special_reach_color">#03A9F4</color>
     <color name="default_progress_special_outline_color">#81D7FF</color>
