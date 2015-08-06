@@ -197,6 +197,16 @@ public class ProgressView extends RelativeLayout {
     private boolean mIsFuture;
 
     /**
+     * The saved attributes coming from {@link SlideChartView} and {@link SlideView}
+     */
+    private TypedArray mAttributes;
+
+    /**
+     * The saved {@link ProgressAttr} coming from {@link SlideChartView} and {@link SlideView}
+     */
+    private ProgressAttr mProgressAttr;
+
+    /**
      * The left and right streaks
      */
     public enum STREAK {
@@ -296,7 +306,7 @@ public class ProgressView extends RelativeLayout {
 
         mDefaultProgressTypeface = mProgressText.getCurrentTypeface();
 
-        loadStyledAttributes(null, null);
+        loadStyledAttributes(mAttributes, mProgressAttr);
     }
 
     /**
@@ -305,6 +315,9 @@ public class ProgressView extends RelativeLayout {
      * @param attributes The attributes to read from, do not pass {@link AttributeSet} as inflation needs the context of the {@link android.support.v4.view.PagerAdapter}
      */
     public ProgressView loadStyledAttributes(TypedArray attributes, ProgressAttr progress) {
+        mAttributes = attributes;
+        mProgressAttr = progress;
+
         mIsSpecial = progress == null ? false : progress.isSpecial();
         mIsFuture = progress == null ? false : progress.isFuture();
 

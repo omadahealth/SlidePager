@@ -144,6 +144,10 @@ public class SlidePager extends ViewPager {
                     mUserPageListener.onPageSelected(position);
                 }
                 resetPage(position);
+
+                if (position > 0) {
+                    resetPage(position - 1);
+                }
             }
 
             @Override
