@@ -31,7 +31,7 @@ import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 /**
  * Created by stoyan on 4/6/15.
  */
-public interface OnSlidePageChangeListener extends ViewPager.OnPageChangeListener {
+public interface OnSlidePageChangeListener<T extends ProgressAttr> extends ViewPager.OnPageChangeListener {
 
     /**
      * Override this method to get all the progress for the current {@link SlidePager} page.
@@ -39,7 +39,7 @@ public interface OnSlidePageChangeListener extends ViewPager.OnPageChangeListene
      * @param index The index for the day (0-7)
      * @return The progress value for the specified day
      */
-    ProgressAttr getDayProgress(int page, int index);
+    T getDayProgress(int page, int index);
 
     /**
      * Called when one of the {@link com.github.omadahealth.slidepager.lib.views.ProgressView} is

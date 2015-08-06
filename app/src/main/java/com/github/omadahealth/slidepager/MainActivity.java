@@ -33,14 +33,14 @@ import com.github.omadahealth.slidepager.lib.SlideTransformer;
 import com.github.omadahealth.slidepager.lib.adapter.SlideChartPagerAdapter;
 import com.github.omadahealth.slidepager.lib.adapter.SlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
-import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
+import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener {
+public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener<ChartProgressAttr> {
 
     /**
      * The slide pager we use
@@ -103,10 +103,10 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     }
 
     @Override
-    public ProgressAttr getDayProgress(int page, int index) {
+    public ChartProgressAttr getDayProgress(int page, int index) {
         int progress;
         Double value = null;
-        if(page == 15 && index == 2){
+        if(page == 15 && (index == 2 || index == 6)){
             progress = 0;
         }
         else {
@@ -116,7 +116,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
         String day = Utilities.getSelectedDayText(getPreviousDate(16).getTime(), page, index);
 
-        return new ProgressAttr(progress, value, day, page == 15 && index == 5);
+        return new ChartProgressAttr(progress, value, day, page == 15 && index == 5, page == 15 && index == 6);
     }
 
     @Override

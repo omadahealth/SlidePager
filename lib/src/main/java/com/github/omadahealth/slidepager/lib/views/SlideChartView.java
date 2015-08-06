@@ -33,6 +33,7 @@ import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
+import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
@@ -75,7 +76,7 @@ public class SlideChartView extends AbstractSlideView {
      * The list of {@link ProgressAttr} to associate with {@link #mProgressList}.
      * Used in {@link #injectViewsAndAttributes()}
      */
-    private List<ProgressAttr> mProgressAttr;
+    private List<ChartProgressAttr> mProgressAttr;
 
     /**
      * The callback listener for when views are clicked
@@ -110,7 +111,7 @@ public class SlideChartView extends AbstractSlideView {
     /**
      * A user defined {@link ViewPager.OnPageChangeListener}
      */
-    private OnSlidePageChangeListener mUserPageListener;
+    private OnSlidePageChangeListener<ChartProgressAttr> mUserPageListener;
 
     public SlideChartView(Context context) {
         this(context, null, -1, null);

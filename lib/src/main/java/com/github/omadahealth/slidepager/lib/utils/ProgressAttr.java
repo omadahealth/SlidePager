@@ -11,11 +11,6 @@ public class ProgressAttr {
     private int mProgress;
 
     /**
-     * The value in double. Used by {@link com.github.omadahealth.slidepager.lib.views.SlideChartView}.
-     */
-    private Double mValue;
-
-    /**
      * Whether this is a special day, and is colored in differently
      * when the page translates. Check :
      * {@link com.github.omadahealth.slidepager.lib.views.ProgressView#mSpecialFillColor}
@@ -25,20 +20,14 @@ public class ProgressAttr {
     private boolean mSpecial;
 
     /**
-     * The String diplayed at the bottom of the chart for each progress. Used by {@link com.github.omadahealth.slidepager.lib.views.SlideChartView}.
+     * Determines if this {@link ProgressAttr} is in the future or not, specifying different thickness for the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
      */
-    private String mBottomText;
+    private boolean mIsFuture;
 
-    public ProgressAttr(int progress, boolean special) {
+    public ProgressAttr(int progress, boolean special, boolean isFuture) {
         this.mProgress = progress;
         this.mSpecial = special;
-    }
-
-    public ProgressAttr(int progress, Double value, String bottomText, boolean special) {
-        this.mProgress = progress;
-        this.mValue = value;
-        this.mBottomText = bottomText;
-        this.mSpecial = special;
+        this.mIsFuture = isFuture;
     }
 
     public boolean isSpecial() {
@@ -57,19 +46,12 @@ public class ProgressAttr {
         this.mProgress = progress;
     }
 
-    public Double getValue() {
-        return mValue;
+    public boolean isFuture() {
+        return mIsFuture;
     }
 
-    public void setValue(Double value) {
-        this.mValue = value;
+    public void setIsFuture(boolean isFuture) {
+        this.mIsFuture = isFuture;
     }
 
-    public String getBottomText() {
-        return mBottomText;
-    }
-
-    public void setBottomText(String bottomText) {
-        this.mBottomText = bottomText;
-    }
 }

@@ -6,6 +6,7 @@
         <attr name="slide_progress_not_completed_reach_color" format="color" />
         <attr name="slide_progress_not_completed_outline_color" format="color" />
         <attr name="slide_progress_not_completed_outline_size" format="dimension" />
+        <attr name="slide_progress_not_completed_future_outline_size" format="dimension" />
         <attr name="slide_progress_not_completed_fill_color" format="color" />
         <attr name="slide_progress_special_reach_color" format="color" />
         <attr name="slide_progress_special_outline_color" format="color" />

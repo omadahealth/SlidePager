@@ -146,6 +146,11 @@ public class ProgressView extends RelativeLayout {
     private float mNotCompletedOutlineSize;
 
     /**
+     * The progress size outline for {@link #mCircularBar} when this day is in the future
+     */
+    private float mNotCompletedFutureOutlineSize;
+
+    /**
      * The progress reached color for {@link #mCircularBar} when it is today's date
      */
     private int mSpecialReachColor;
@@ -184,7 +189,12 @@ public class ProgressView extends RelativeLayout {
     /**
      * Boolean that controls if we should use the special today colors for this view
      */
-    private boolean isSpecial;
+    private boolean mIsSpecial;
+
+    /**
+     * Boolean that controls if we should use the future size for this view
+     */
+    private boolean mIsFuture;
 
     /**
      * The left and right streaks
@@ -201,6 +211,7 @@ public class ProgressView extends RelativeLayout {
     private static String INSTANCE_NOT_COMPLETED_COLOR = "not_completed_color";
     private static String INSTANCE_NOT_COMPLETED_OUTLINE_COLOR = "not_completed_outline_color";
     private static String INSTANCE_NOT_COMPLETED_OUTLINE_SIZE = "not_completed_outline_size";
+    private static String INSTANCE_NOT_COMPLETED_FUTURE_OUTLINE_SIZE = "not_completed_future_outline_size";
     private static String INSTANCE_NOT_COMPLETED_FILL_COLOR = "not_completed_fill_color";
     private static String INSTANCE_SPECIAL_COMPLETED_COLOR = "special_color";
     private static String INSTANCE_SPECIAL_COMPLETED_OUTLINE_COLOR = "special_outline_color";
@@ -231,6 +242,7 @@ public class ProgressView extends RelativeLayout {
         bundle.putInt(INSTANCE_NOT_COMPLETED_COLOR, mNotCompletedReachColor);
         bundle.putInt(INSTANCE_NOT_COMPLETED_OUTLINE_COLOR, mNotCompletedOutlineColor);
         bundle.putFloat(INSTANCE_NOT_COMPLETED_OUTLINE_SIZE, mNotCompletedOutlineSize);
+        bundle.putFloat(INSTANCE_NOT_COMPLETED_FUTURE_OUTLINE_SIZE, mNotCompletedFutureOutlineSize);
         bundle.putInt(INSTANCE_NOT_COMPLETED_FILL_COLOR, mNotCompletedFillColor);
         bundle.putInt(INSTANCE_SPECIAL_COMPLETED_COLOR, mSpecialReachColor);
         bundle.putInt(INSTANCE_SPECIAL_COMPLETED_OUTLINE_COLOR, mSpecialOutlineColor);
@@ -253,6 +265,7 @@ public class ProgressView extends RelativeLayout {
             mNotCompletedReachColor = bundle.getInt(INSTANCE_NOT_COMPLETED_COLOR, res.getColor(R.color.default_progress_not_completed_reach_color));
             mNotCompletedOutlineColor = bundle.getInt(INSTANCE_NOT_COMPLETED_OUTLINE_COLOR, res.getColor(R.color.default_progress_not_completed_outline_color));
             mNotCompletedOutlineSize = bundle.getFloat(INSTANCE_NOT_COMPLETED_OUTLINE_SIZE, res.getDimension(R.dimen.circular_bar_default_outline_width));
+            mNotCompletedFutureOutlineSize = bundle.getFloat(INSTANCE_NOT_COMPLETED_FUTURE_OUTLINE_SIZE, res.getDimension(R.dimen.circular_bar_default_future_outline_width));
             mNotCompletedFillColor = bundle.getInt(INSTANCE_NOT_COMPLETED_FILL_COLOR, res.getColor(R.color.default_progress_not_completed_fill_color));
 
             mSpecialReachColor = bundle.getInt(INSTANCE_SPECIAL_COMPLETED_COLOR, res.getColor(R.color.default_progress_special_reach_color));
@@ -292,7 +305,8 @@ public class ProgressView extends RelativeLayout {
      * @param attributes The attributes to read from, do not pass {@link AttributeSet} as inflation needs the context of the {@link android.support.v4.view.PagerAdapter}
      */
     public ProgressView loadStyledAttributes(TypedArray attributes, ProgressAttr progress) {
-        isSpecial = progress == null ? false : progress.isSpecial();
+        mIsSpecial = progress == null ? false : progress.isSpecial();
+        mIsFuture = progress == null ? false : progress.isFuture();
 
         Resources res = getContext().getResources();
         mProgressStrings = res.getStringArray(R.array.slide_progress_text);
@@ -306,6 +320,7 @@ public class ProgressView extends RelativeLayout {
             mNotCompletedReachColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_reach_color, res.getColor(R.color.default_progress_not_completed_reach_color));
             mNotCompletedOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_outline_color, res.getColor(R.color.default_progress_not_completed_outline_color));
             mNotCompletedOutlineSize = attributes.getDimension(R.styleable.SlidePager_slide_progress_not_completed_outline_size, res.getDimension(R.dimen.circular_bar_default_outline_width));
+            mNotCompletedFutureOutlineSize = attributes.getDimension(R.styleable.SlidePager_slide_progress_not_completed_future_outline_size, res.getDimension(R.dimen.circular_bar_default_future_outline_width));
             mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.default_progress_not_completed_fill_color));
 
             mSpecialReachColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_reach_color, res.getColor(R.color.default_progress_special_reach_color));
@@ -323,6 +338,7 @@ public class ProgressView extends RelativeLayout {
             mNotCompletedReachColor = res.getColor(R.color.default_progress_not_completed_reach_color);
             mNotCompletedOutlineColor = res.getColor(R.color.default_progress_not_completed_outline_color);
             mNotCompletedOutlineSize = res.getDimension(R.dimen.circular_bar_default_outline_width);
+            mNotCompletedFutureOutlineSize = res.getDimension(R.dimen.circular_bar_default_future_outline_width);
             mNotCompletedFillColor = res.getColor(R.color.default_progress_not_completed_fill_color);
 
             mSpecialReachColor = res.getColor(R.color.default_progress_special_reach_color);
@@ -398,15 +414,15 @@ public class ProgressView extends RelativeLayout {
      * Sets the colors of {@link #mCircularBar}
      */
     public void setCircleColorsAndSize() {
-        mFillColor = isSpecial ? mSpecialFillColor : mNotCompletedFillColor;
-        mReachColor = isSpecial ? mSpecialReachColor : mNotCompletedReachColor;
-        mOutlineColor = isSpecial ? mSpecialOutlineColor : mNotCompletedOutlineColor;
+        mFillColor = mIsSpecial ? mSpecialFillColor : mNotCompletedFillColor;
+        mReachColor = mIsSpecial ? mSpecialReachColor : mNotCompletedReachColor;
+        mOutlineColor = mIsSpecial ? mSpecialOutlineColor : mNotCompletedOutlineColor;
 
         mCircularBar.setCircleFillColor(mFillColor);
         mCircularBar.setClockwiseReachedArcColor(mReachColor);
         mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
 
-        mCircularBar.setClockwiseOutlineArcWidth(mNotCompletedOutlineSize);
+        mCircularBar.setClockwiseOutlineArcWidth(mIsFuture ? mNotCompletedFutureOutlineSize : mNotCompletedOutlineSize);
 
         setProgressText();
     }
@@ -447,9 +463,9 @@ public class ProgressView extends RelativeLayout {
         if (progress == null) {
             return;
         }
-        isSpecial = progress.isSpecial();
+        mIsSpecial = progress.isSpecial();
         setCircleColorsAndSize();
-        mReachColor = isSpecial ? mSpecialReachColor : mReachColor;
+        mReachColor = mIsSpecial ? mSpecialReachColor : mReachColor;
 
         mSiblings = setSiblings(siblings);
         if (mReachColor != mNotCompletedReachColor) {
