@@ -25,20 +25,50 @@ package com.github.omadahealth.slidepager.lib.utils;
 
 import com.github.omadahealth.slidepager.lib.adapter.SlidePagerAdapter;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by stoyan on 4/6/15.
  */
 public class Utilities {
+
+    public static final long MILLI_SECONDS_IN_WEEK = 1000 * 60 * 60 * 24 * 7;
+
     /**
      * Day in month: March 30
      */
     private static final String MONTH_IN_YEAR_STRING_FORMAT = "LLLL d";
+
+    /**
+     * Short month day:   Jan 20
+     */
+    public static final String DATE_SHORT_MONTH_DAY_STRING_FORMAT = "LLL d";
+
+    /**
+     * Day in a week: Tue
+     */
+    public static final String DATE_SHORTENED_DAY_OF_WEEK_STRING_FORMAT = "EEE";
+
+    /**
+     * 123.432654 => 123.4
+     */
+    public static final String WEIGHT_FORMAT = "0.0";
+
+    /**
+     * The precision of the scale's rounding
+     */
+    public static final double WEIGHT_SCALE_PRECISION = 0.2;
+
+    /**
+     * The string to show if the date is today
+     */
+    public static final String TODAY_UPPERCASE = "TODAY";
 
     /**
      * Calculates the number of weeks between two dates
@@ -120,5 +150,136 @@ public class Utilities {
         }
 
         return start + (position + 1) + mid + totalWeeks + end;
+    }
+
+    /**
+     * Formats the weight to a "0.0" in an increment of {@link #WEIGHT_SCALE_PRECISION} format and returns it as a double
+     *
+     * @param value The value to format
+     * @return
+     */
+    public static double formatWeightToDouble(Double value) {
+        if (value == null) {
+            value = 0.0;
+        }
+        double diff = value % WEIGHT_SCALE_PRECISION;
+        double roundedValue;
+        if (diff >= 0.1) {
+            roundedValue = value + (WEIGHT_SCALE_PRECISION - diff);
+        } else {
+            roundedValue = value - diff;
+        }
+        DecimalFormat weightFormat = new DecimalFormat(WEIGHT_FORMAT);
+        return Double.parseDouble(weightFormat.format(roundedValue));
+    }
+
+    /**
+     * Formats the weight of to "0.0" format
+     *
+     * @param value The value to format
+     * @return
+     */
+    public static String formatWeight(Double value) {
+        if(value == null) {
+            return "-";
+        }
+
+        DecimalFormat weightFormat = new DecimalFormat(WEIGHT_FORMAT);
+        return weightFormat.format(formatWeightToDouble(value));
+    }
+
+    /**
+     * Get a selected day text from a start point and a page and index
+     */
+    public static String getSelectedDayText(long start, int page, int index) {
+        Date date = getSelectedDay(start, page, index);
+
+        if (isToday(date.getTime())) {
+            return TODAY_UPPERCASE;
+        }
+
+        if (withinAWeek(date.getTime())) {
+            SimpleDateFormat sf = new SimpleDateFormat(DATE_SHORTENED_DAY_OF_WEEK_STRING_FORMAT, Locale.getDefault());
+            return sf.format(date).toUpperCase(Locale.getDefault());
+        }
+
+        SimpleDateFormat sf = new SimpleDateFormat(DATE_SHORT_MONTH_DAY_STRING_FORMAT, Locale.getDefault());
+        return sf.format(date).toUpperCase(Locale.getDefault());
+    }
+
+    /**
+     * Checks to see if time is within this week. Performs second-millisecond
+     * conversion
+     *
+     * @param milli The epoch time in seconds or milliseconds
+     * @return True, if the date is within 1 week in the past
+     */
+    public static boolean withinAWeek(long milli) {
+        long diff = System.currentTimeMillis() - toMilliseconds(milli);
+        return diff < MILLI_SECONDS_IN_WEEK;
+    }
+
+    /**
+     * Checks to see if the time given is in the same day as today
+     * Function checks that time is in milliseconds
+     *
+     * @param milli time
+     * @return true if it is the same day
+     */
+    public static boolean isToday(long milli) {
+        long inMilli = toMilliseconds(milli);
+        return getStartOfDay(new Date(inMilli)) == getStartOfDay(new Date());
+    }
+
+    /**
+     * Get a selected day text from a start point and a page and index
+     */
+    public static Date getSelectedDay(long start, int page, int index) {
+        Calendar cal = Calendar.getInstance();
+        Date startDate = new Date(start);
+        cal.setTime(startDate);
+
+        cal.add(Calendar.WEEK_OF_YEAR, page);
+        cal.add(Calendar.DAY_OF_YEAR, index);
+        return new Date(getStartOfDay(new Date(cal.getTimeInMillis())));
+    }
+
+    /**
+     * Returns the start of the day in milliseconds
+     *
+     * @param day The day who's start we need
+     * @return Time in milliseconds
+     */
+    public static long getStartOfDay(Date day) {
+        if (day == null) {
+            day = new Date();
+        }
+
+        // use UTC time zone
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(day); // compute start of the day for the timestamp
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTimeInMillis();
+    }
+
+    /**
+     * Converts any time to milliseconds
+     *
+     * @param since The epoch time, seconds or milliseconds
+     * @return The epoch time in milliseconds
+     */
+    public static long toMilliseconds(long since) {
+        if (since == 0) {
+            return 0;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        if (cal.getTimeInMillis() / since > 10) {
+            return TimeUnit.SECONDS.toMillis(since);
+        }
+        return since;
     }
 }

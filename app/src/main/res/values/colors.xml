@@ -5,4 +5,7 @@
     <color name="reached_green_color">#00C853</color>
     <color name="transparent">#00000000</color>
 
+    <color name="chart_background_start">#374953</color>
+    <color name="chart_background_end">#38667c</color>
+
 </resources>

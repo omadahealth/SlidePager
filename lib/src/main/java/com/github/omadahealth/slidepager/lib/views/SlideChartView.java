@@ -34,6 +34,7 @@ import com.github.omadahealth.slidepager.lib.SlideTransformer;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
+import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 
 import java.util.ArrayList;
@@ -71,6 +72,12 @@ public class SlideChartView extends AbstractSlideView {
     private static String[] mProgressStrings;
 
     /**
+     * The list of {@link ProgressAttr} to associate with {@link #mProgressList}.
+     * Used in {@link #injectViewsAndAttributes()}
+     */
+    private List<ProgressAttr> mProgressAttr;
+
+    /**
      * The callback listener for when views are clicked
      */
     private OnSlideListener mCallback;
@@ -84,6 +91,11 @@ public class SlideChartView extends AbstractSlideView {
      * The xml attributes of this view
      */
     private TypedArray mAttributes;
+
+    /**
+     * The {@link android.graphics.Color} link of the special day: {@link ProgressAttr#isSpecial()}
+     */
+    private int mSpecialBottomTextColor;
 
     /**
      * The position of this page within the {@link com.github.omadahealth.slidepager.lib.SlidePager}
@@ -112,7 +124,7 @@ public class SlideChartView extends AbstractSlideView {
     private void loadStyledAttributes(TypedArray attributes) {
         mAttributes = attributes;
         if (mAttributes != null) {
-            //TODO attributes color, background etc...
+            mSpecialBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_text_color, getResources().getColor(R.color.default_progress_chart_bar_special_bottom_text));
         }
     }
 
@@ -131,8 +143,8 @@ public class SlideChartView extends AbstractSlideView {
             ButterKnife.inject(this, view);
 
             mAttributes = attributes;
-            injectViewsAndAttributes();
             loadStyledAttributes(attributes);
+            injectViewsAndAttributes();
         }
     }
 
@@ -140,7 +152,20 @@ public class SlideChartView extends AbstractSlideView {
      * Inject the views into {@link #mProgressList}
      */
     private void injectViewsAndAttributes() {
-        mProgressStrings = getResources().getStringArray(R.array.slide_progress_text);
+        if (mUserPageListener == null) {
+            return;
+        }
+
+        //Init the ProgressAttr for this page
+        mProgressAttr = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            mProgressAttr.add(mUserPageListener.getDayProgress(mPagePosition, i));
+        }
+
+        //Init the array of strings to default to
+        if (mProgressStrings == null) {
+            mProgressStrings = getResources().getStringArray(R.array.slide_progress_text);
+        }
 
         //Progress top texts
         mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_top_text_1));
@@ -152,13 +177,13 @@ public class SlideChartView extends AbstractSlideView {
         mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_top_text_7));
 
         //Progress circles
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_1).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 0) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_2).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 1) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_3).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 2) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_4).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 3) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_5).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 4) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_6).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 5) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_7).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 6) : null));
+        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_1).loadStyledAttributes(mAttributes, mProgressAttr.get(0)));
+        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_2).loadStyledAttributes(mAttributes, mProgressAttr.get(1)));
+        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_3).loadStyledAttributes(mAttributes, mProgressAttr.get(2)));
+        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_4).loadStyledAttributes(mAttributes, mProgressAttr.get(3)));
+        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_5).loadStyledAttributes(mAttributes, mProgressAttr.get(4)));
+        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_6).loadStyledAttributes(mAttributes, mProgressAttr.get(5)));
+        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_7).loadStyledAttributes(mAttributes, mProgressAttr.get(6)));
 
         //Progress bottom texts
         mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_1));
@@ -171,6 +196,29 @@ public class SlideChartView extends AbstractSlideView {
 
         //Init the tags of the subviews
         SlideTransformer.initTags(this);
+
+        //Init values and days text
+        initTopAndBottomTexts();
+    }
+
+    /**
+     * Init the list of {@link TypefaceTextView}: {@link #mProgressTopTextList} and {@link #mProgressBottomTextList}
+     */
+    private void initTopAndBottomTexts() {
+        //Set the top text to be the values
+        for (int i = 0; i < mProgressTopTextList.size(); i++) {
+            String oneDecimal = Utilities.formatWeight(mProgressAttr.get(i).getValue());
+            mProgressTopTextList.get(i).setText(oneDecimal);
+        }
+
+        //Set the bottom texts to be the day values and set the color if special
+        for (int i = 0; i < mProgressBottomTextList.size(); i++) {
+            TypefaceTextView currentTextView = mProgressBottomTextList.get(i);
+            if (mProgressAttr.get(i).isSpecial()) {
+                currentTextView.setTextColor(mSpecialBottomTextColor);
+            }
+            currentTextView.setText(mProgressAttr.get(i).getBottomText());
+        }
     }
 
     @SuppressWarnings("unchecked")
