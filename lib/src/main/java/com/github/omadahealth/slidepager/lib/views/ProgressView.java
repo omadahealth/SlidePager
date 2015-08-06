@@ -172,6 +172,11 @@ public class ProgressView extends RelativeLayout {
     private boolean mShowStreaks;
 
     /**
+     * Boolean that controls if the {@link #mProgressText} is visible or not
+     */
+    private boolean mShowProgressText;
+
+    /**
      * Boolean that controls if we should use the special today colors for this view
      */
     private boolean isSpecial;
@@ -185,6 +190,7 @@ public class ProgressView extends RelativeLayout {
     }
 
     private static String INSTANCE_SHOW_STREAKS = "show_streaks";
+    private static String INSTANCE_SHOW_PROGRESS_TEXT = "show_progress_text";
     private static String INSTANCE_COMPLETED_COLOR = "completed_color";
     private static String INSTANCE_COMPLETED_FILL_COLOR = "completed_fill_color";
     private static String INSTANCE_NOT_COMPLETED_COLOR = "not_completed_color";
@@ -200,6 +206,10 @@ public class ProgressView extends RelativeLayout {
 
     public ProgressView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
+
+        if (isInEditMode()) {
+            return;
+        }
         injectViews(context);
     }
 
@@ -208,6 +218,7 @@ public class ProgressView extends RelativeLayout {
         final Bundle bundle = new Bundle();
         bundle.putParcelable(INSTANCE_STATE, super.onSaveInstanceState());
         bundle.putBoolean(INSTANCE_SHOW_STREAKS, mShowStreaks);
+        bundle.putBoolean(INSTANCE_SHOW_PROGRESS_TEXT, mShowProgressText);
 
         bundle.putInt(INSTANCE_COMPLETED_COLOR, mCompletedColor);
         bundle.putInt(INSTANCE_COMPLETED_FILL_COLOR, mCompletedFillColor);
@@ -228,6 +239,7 @@ public class ProgressView extends RelativeLayout {
             final Bundle bundle = (Bundle) state;
             Resources res = getContext().getResources();
             mShowStreaks = bundle.getBoolean(INSTANCE_SHOW_STREAKS, true);
+            mShowProgressText = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_TEXT, true);
 
             mCompletedColor = bundle.getInt(INSTANCE_COMPLETED_COLOR, res.getColor(R.color.default_progress_completed_reach_color));
             mCompletedFillColor = bundle.getInt(INSTANCE_COMPLETED_FILL_COLOR, res.getColor(R.color.default_progress_completed_fill_color));
@@ -279,6 +291,7 @@ public class ProgressView extends RelativeLayout {
         mProgressStrings = res.getStringArray(R.array.slide_progress_text);
         if (attributes != null) {
             mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_show_streaks, true);
+            mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, true);
 
             mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_reach_color, res.getColor(R.color.default_progress_completed_reach_color));
             mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
@@ -294,6 +307,7 @@ public class ProgressView extends RelativeLayout {
             //Do not recycle attributes, we need them for the future views
         } else {
             mShowStreaks = true;
+            mShowProgressText = true;
 
             mCompletedColor = res.getColor(R.color.default_progress_completed_reach_color);
             mCompletedFillColor = res.getColor(R.color.default_progress_completed_fill_color);
@@ -358,7 +372,6 @@ public class ProgressView extends RelativeLayout {
                     //Set Color
                     mCircularBar.setCircleFillColor(mFillColor);
                     mCircularBar.setClockwiseReachedArcColor(mReachColor);
-
                 }
             }
 
@@ -383,16 +396,20 @@ public class ProgressView extends RelativeLayout {
         mCircularBar.setCircleFillColor(mFillColor);
         mCircularBar.setClockwiseReachedArcColor(mReachColor);
         mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
-        setProgressText();
 
+        setProgressText();
     }
 
     /**
-     * Sets the text for the {@link #mProgressText}
+     * Sets the text for the {@link #mProgressText} or {@link View#GONE} if {@link #mShowProgressText} is false
      */
     private void setProgressText() {
-        getProgressTextView().setText(mProgressStrings[getIntTag()]);
-        getProgressTextView().setTextColor(mNotCompletedReachColor);
+        if (mShowProgressText) {
+            getProgressTextView().setText(mProgressStrings[getIntTag()]);
+            getProgressTextView().setTextColor(mNotCompletedReachColor);
+        } else {
+            getProgressTextView().setVisibility(View.GONE);
+        }
     }
 
     /**

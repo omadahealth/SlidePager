@@ -29,8 +29,9 @@ import android.support.v7.app.ActionBarActivity;
 
 import com.github.omadahealth.demo.R;
 import com.github.omadahealth.slidepager.lib.SlidePager;
-import com.github.omadahealth.slidepager.lib.SlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
+import com.github.omadahealth.slidepager.lib.adapter.SlideChartPagerAdapter;
+import com.github.omadahealth.slidepager.lib.adapter.SlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
@@ -46,6 +47,11 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     private SlidePager mSlidePager;
 
     /**
+     * The slide pager we use
+     */
+    private SlidePager mSlideChartPager;
+
+    /**
      * Max number of weeks in 'a program', could be set to the number of weeks if. Simply causes
      * slightly different output of the text displaying what week we are in
      */
@@ -54,7 +60,6 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @Override
@@ -62,17 +67,29 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //SlidePagerAdapter
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
         SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(16), new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
         SlideView.setSelectedView(5);
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);
-
         mSlidePager.post(new Runnable() {
             @Override
             public void run() {
                 mSlidePager.refreshPage();
+            }
+        });
+
+        //SlideChartPagerAdapter
+        mSlideChartPager = (SlidePager) findViewById(R.id.slidepager2);
+        SlideChartPagerAdapter adapterChart = new SlideChartPagerAdapter(this, getPreviousDate(16), new Date(), mSlideChartPager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
+        mSlideChartPager.setAdapter(adapterChart);
+        mSlideChartPager.setOnPageChangeListener(this);
+        mSlideChartPager.post(new Runnable() {
+            @Override
+            public void run() {
+                mSlideChartPager.refreshPage();
             }
         });
     }
@@ -81,6 +98,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mSlidePager.refreshPage();
+        mSlideChartPager.refreshPage();
     }
 
     @Override

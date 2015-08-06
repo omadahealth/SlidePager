@@ -21,18 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.github.omadahealth.slidepager.lib;
+package com.github.omadahealth.slidepager.lib.adapter;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
+import com.github.omadahealth.slidepager.lib.SlidePager;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
+import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
@@ -43,7 +43,7 @@ import java.util.List;
 /**
  * Created by stoyan on 4/3/15.
  */
-public class SlidePagerAdapter extends PagerAdapter {
+public class SlidePagerAdapter extends AbstractSlidePagerAdapter<SlideView> {
     /**
      * The maximum number of weeks before we change the {@link #getLeftText(int, int)}
      */
@@ -155,12 +155,7 @@ public class SlidePagerAdapter extends PagerAdapter {
         return view == object;
     }
 
-    /**
-     * Get the current view based on the current position of the {@link SlidePager}
-     *
-     * @param position The position to get the view from
-     * @return The view for the given position, if created yet
-     */
+    @Override
     public SlideView getCurrentView(int position) {
         if (mViews == null || position > mViews.size() - 1) {
             return null;

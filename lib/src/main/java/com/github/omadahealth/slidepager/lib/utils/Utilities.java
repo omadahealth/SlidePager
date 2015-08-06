@@ -23,6 +23,8 @@
  */
 package com.github.omadahealth.slidepager.lib.utils;
 
+import com.github.omadahealth.slidepager.lib.adapter.SlidePagerAdapter;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -104,8 +106,8 @@ public class Utilities {
 
     /**
      * Generates a string representing the current week compared to the total weeks represented
-     * @param position The current View in the {@link com.github.omadahealth.slidepager.lib.SlidePagerAdapter}
-     * @param totalWeeks The total number of weeks the {@link com.github.omadahealth.slidepager.lib.SlidePagerAdapter}
+     * @param position The current View in the {@link SlidePagerAdapter}
+     * @param totalWeeks The total number of weeks the {@link SlidePagerAdapter}
      * @param maxWeeks The number of set weeks, could be the same as maxWeeks
      * @return Html string of what week we are in
      */

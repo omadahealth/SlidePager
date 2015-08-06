@@ -3,5 +3,6 @@
     <color name="circle_fill">#dffee8</color>
     <color name="gray">#fa7d7d7d</color>
     <color name="reached_green_color">#00C853</color>
+    <color name="transparent">#00000000</color>
 
 </resources>

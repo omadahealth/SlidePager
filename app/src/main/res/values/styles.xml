@@ -7,13 +7,18 @@
 
 
     <style name="SlidePagerStyle">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-
         <item name="slide_start_at_end">true</item>
         <item name="slide_show_streaks">true</item>
+        <item name="slide_show_progress_text">true</item>
         <item name="slide_show_week">true</item>
         <item name="slide_show_date">true</item>
+    </style>
+
+    <style name="SlideChartPagerStyle">
+        <item name="slide_start_at_end">true</item>
+        <item name="slide_show_streaks">false</item>
+        <item name="slide_show_progress_text">false</item>
+        <item name="slide_progress_special_fill_color">@color/transparent</item>
     </style>
 
 </resources>

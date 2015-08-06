@@ -30,9 +30,10 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.github.omadahealth.slidepager.lib.adapter.AbstractSlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
+import com.github.omadahealth.slidepager.lib.views.AbstractSlideView;
 import com.github.omadahealth.slidepager.lib.views.ProgressView;
-import com.github.omadahealth.slidepager.lib.views.SlideView;
 
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class SlidePager extends ViewPager {
     private OnSlidePageChangeListener mUserPageListener;
 
     /**
-     * True if we should start at the last position in the {@link SlidePagerAdapter}
+     * True if we should start at the last position in the {@link AbstractSlidePagerAdapter}
      */
     private boolean mStartAtEnd;
 
@@ -70,8 +71,8 @@ public class SlidePager extends ViewPager {
 
     @Override
     public void setAdapter(PagerAdapter adapter) {
-        if (!(adapter instanceof SlidePagerAdapter)) {
-            throw new IllegalArgumentException("PagerAdapter should be a subclass of SlidePagerAdapter");
+        if (!(adapter instanceof AbstractSlidePagerAdapter)) {
+            throw new IllegalArgumentException("PagerAdapter should be a subclass of AbstractSlidePagerAdapter");
         }
 
         super.setAdapter(adapter);
@@ -102,8 +103,8 @@ public class SlidePager extends ViewPager {
             return;
         }
 
-        if (getAdapter() instanceof SlidePagerAdapter) {
-            transformer.transformPage(((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()), 0);
+        if (getAdapter() instanceof AbstractSlidePagerAdapter) {
+            transformer.transformPage(((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()), 0);
             super.setPageTransformer(reverseDrawingOrder, transformer);
         }
     }
@@ -175,7 +176,7 @@ public class SlidePager extends ViewPager {
      */
     @SuppressWarnings("unchecked")
     private void resetPage(int position) {
-        SlideView selectedView = (SlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
+        AbstractSlideView selectedView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
         selectedView.resetPage(mAttributes);
     }
 
@@ -183,7 +184,7 @@ public class SlidePager extends ViewPager {
      * @param position
      */
     private void animatePage(int position) {
-        SlideView slideView = (SlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
+        AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
         slideView.animatePage(mUserPageListener, mAttributes);
     }
 
@@ -192,13 +193,13 @@ public class SlidePager extends ViewPager {
      * @param show
      */
     private void animateSeries(int position, boolean show) {
-        SlideView slideView = (SlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
+        AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
         slideView.animateSeries(show);
     }
 
     @SuppressWarnings("unchecked")
     private List<View> getChildren(int position) {
-        View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(position));
+        View selectedView = (((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position));
 
 
         if (selectedView.getTag() == null) {
@@ -219,7 +220,6 @@ public class SlidePager extends ViewPager {
     public TypedArray getAttributeSet() {
         return mAttributes;
     }
-
 
     public void setAttributeSet(TypedArray attributeSet) {
         this.mAttributes = attributeSet;

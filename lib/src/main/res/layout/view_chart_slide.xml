@@ -1,0 +1,240 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--<include-->
+    <!--android:id="@+id/progress_background_ll"-->
+    <!--layout="@layout/view_chart_slide_background"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/progress_top_text_ll" />-->
+
+    <LinearLayout
+        android:id="@+id/progress_top_text_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="0"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="1"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="2"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="3"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="4"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="5"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="6"
+            app:tv_typeface="roboto_regular" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/progress_views_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progress_top_text_ll"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/progress_1_bar"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/default_progress_chart_bart_color"
+                android:minHeight="50dp" />
+
+            <com.github.omadahealth.slidepager.lib.views.ProgressView
+                android:id="@+id/progress_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/view_day_progress_margin_padding_negative"
+                android:layout_marginTop="@dimen/view_day_progress_margin_padding_negative"
+                android:layout_below="@+id/progress_1_bar"
+                android:tag="0" />
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/progress_1"
+                android:layout_centerHorizontal="true"
+                android:background="@color/default_progress_chart_bart_color"
+                android:minHeight="50dp" />
+        </RelativeLayout>
+
+        <com.github.omadahealth.slidepager.lib.views.ProgressView
+            android:id="@+id/progress_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="1" />
+
+        <com.github.omadahealth.slidepager.lib.views.ProgressView
+            android:id="@+id/progress_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="2" />
+
+        <com.github.omadahealth.slidepager.lib.views.ProgressView
+            android:id="@+id/progress_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="3" />
+
+        <com.github.omadahealth.slidepager.lib.views.ProgressView
+            android:id="@+id/progress_5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="4" />
+
+        <com.github.omadahealth.slidepager.lib.views.ProgressView
+            android:id="@+id/progress_6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="5" />
+
+        <com.github.omadahealth.slidepager.lib.views.ProgressView
+            android:id="@+id/progress_7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/progress_bottom_text_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progress_views_ll"
+        android:orientation="horizontal">
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="0"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="1"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="2"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="3"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="4"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="5"
+            app:tv_typeface="roboto_regular" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="6"
+            app:tv_typeface="roboto_regular" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

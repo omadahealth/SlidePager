@@ -11,6 +11,7 @@
         <attr name="slide_progress_special_fill_color" format="color" />
         <attr name="slide_start_at_end" format="boolean" />
         <attr name="slide_show_streaks" format="boolean" />
+        <attr name="slide_show_progress_text" format="boolean" />
         <attr name="slide_show_week" format="boolean" />
         <attr name="slide_show_date" format="boolean" />
     </declare-styleable>
