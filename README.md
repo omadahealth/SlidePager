@@ -56,14 +56,21 @@ You can change several attributes in the XML file:
 * app:slide_progress_completed_reach_color [color hex] --> The reach color(border) when the progress == 100%
 * app:slide_progress_not_completed_reach_color [color hex] --> The reach color(border) when the progress < 100%
 * app:slide_progress_not_completed_outline_color [color hex] --> The outline color(border) when the progress < 100%
+* app:slide_progress_not_completed_outline_size [dimension] --> The outline size(border) when the progress < 100%
+* app:slide_progress_not_completed_future_outline_size [dimension] --> The outline size(border) when the progress is in the future
 * app:slide_progress_not_completed_fill_color [color hex] --> The fill color(border) when the progress < 100%
 * app:slide_progress_special_reach_color [color hex] --> The reach color(border) when the progress < 100%
 * app:slide_progress_special_outline_color [color hex] --> The outline color(border) when the progress < 100%
 * app:slide_progress_special_fill_color [color hex] --> The fill color(border) when the progress < 100%
 * app:slide_start_at_end [boolean] --> True if you want the pager to start at the last page instead of 0
 * app:slide_show_streaks [boolean] --> True if you want the connecting streaks to appear between consecutive 100% progress views
+* app:slide_show_progress_text [boolean] --> True if you want to display the text below the CircularBar
 * app:slide_show_week [boolean] --> True if you want to show the left text view
 * app:slide_show_date [boolean] --> True if you want to show the right text view
+* app:slide_progress_chart_bar_top_text_color [color hex] --> The top text color of the SlideChartView
+* app:slide_progress_chart_bar_bottom_text_color [color hex] --> The bottom text color of the SlideChartView
+* app:slide_progress_chart_bar_bottom_special_text_color [color hex] --> The bottom text color of the SlideChartView (special progress)
+* app:slide_progress_chart_color [color hex] --> The color of the bars in SlideChartView
 
 ========
 
