@@ -1,0 +1,275 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--<include-->
+    <!--android:id="@+id/progress_background_ll"-->
+    <!--layout="@layout/view_chart_slide_background"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/progress_top_text_ll" />-->
+
+    <LinearLayout
+        android:id="@+id/progress_top_text_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/view_day_progress_margin_top_text"
+        android:orientation="horizontal">
+
+        android:tag="0"
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_1"
+            style="@style/slideChartTopTextStyle"
+            android:gravity="center" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_2"
+            style="@style/slideChartTopTextStyle"
+            android:tag="1" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_3"
+            style="@style/slideChartTopTextStyle"
+            android:tag="2" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_4"
+            style="@style/slideChartTopTextStyle"
+            android:tag="3" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_5"
+            style="@style/slideChartTopTextStyle"
+            android:tag="4" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_6"
+            style="@style/slideChartTopTextStyle"
+            android:tag="5" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_top_text_7"
+            style="@style/slideChartTopTextStyle"
+            android:tag="6" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/progress_views_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progress_top_text_ll"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/progress_1_bar_top"
+                android:layout_alignParentTop="true"
+                style="@style/slideChartBarStyle"/>
+
+            <com.github.omadahealth.slidepager.lib.views.ProgressView
+                android:id="@+id/progress_1"
+                android:layout_below="@+id/progress_1_bar_top"
+                android:tag="0"
+                style="@style/slideChartProgressViewStyle"/>
+
+            <ImageView
+                android:id="@+id/progress_1_bar_bottom"
+                android:layout_below="@+id/progress_1"
+                style="@style/slideChartBarStyle"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/progress_2_bar_top"
+                android:layout_alignParentTop="true"
+                style="@style/slideChartBarStyle"/>
+
+            <com.github.omadahealth.slidepager.lib.views.ProgressView
+                android:id="@+id/progress_2"
+                android:layout_below="@+id/progress_2_bar_top"
+                android:tag="1"
+                style="@style/slideChartProgressViewStyle"/>
+
+            <ImageView
+                android:id="@+id/progress_2_bar_bottom"
+                android:layout_below="@+id/progress_2"
+                style="@style/slideChartBarStyle"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/progress_3_bar_top"
+                android:layout_alignParentTop="true"
+                style="@style/slideChartBarStyle"/>
+
+            <com.github.omadahealth.slidepager.lib.views.ProgressView
+                android:id="@+id/progress_3"
+                android:layout_below="@+id/progress_3_bar_top"
+                android:tag="2"
+                style="@style/slideChartProgressViewStyle"/>
+
+            <ImageView
+                android:id="@+id/progress_3_bar_bottom"
+                android:layout_below="@+id/progress_3"
+                style="@style/slideChartBarStyle"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/progress_4_bar_top"
+                android:layout_alignParentTop="true"
+                style="@style/slideChartBarStyle"/>
+
+            <com.github.omadahealth.slidepager.lib.views.ProgressView
+                android:id="@+id/progress_4"
+                android:layout_below="@+id/progress_4_bar_top"
+                android:tag="3"
+                style="@style/slideChartProgressViewStyle"/>
+
+            <ImageView
+                android:id="@+id/progress_4_bar_bottom"
+                android:layout_below="@+id/progress_4"
+                style="@style/slideChartBarStyle"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/progress_5_bar_top"
+                android:layout_alignParentTop="true"
+                style="@style/slideChartBarStyle"/>
+
+            <com.github.omadahealth.slidepager.lib.views.ProgressView
+                android:id="@+id/progress_5"
+                android:layout_below="@+id/progress_5_bar_top"
+                android:tag="4"
+                style="@style/slideChartProgressViewStyle"/>
+
+            <ImageView
+                android:id="@+id/progress_5_bar_bottom"
+                android:layout_below="@+id/progress_5"
+                style="@style/slideChartBarStyle"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/progress_6_bar_top"
+                android:layout_alignParentTop="true"
+                style="@style/slideChartBarStyle"/>
+
+            <com.github.omadahealth.slidepager.lib.views.ProgressView
+                android:id="@+id/progress_6"
+                android:layout_below="@+id/progress_6_bar_top"
+                android:tag="5"
+                style="@style/slideChartProgressViewStyle"/>
+
+            <ImageView
+                android:id="@+id/progress_6_bar_bottom"
+                android:layout_below="@+id/progress_6"
+                style="@style/slideChartBarStyle"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/progress_7_bar_top"
+                android:layout_alignParentTop="true"
+                style="@style/slideChartBarStyle"/>
+
+            <com.github.omadahealth.slidepager.lib.views.ProgressView
+                android:id="@+id/progress_7"
+                android:layout_below="@+id/progress_7_bar_top"
+                android:tag="6"
+                style="@style/slideChartProgressViewStyle"/>
+
+            <ImageView
+                android:id="@+id/progress_7_bar_bottom"
+                android:layout_below="@+id/progress_7"
+                style="@style/slideChartBarStyle"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/progress_bottom_axis"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/progress_views_ll"
+        android:background="@color/default_progress_chart_bar_color"/>
+
+    <LinearLayout
+        android:id="@+id/progress_bottom_text_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/view_day_progress_margin_bottom_text"
+        android:layout_below="@+id/progress_bottom_axis"
+        android:orientation="horizontal">
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_1"
+            style="@style/slideChartBottomTextStyle"
+            android:tag="0" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_2"
+            style="@style/slideChartBottomTextStyle"
+            android:tag="1" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_3"
+            style="@style/slideChartBottomTextStyle"
+            android:tag="2" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_4"
+            style="@style/slideChartBottomTextStyle"
+            android:tag="3" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_5"
+            style="@style/slideChartBottomTextStyle"
+            android:tag="4" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_6"
+            style="@style/slideChartBottomTextStyle"
+            android:tag="5" />
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_bottom_text_7"
+            style="@style/slideChartBottomTextStyle"
+            android:tag="6" />
+
+    </LinearLayout>
+
+</RelativeLayout>
