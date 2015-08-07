@@ -141,7 +141,7 @@ public class SlidePager extends ViewPager {
                 if (mUserPageListener != null) {
                     mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
-                if(positionOffset == 0){
+                if (positionOffset == 0) {
                     resetPage(position);
                 }
             }
@@ -188,8 +188,12 @@ public class SlidePager extends ViewPager {
      */
     @SuppressWarnings("unchecked")
     private void resetPage(int position) {
-        AbstractSlideView selectedView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
-        selectedView.resetPage(mAttributes);
+        if (getAdapter() != null) {
+            AbstractSlideView selectedView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
+            if (selectedView != null) {
+                selectedView.resetPage(mAttributes);
+            }
+        }
     }
 
     /**
@@ -211,6 +215,7 @@ public class SlidePager extends ViewPager {
 
     /**
      * Returns the initiated child views in {@link SlideTransformer#initTags(View)}
+     *
      * @param position
      * @return
      */
@@ -236,6 +241,7 @@ public class SlidePager extends ViewPager {
     /**
      * Gets the attribute set that we pass from xml attr in {@link R.styleable#SlidePager}
      * in {@link #loadStyledAttributes(AttributeSet, int)}
+     *
      * @return
      */
     public TypedArray getAttributeSet() {
@@ -244,6 +250,7 @@ public class SlidePager extends ViewPager {
 
     /**
      * Sets the {@link #mAttributes} that are passed on to the {@link ProgressView} and {@link android.transition.Slide}
+     *
      * @param attributeSet
      */
 
