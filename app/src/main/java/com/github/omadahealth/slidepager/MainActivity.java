@@ -37,7 +37,6 @@ import com.github.omadahealth.slidepager.lib.adapter.SlideChartPagerAdapter;
 import com.github.omadahealth.slidepager.lib.adapter.SlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
-import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
@@ -78,7 +77,8 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
      */
     private int mCurrentIndex;
 
-    private ProgressAttr progressAttr = new ProgressAttr(0, false);
+    private ProgressAttr progressAttr = new ProgressAttr(0, false, false);
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -90,9 +90,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         setContentView(R.layout.activity_main);
 
         //SlidePagerAdapter
-
         mStartDate = Utilities.getPreviousDate(DEFAULT_PROGRAM_WEEKS);
-
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
         final SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, mStartDate, new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
         SlideView.setSelectedView(0);
@@ -100,16 +98,14 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);
 
-
         Button change = (Button) findViewById(R.id.change_button);
         change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressAttr = new ProgressAttr(progressAttr.getProgress() == 100 ? 0 : 100, mCurrentPage == 15 && mCurrentIndex == 4);
+                progressAttr = new ProgressAttr(progressAttr.getProgress() == 100 ? 0 : 100, mCurrentPage == 15 && mCurrentIndex == 4, false);
                 adapterOne.getCurrentView(mCurrentPage).animateProgressView(mCurrentIndex, progressAttr);
             }
         });
-
         mSlidePager.post(new Runnable() {
             @Override
             public void run() {
@@ -117,9 +113,10 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
             }
         });
 
+
         //SlideChartPagerAdapter
         mSlideChartPager = (SlidePager) findViewById(R.id.slidepager2);
-        SlideChartPagerAdapter adapterChart = new SlideChartPagerAdapter(this, getPreviousDate(16), new Date(), mSlideChartPager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
+        SlideChartPagerAdapter adapterChart = new SlideChartPagerAdapter(this, Utilities.getPreviousDate(16), new Date(), mSlideChartPager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
         mSlideChartPager.setAdapter(adapterChart);
         mSlideChartPager.setOnPageChangeListener(this);
         mSlideChartPager.post(new Runnable() {
@@ -149,7 +146,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
             progress = 100;
         }
 
-        String day = Utilities.getSelectedDayText(getPreviousDate(16).getTime(), page, index);
+        String day = Utilities.getSelectedDayText(Utilities.getPreviousDate(16).getTime(), page, index);
 
         return new ChartProgressAttr(progress, value, day, page == 15 && index == 5, page == 15 && index == 6);
     }

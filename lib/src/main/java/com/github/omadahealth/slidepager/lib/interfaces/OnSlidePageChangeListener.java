@@ -40,6 +40,6 @@ public interface OnSlidePageChangeListener<T extends ProgressAttr> extends ViewP
      * @param index The index for the day (0-6)
      * @return The progress value for the specified day
      */
-    ProgressAttr getDayProgress(int page, int index);
+    T getDayProgress(int page, int index);
 
 }

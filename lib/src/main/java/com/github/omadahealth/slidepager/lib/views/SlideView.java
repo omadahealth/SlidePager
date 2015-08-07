@@ -238,7 +238,7 @@ public class SlideView extends AbstractSlideView {
         mSelectedImageView.setSelectedViewId(view.getId());
 
 
-        if(mAnimationSet == null){
+        if (mAnimationSet == null) {
             mAnimationSet = new AnimatorSet();
         }
         mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, SELECTION_ANIMATION_DURATION, ObjectAnimator.ofFloat(mSelectedImageView, "x", startPosition, offset)));
@@ -310,7 +310,8 @@ public class SlideView extends AbstractSlideView {
 
     /**
      * Animates the {@link ProgressView}s of this page and sets their attributes.
-     * @param listener A listener to get {@link OnSlidePageChangeListener#getDayProgress(int, int)}
+     *
+     * @param listener   A listener to get {@link OnSlidePageChangeListener#getDayProgress(int, int)}
      * @param attributes The attributes to use
      */
     @SuppressWarnings("unchecked")
@@ -334,6 +335,7 @@ public class SlideView extends AbstractSlideView {
 
     /**
      * Displays or hides the streaks of all the {@link ProgressView}s
+     *
      * @param show True to animate them visible, false to immediately hide them
      */
     @SuppressWarnings("unchecked")
@@ -353,6 +355,7 @@ public class SlideView extends AbstractSlideView {
 
     /**
      * Resets the state of this page, usually called when we change pages in the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     *
      * @param mAttributes The attributes to reset the views to
      */
     @SuppressWarnings("unchecked")
@@ -394,14 +397,15 @@ public class SlideView extends AbstractSlideView {
 
     /**
      * Public method for animating an individual {@link ProgressView}
-     * @param index The index from [0,6] of the view
+     *
+     * @param index    The index from [0,6] of the view
      * @param progress The {@link ProgressAttr} to animate
      */
     @SuppressWarnings("unchecked")
-    public void animateProgressView(int index, ProgressAttr progress){
+    public void animateProgressView(int index, ProgressAttr progress) {
         final List<View> children = (List<View>) getTag();
         ProgressView view = getProgressView(index);
-        if(view != null){
+        if (view != null) {
             view.animateProgress(view.getProgress(), progress, mProgressAnimationTime, children);
         }
     }
@@ -479,11 +483,12 @@ public class SlideView extends AbstractSlideView {
 
     /**
      * Returns the {@link ProgressView} at the given index
+     *
      * @param index The index from [0,6]
      * @return The view
      */
-    public ProgressView getProgressView(int index){
-        if(mProgressList == null){
+    public ProgressView getProgressView(int index) {
+        if (mProgressList == null) {
             return null;
         }
         return mProgressList.get(index);
@@ -491,6 +496,7 @@ public class SlideView extends AbstractSlideView {
 
     /**
      * Returns the view that displays the currently selected {@link ProgressView}
+     *
      * @return
      */
     public SelectedImageView getSelectedImageView() {
@@ -499,6 +505,7 @@ public class SlideView extends AbstractSlideView {
 
     /**
      * Gets the currently selected index
+     *
      * @return
      */
     public synchronized static int getSelectedView() {
@@ -507,6 +514,7 @@ public class SlideView extends AbstractSlideView {
 
     /**
      * Sets the currently selected index
+     *
      * @param selectedView From [0,6]
      */
     public synchronized static void setSelectedView(int selectedView) {

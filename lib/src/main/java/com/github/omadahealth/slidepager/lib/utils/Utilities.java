@@ -56,11 +56,6 @@ public class Utilities {
     public static final String DATE_SHORT_MONTH_DAY_STRING_FORMAT = "LLL d";
 
     /**
-     * Short month day:   Jan 20
-     */
-    public static final String DATE_SHORT_MONTH_DAY_STRING_FORMAT = "LLL d";
-
-    /**
      * Day in a week: Tue
      */
     public static final String DATE_SHORTENED_DAY_OF_WEEK_STRING_FORMAT = "EEE";
@@ -202,25 +197,6 @@ public class Utilities {
 
         DecimalFormat weightFormat = new DecimalFormat(WEIGHT_FORMAT);
         return weightFormat.format(formatWeightToDouble(value));
-    }
-
-    /**
-     * Get a selected day text from a start point and a page and index
-     */
-    public static String getSelectedDayText(long start, int page, int index) {
-        Date date = getSelectedDay(start, page, index);
-
-        if (isToday(date.getTime())) {
-            return TODAY_UPPERCASE;
-        }
-
-        if (withinAWeek(date.getTime())) {
-            SimpleDateFormat sf = new SimpleDateFormat(DATE_SHORTENED_DAY_OF_WEEK_STRING_FORMAT, Locale.getDefault());
-            return sf.format(date).toUpperCase(Locale.getDefault());
-        }
-
-        SimpleDateFormat sf = new SimpleDateFormat(DATE_SHORT_MONTH_DAY_STRING_FORMAT, Locale.getDefault());
-        return sf.format(date).toUpperCase(Locale.getDefault());
     }
 
     /**

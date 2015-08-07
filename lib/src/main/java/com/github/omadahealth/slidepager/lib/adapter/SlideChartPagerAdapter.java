@@ -26,7 +26,6 @@ package com.github.omadahealth.slidepager.lib.adapter;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -190,18 +189,8 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
      * @return
      */
     private SlideChartView getWeekSlide(int pagePosition, int weeks) {
-        int weeksSince = weeks - (pagePosition + 1);
-        SlideChartView week = new SlideChartView(mContext, mAttributeSet, pagePosition, mUserPageListener);
-        week.setListener(new OnSlideListener() {
-            @Override
-            public void onDaySelected(int page, int index) {
-                Log.i("onDaySelected", "page : " + page + ", index : " + index);
-                if (mUserPageListener != null) {
-                    mUserPageListener.onDaySelected(page, index);
-                }
-            }
-        });
-        return week;
+        //no listener, no day selectable
+        return new SlideChartView(mContext, mAttributeSet, pagePosition, mUserPageListener);
     }
 
     /**

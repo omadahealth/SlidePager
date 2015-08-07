@@ -401,38 +401,6 @@ public class ProgressView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (getCircularBar().getProgress() >= 99.95f) {
-                    showCheckMark(true);
-
-                    if (mShowStreaks && mSiblings != null && mSiblings.size() > 0) {
-                        //Previous exists
-                        if (getIntTag() - 1 >= 0) {
-                            ProgressView previousDay = mSiblings.get(index - 1);
-                            //Previous is complete
-                            if (previousDay.getCircularBar().getProgress() >= 99.95f) {
-                                showStreak(true, ProgressView.STREAK.LEFT_STREAK);
-                            }
-
-                        }
-
-                        //Next exists
-                        if (index + 1 < mSiblings.size()) {
-                            ProgressView nextDay = mSiblings.get(index + 1);
-                            //Next is complete
-                            if (nextDay.getCircularBar().getProgress() >= 99.95f) {
-                                showStreak(true, ProgressView.STREAK.RIGHT_STREAK);
-                            }
-                        }
-                    }
-
-                    //Set Color
-                    mCircularBar.setCircleFillColor(mCompletedFillColor);
-                    mCircularBar.setClockwiseReachedArcColor(mCompletedColor);
-                } else {
-                    //Set Color
-                    mCircularBar.setCircleFillColor(mFillColor);
-                    mCircularBar.setClockwiseReachedArcColor(mReachColor);
-                }
                 animateStreaks();
             }
 
@@ -478,7 +446,7 @@ public class ProgressView extends RelativeLayout {
             mCircularBar.setCircleFillColor(mCompletedFillColor);
             mCircularBar.setClockwiseReachedArcColor(mCompletedColor);
         } else {
-            if (!isSpecial) {
+            if (!mIsSpecial) {
                 showCheckMark(false);
             }
 
@@ -504,8 +472,6 @@ public class ProgressView extends RelativeLayout {
         mCircularBar.setClockwiseReachedArcColor(mReachColor);
         mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
         mCircularBar.setClockwiseOutlineArcWidth(mIsFuture ? mNotCompletedFutureOutlineSize : mNotCompletedOutlineSize);
-
-        setProgressText();
     }
     
     /**
@@ -519,7 +485,7 @@ public class ProgressView extends RelativeLayout {
     /**
      * Sets the text for the {@link #mProgressText} or {@link View#GONE} if {@link #mShowProgressText} is false
      */
-    private void setProgressText(String text) {
+    public void setProgressText(String text) {
         if (mShowProgressText) {
             getProgressTextView().setText(text);
             getProgressTextView().setTextColor(mNotCompletedReachColor);
@@ -580,7 +546,7 @@ public class ProgressView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(siblings != null){
+                if (siblings != null) {
                     for (View view : siblings) {
                         if (view instanceof ProgressView) {
                             ((ProgressView) view).animateStreaks();

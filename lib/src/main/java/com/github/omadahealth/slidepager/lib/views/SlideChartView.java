@@ -32,7 +32,6 @@ import android.widget.ImageView;
 
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
-import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
@@ -83,11 +82,6 @@ public class SlideChartView extends AbstractSlideView {
      * Used in {@link #injectViewsAndAttributes()}
      */
     private List<ChartProgressAttr> mProgressAttr;
-
-    /**
-     * The callback listener for when views are clicked
-     */
-    private OnSlideListener mCallback;
 
     /**
      * The default animation time
@@ -185,11 +179,6 @@ public class SlideChartView extends AbstractSlideView {
         mProgressAttr = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             mProgressAttr.add(mUserPageListener.getDayProgress(mPagePosition, i));
-        }
-
-        //Init the array of strings to default to
-        if (mProgressStrings == null) {
-            mProgressStrings = getResources().getStringArray(R.array.slide_progress_text);
         }
 
         //Progress top texts
@@ -325,14 +314,5 @@ public class SlideChartView extends AbstractSlideView {
             ProgressAttr progress = listener.getDayProgress(mPagePosition, view.getIntTag());
             view.animateProgress(0, progress, mProgressAnimationTime, children);
         }
-    }
-
-    /**
-     * Sets the listener for click events in this view
-     *
-     * @param listener
-     */
-    public void setListener(OnSlideListener listener) {
-        this.mCallback = listener;
     }
 }
