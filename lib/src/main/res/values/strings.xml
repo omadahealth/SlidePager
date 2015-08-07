@@ -3,7 +3,7 @@
     <string name="left_textview_text"><![CDATA[<html><b>Week 7 </b><i>of 16</i></html>]]></string>
     <string name="right_textview_text">March 30 - April 6</string>
 
-    <string-array name="slide_progress_text">
+    <string-array name="slide_progress_short_text">
         <item>S</item>
         <item>M</item>
         <item>T</item>
@@ -11,5 +11,15 @@
         <item>T</item>
         <item>F</item>
         <item>S</item>
+    </string-array>
+
+    <string-array name="slide_progress_long_text">
+        <item>SUN</item>
+        <item>MON</item>
+        <item>TUE</item>
+        <item>WED</item>
+        <item>THU</item>
+        <item>FRI</item>
+        <item>SAT</item>
     </string-array>
 </resources>

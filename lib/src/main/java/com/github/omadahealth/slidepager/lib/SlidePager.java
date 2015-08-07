@@ -42,6 +42,11 @@ import java.util.List;
  */
 public class SlidePager extends ViewPager {
     /**
+     * The tag for logging
+     */
+    private static final String TAG = "SlidePager";
+
+    /**
      * A user defined {@link OnPageChangeListener} that can
      * be added to {@link #setOnPageChangeListener(OnPageChangeListener)}. The default page listener
      * is defined implemented by this class and set in {@link #setSlidePager()}
@@ -136,6 +141,9 @@ public class SlidePager extends ViewPager {
                 if (mUserPageListener != null) {
                     mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
+                if(positionOffset == 0){
+                    resetPage(position);
+                }
             }
 
             @Override
@@ -201,6 +209,11 @@ public class SlidePager extends ViewPager {
         slideView.animateSeries(show);
     }
 
+    /**
+     * Returns the initiated child views in {@link SlideTransformer#initTags(View)}
+     * @param position
+     * @return
+     */
     @SuppressWarnings("unchecked")
     private List<View> getChildren(int position) {
         View selectedView = (((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position));
@@ -217,13 +230,22 @@ public class SlidePager extends ViewPager {
      * Refreshes the page animation
      */
     public void refreshPage() {
-
         animatePage(getCurrentItem());
     }
 
+    /**
+     * Gets the attribute set that we pass from xml attr in {@link R.styleable#SlidePager}
+     * in {@link #loadStyledAttributes(AttributeSet, int)}
+     * @return
+     */
     public TypedArray getAttributeSet() {
         return mAttributes;
     }
+
+    /**
+     * Sets the {@link #mAttributes} that are passed on to the {@link ProgressView} and {@link android.transition.Slide}
+     * @param attributeSet
+     */
 
     public void setAttributeSet(TypedArray attributeSet) {
         this.mAttributes = attributeSet;

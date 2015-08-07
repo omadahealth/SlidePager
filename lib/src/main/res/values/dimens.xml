@@ -8,6 +8,9 @@
     <dimen name="view_day_progress_margin_bottom_text">7dp</dimen>
     <dimen name="view_day_progress_margin_padding_negative">-7dp</dimen>
     <dimen name="view_day_progress_check">40dp</dimen>
+    <dimen name="selected_progress_view_text_size">13sp</dimen>
+    <dimen name="not_selected_progress_view_text_size">14sp</dimen>
+    <dimen name="default_progress_reached_width">3dp</dimen>
     <dimen name="week_text_size">14sp</dimen>
 
     <dimen name="circular_bar_default_outline_width">0.75dp</dimen>

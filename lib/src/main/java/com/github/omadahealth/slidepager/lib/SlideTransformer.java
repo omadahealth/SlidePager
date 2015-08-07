@@ -174,9 +174,9 @@ public class SlideTransformer implements ViewPager.PageTransformer {
      */
     private void lockPage(View view, float position) {
         view.setTranslationX(view.getWidth() * -position);
-        if (position < -1.0F || position > 1.0F) {
+        if (Math.abs(position) >= 1f) {
             view.setAlpha(0.0F);
-            view.setVisibility(View.GONE);
+            view.setVisibility(View.INVISIBLE);
         } else if (position == 0.0F) {
             view.setAlpha(1.0F);
             view.setVisibility(View.VISIBLE);

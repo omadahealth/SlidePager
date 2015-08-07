@@ -26,6 +26,9 @@ package com.github.omadahealth.slidepager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.github.omadahealth.demo.R;
 import com.github.omadahealth.slidepager.lib.SlidePager;
@@ -35,9 +38,10 @@ import com.github.omadahealth.slidepager.lib.adapter.SlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
+import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
+import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener<ChartProgressAttr> {
@@ -58,6 +62,23 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
      */
     private static final int DEFAULT_PROGRAM_WEEKS = 16;
 
+    /**
+     * Start date of the {@link #mSlidePager}
+     */
+    private Date mStartDate;
+
+    /**
+     * The current index of the {@link SlidePagerAdapter} we set on {@link #mSlidePager}
+     */
+    private int mCurrentPage;
+
+    /**
+     * The current index of the {@link com.github.omadahealth.slidepager.lib.views.ProgressView}
+     * in the displaying {@link android.transition.Slide}
+     */
+    private int mCurrentIndex;
+
+    private ProgressAttr progressAttr = new ProgressAttr(0, false);
     @Override
     protected void onResume() {
         super.onResume();
@@ -69,12 +90,26 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         setContentView(R.layout.activity_main);
 
         //SlidePagerAdapter
+
+        mStartDate = Utilities.getPreviousDate(DEFAULT_PROGRAM_WEEKS);
+
         mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
-        SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, getPreviousDate(16), new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
-        SlideView.setSelectedView(5);
+        final SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, mStartDate, new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
+        SlideView.setSelectedView(0);
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);
+
+
+        Button change = (Button) findViewById(R.id.change_button);
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressAttr = new ProgressAttr(progressAttr.getProgress() == 100 ? 0 : 100, mCurrentPage == 15 && mCurrentIndex == 4);
+                adapterOne.getCurrentView(mCurrentPage).animateProgressView(mCurrentIndex, progressAttr);
+            }
+        });
+
         mSlidePager.post(new Runnable() {
             @Override
             public void run() {
@@ -121,6 +156,22 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
     @Override
     public void onDaySelected(int page, int index) {
+        Log.i("MainActivity", "onDaySelected : " + page + ", " + index);
+        mCurrentPage = page;
+        mCurrentIndex = index;
+    }
+
+    @Override
+    public boolean isDaySelectable(int page, int index) {
+        if (page == 15 && index > 4) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String getDayTextLabel(int page, int index) {
+        return Utilities.getSelectedDayText(mStartDate.getTime(), page, index);
     }
 
     @Override
@@ -135,18 +186,4 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     public void onPageScrollStateChanged(int state) {
     }
 
-    /**
-     * Returns a date from a time
-     *
-     * @param weeks Number of weeks before today
-     * @return
-     */
-    private Date getPreviousDate(int weeks) {
-        Calendar cal = Calendar.getInstance();
-        Date now = new Date();
-        cal.setTime(now);
-
-        cal.add(Calendar.DAY_OF_YEAR, -1 * 7 * weeks);
-        return new Date(cal.getTimeInMillis());
-    }
 }

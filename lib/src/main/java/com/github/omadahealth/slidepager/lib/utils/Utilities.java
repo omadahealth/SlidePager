@@ -46,6 +46,16 @@ public class Utilities {
     private static final String MONTH_IN_YEAR_STRING_FORMAT = "LLLL d";
 
     /**
+     * Day:  Tuesday
+     */
+    public static final String DATE_FULL_STRING_FORMAT = "EEEE";
+
+    /**
+     * Short month day:   Jan 20
+     */
+    public static final String DATE_SHORT_MONTH_DAY_STRING_FORMAT = "LLL d";
+
+    /**
      * Short month day:   Jan 20
      */
     public static final String DATE_SHORT_MONTH_DAY_STRING_FORMAT = "LLL d";
@@ -77,17 +87,23 @@ public class Utilities {
      * @return Number of weeks the end date is after the start date, could be negative
      */
     public static int getWeeksBetween(Date start, Date end) {
-
+        //if end is before start
         if (end.before(start)) {
             return -getWeeksBetween(end, start);
         }
+
         start = resetTime(start);
         end = resetTime(end);
+
+        //if same day
+        if(start.compareTo(end) == 0){
+            return 0;
+        }
 
         Calendar cal = new GregorianCalendar();
         cal.setTime(start);
         int weeks = 0;
-        while (cal.getTime().before(end)) {
+        while (cal.getTime().compareTo(end) <= 0) {
             // add another week
             cal.add(Calendar.WEEK_OF_YEAR, 1);
             weeks++;
@@ -281,5 +297,43 @@ public class Utilities {
             return TimeUnit.SECONDS.toMillis(since);
         }
         return since;
+    }
+
+    /**
+     * Returns a date from a time
+     *
+     * @param weeksBefore Number of weeksBefore before today
+     * @return
+     */
+    public static Date getPreviousDate(int weeksBefore) {
+        weeksBefore--;
+        Calendar cal = new GregorianCalendar();
+        Date now = new Date();
+
+        cal.setTime(now);
+        //Get the start of the week
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+
+        cal.add(Calendar.WEEK_OF_YEAR, -weeksBefore);
+
+        return cal.getTime();
+    }
+
+    /**
+     * Returns the selected day text in  'Jan 20' format
+     * @param start The start date of the {@link com.github.omadahealth.slidepager.lib.SlidePager} in milliseconds
+     * @param page The index of the page
+     * @param index The index of the view inside the page
+     * @return The formatted date string
+     */
+    public static String getSelectedDayText(long start, int page, int index) {
+        SimpleDateFormat sf = new SimpleDateFormat(DATE_SHORT_MONTH_DAY_STRING_FORMAT, Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+        Date startDate = new Date(start);
+        cal.setTime(startDate);
+
+        cal.add(Calendar.WEEK_OF_YEAR, page);
+        cal.add(Calendar.DAY_OF_YEAR, index);
+        return sf.format(new Date(cal.getTimeInMillis())).toUpperCase();
     }
 }

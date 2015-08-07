@@ -30,6 +30,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -166,6 +167,11 @@ public class ProgressView extends RelativeLayout {
     private int mSpecialFillColor;
 
     /**
+     * The width of the reached progress
+     */
+    private float mReachedWidth;
+
+    /**
      * The strings that we set in {@link #mProgressText}
      */
     private static String[] mProgressStrings;
@@ -226,6 +232,7 @@ public class ProgressView extends RelativeLayout {
     private static String INSTANCE_SPECIAL_COMPLETED_COLOR = "special_color";
     private static String INSTANCE_SPECIAL_COMPLETED_OUTLINE_COLOR = "special_outline_color";
     private static String INSTANCE_SPECIAL_COMPLETED_FILL_COLOR = "special_fill_color";
+    private static String INSTANCE_REACHED_WIDTH = "reached_width";
 
     public ProgressView(Context context) {
         this(context, null);
@@ -257,6 +264,7 @@ public class ProgressView extends RelativeLayout {
         bundle.putInt(INSTANCE_SPECIAL_COMPLETED_COLOR, mSpecialReachColor);
         bundle.putInt(INSTANCE_SPECIAL_COMPLETED_OUTLINE_COLOR, mSpecialOutlineColor);
         bundle.putInt(INSTANCE_SPECIAL_COMPLETED_FILL_COLOR, mSpecialFillColor);
+        bundle.putFloat(INSTANCE_REACHED_WIDTH, mReachedWidth);
 
         return bundle;
     }
@@ -282,6 +290,8 @@ public class ProgressView extends RelativeLayout {
             mSpecialOutlineColor = bundle.getInt(INSTANCE_SPECIAL_COMPLETED_OUTLINE_COLOR, res.getColor(R.color.default_progress_special_outline_color));
             mSpecialFillColor = bundle.getInt(INSTANCE_SPECIAL_COMPLETED_FILL_COLOR, res.getColor(R.color.default_progress_special_fill_color));
 
+            mReachedWidth = bundle.getFloat(INSTANCE_REACHED_WIDTH, res.getDimension(R.dimen.default_progress_reached_width));
+
             super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATE));
             return;
         }
@@ -306,6 +316,8 @@ public class ProgressView extends RelativeLayout {
 
         mDefaultProgressTypeface = mProgressText.getCurrentTypeface();
 
+        mCircularBar.setStartLineEnabled(false);
+        mProgressText.setTypeface(TypefaceTextView.getFont(context, TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
         loadStyledAttributes(mAttributes, mProgressAttr);
     }
 
@@ -322,7 +334,6 @@ public class ProgressView extends RelativeLayout {
         mIsFuture = progress == null ? false : progress.isFuture();
 
         Resources res = getContext().getResources();
-        mProgressStrings = res.getStringArray(R.array.slide_progress_text);
         if (attributes != null) {
             mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_show_streaks, true);
             mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, true);
@@ -340,6 +351,7 @@ public class ProgressView extends RelativeLayout {
             mSpecialOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_outline_color, res.getColor(R.color.default_progress_special_outline_color));
             mSpecialFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_fill_color, res.getColor(R.color.default_progress_special_fill_color));
 
+            mReachedWidth = attributes.getDimension(R.styleable.SlidePager_slide_progress_reached_width, res.getDimension(R.dimen.default_progress_reached_width));
             //Do not recycle attributes, we need them for the future views
         } else {
             mShowStreaks = true;
@@ -357,7 +369,10 @@ public class ProgressView extends RelativeLayout {
             mSpecialReachColor = res.getColor(R.color.default_progress_special_reach_color);
             mSpecialOutlineColor = res.getColor(R.color.default_progress_special_outline_color);
             mSpecialFillColor = res.getColor(R.color.default_progress_special_fill_color);
+
+            mReachedWidth = res.getDimension(R.dimen.default_progress_reached_width);
         }
+        loadProgressTextLabels(res);
 
         setCircleColorsAndSize();
 
@@ -367,11 +382,18 @@ public class ProgressView extends RelativeLayout {
     }
 
     /**
+     * Loads the {@link #mProgressStrings} from {@link com.github.omadahealth.slidepager.lib.R.array#slide_progress_long_text}
+     * @param res
+     */
+    private void loadProgressTextLabels(Resources res) {
+        mProgressStrings = res.getStringArray(R.array.slide_progress_long_text);
+    }
+
+    /**
      * Initiates the animation listener for the {@link CircularBar} so we can animate the streaks in
      * on animation end
      */
     private void initAnimations() {
-        final int index = getIntTag();
         addAnimationListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -411,6 +433,7 @@ public class ProgressView extends RelativeLayout {
                     mCircularBar.setCircleFillColor(mFillColor);
                     mCircularBar.setClockwiseReachedArcColor(mReachColor);
                 }
+                animateStreaks();
             }
 
             @Override
@@ -424,6 +447,51 @@ public class ProgressView extends RelativeLayout {
     }
 
     /**
+     * Animates the display of the {@link #mLeftStreak} and {@link #mRightStreak} depending
+     * on the values of neighboring {@link ProgressView}s
+     */
+    public void animateStreaks() {
+        int index = getIntTag();
+        if (getCircularBar().getProgress() >= 99.95f) {
+            showCheckMark(true);
+
+            if (mShowStreaks && mSiblings != null && mSiblings.size() > 0) {
+                //Previous exists
+                if (getIntTag() - 1 >= 0) {
+                    ProgressView previousDay = mSiblings.get(index - 1);
+                    //Previous is complete
+                    boolean complete = previousDay.getProgress() >= 99.95f;
+                    showStreak(complete, ProgressView.STREAK.LEFT_STREAK);
+
+                }
+
+                //Next exists
+                if (index + 1 < mSiblings.size()) {
+                    ProgressView nextDay = mSiblings.get(index + 1);
+                    //Next is complete
+                    boolean complete = nextDay.getProgress() >= 99.95f;
+                    showStreak(complete, ProgressView.STREAK.RIGHT_STREAK);
+                }
+            }
+
+            //Set Color
+            mCircularBar.setCircleFillColor(mCompletedFillColor);
+            mCircularBar.setClockwiseReachedArcColor(mCompletedColor);
+        } else {
+            if (!isSpecial) {
+                showCheckMark(false);
+            }
+
+            //Set Color
+            mCircularBar.setCircleFillColor(mFillColor);
+            mCircularBar.setClockwiseReachedArcColor(mReachColor);
+
+            showStreak(false, STREAK.RIGHT_STREAK);
+            showStreak(false, STREAK.LEFT_STREAK);
+        }
+    }
+
+    /**
      * Sets the colors of {@link #mCircularBar}
      */
     public void setCircleColorsAndSize() {
@@ -431,21 +499,29 @@ public class ProgressView extends RelativeLayout {
         mReachColor = mIsSpecial ? mSpecialReachColor : mNotCompletedReachColor;
         mOutlineColor = mIsSpecial ? mSpecialOutlineColor : mNotCompletedOutlineColor;
 
+        mCircularBar.setClockwiseReachedArcWidth(mReachedWidth);
         mCircularBar.setCircleFillColor(mFillColor);
         mCircularBar.setClockwiseReachedArcColor(mReachColor);
         mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
-
         mCircularBar.setClockwiseOutlineArcWidth(mIsFuture ? mNotCompletedFutureOutlineSize : mNotCompletedOutlineSize);
 
         setProgressText();
+    }
+    
+    /**
+     * Calls {@link #setProgressText(String)} )} with {@link #mProgressStrings}
+     * array position for this view
+     */
+    public void setProgressText() {
+        setProgressText(mProgressStrings[getIntTag()]);
     }
 
     /**
      * Sets the text for the {@link #mProgressText} or {@link View#GONE} if {@link #mShowProgressText} is false
      */
-    private void setProgressText() {
+    private void setProgressText(String text) {
         if (mShowProgressText) {
-            getProgressTextView().setText(mProgressStrings[getIntTag()]);
+            getProgressTextView().setText(text);
             getProgressTextView().setTextColor(mNotCompletedReachColor);
         } else {
             getProgressTextView().setVisibility(View.GONE);
@@ -458,9 +534,11 @@ public class ProgressView extends RelativeLayout {
      * @param selected True for {@link TypefaceType#ROBOTO_BOLD}, false for {@link TypefaceType#ROBOTO_THIN}
      */
     public void isSelected(boolean selected) {
+        Resources res = getContext().getResources();
         Typeface typeface = TypefaceTextView.getFont(getContext(),
                 selected ? TypefaceType.ROBOTO_BOLD.getAssetFileName() : mDefaultProgressTypeface.getAssetFileName());
         mProgressText.setTypeface(typeface);
+        mProgressText.setTextSize(TypedValue.COMPLEX_UNIT_PX, selected ? res.getDimension(R.dimen.selected_progress_view_text_size) : res.getDimension(R.dimen.not_selected_progress_view_text_size));
     }
 
     /**
@@ -472,7 +550,7 @@ public class ProgressView extends RelativeLayout {
      * @param duration The duration in milliseconds of the animation
      * @param siblings The sibling views we use to evaluate streaks showing
      */
-    public void animateProgress(int start, ProgressAttr progress, int duration, List<View> siblings) {
+    public void animateProgress(int start, ProgressAttr progress, int duration, final List<View> siblings) {
         if (progress == null) {
             return;
         }
@@ -486,7 +564,45 @@ public class ProgressView extends RelativeLayout {
         } else {
             mCircularBar.setClockwiseReachedArcColor(progress.getProgress() == 100 ? mCompletedColor : mReachColor);
         }
+        if (progress.isSpecial()) {
+            mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.ic_add_plus));
+            if (progress.getProgress() < 0.01) {
+                mCheckMark.setAlpha(1f);
+            } else {
+                mCheckMark.setAlpha(0f);
+            }
+        }
+        mCircularBar.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if(siblings != null){
+                    for (View view : siblings) {
+                        if (view instanceof ProgressView) {
+                            ((ProgressView) view).animateStreaks();
+                        }
+                    }
+                }
+
+                animateStreaks();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         mCircularBar.animateProgress(start, progress.getProgress(), duration);
+
     }
 
     /**
@@ -514,6 +630,13 @@ public class ProgressView extends RelativeLayout {
             mCheckMark.setAlpha(0f);
             return;
         }
+
+        //Return if sideView already shown
+        if (mCheckMark.getAlpha() == 1f) {
+            return;
+        }
+
+        mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.checkmark_green));
         float start = 0;
         float end = 1f;
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, EASE_IN_DURATION, ObjectAnimator.ofFloat(mCheckMark, "alpha", start, end)));
@@ -545,6 +668,13 @@ public class ProgressView extends RelativeLayout {
         //Immediately remove them
         if (!show) {
             sideView.setAlpha(0f);
+            sideView.setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        //Return if sideView already shown
+        if (sideView.getAlpha() == 1f) {
+            sideView.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -589,8 +719,6 @@ public class ProgressView extends RelativeLayout {
      * @param streakHeight The streak we want to set the dimension to
      */
     public void setStreakHeight(View streakHeight) {
-        MarginLayoutParams circularParams = (MarginLayoutParams) mCircularBar.getLayoutParams();
-
         streakHeight.getLayoutParams().height = (int) mCircularBar.getDiameter();
         streakHeight.requestLayout();
     }
@@ -609,10 +737,23 @@ public class ProgressView extends RelativeLayout {
         return mProgressText;
     }
 
+    /**
+     * Returns the contained {@link CircularBar}
+     *
+     * @return The {@link CircularBar}
+     */
     public CircularBar getCircularBar() {
         return mCircularBar;
     }
 
+    /**
+     * Returns the current {@link #mCircularBar#getProgress()} using {@link Math#round(float)}
+     *
+     * @return The {@link #mCircularBar#getProgress()}
+     */
+    public int getProgress() {
+        return Math.round(mCircularBar != null ? mCircularBar.getProgress() : 0f);
+    }
 
     /**
      * Sets the {@link #mSiblings} after removing any non {@link ProgressView}
@@ -632,6 +773,10 @@ public class ProgressView extends RelativeLayout {
         return siblings;
     }
 
+    /**
+     * Gets the tag of this view, which are from [1,7]
+     * @return
+     */
     public Integer getIntTag() {
         return Integer.parseInt((String) getTag());
     }

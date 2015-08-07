@@ -26,7 +26,6 @@ package com.github.omadahealth.slidepager.lib.adapter;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -36,9 +35,7 @@ import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListene
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by stoyan on 4/3/15.
@@ -66,7 +63,7 @@ public class SlidePagerAdapter extends AbstractSlidePagerAdapter<SlideView> {
     /**
      * The list of {@link View} used to retain inflated views
      */
-    private List<SlideView> mViews;
+    private SlideView[] mViews;
 
     /**
      * Weeks that this view represents
@@ -128,20 +125,40 @@ public class SlidePagerAdapter extends AbstractSlidePagerAdapter<SlideView> {
 
     @Override
     public int getCount() {
-        return mViews.size();
+        return mViews.length;
     }
 
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
         SlideView currentView;
-        if (mViews.size() > position) {
-            currentView = mViews.get(position);
+        if (mViews.length > position) {
+            currentView = getViewForPosition(position);
         } else {
-            currentView = getWeekSlide(position, mWeeks);
-            mViews.add(currentView);
+            return null;
         }
 
         collection.addView(currentView);
+        return currentView;
+    }
+
+    /**
+     * Gets the {@link SlideView} for the current pager position, uses lazy initialization
+     * to instantiate new views
+     * @param position The position in the pager
+     * @return The existing slide view, or a new one
+     */
+    private SlideView getViewForPosition(int position) {
+        if (mViews == null) {
+            this.mViews = initViews();
+        }
+
+        SlideView currentView = mViews[position];
+
+        if (currentView == null) {
+            currentView = getWeekSlide(position, mWeeks);
+            mViews[position] = currentView;
+        }
+
         return currentView;
     }
 
@@ -157,10 +174,11 @@ public class SlidePagerAdapter extends AbstractSlidePagerAdapter<SlideView> {
 
     @Override
     public SlideView getCurrentView(int position) {
-        if (mViews == null || position > mViews.size() - 1) {
+        if (mViews == null || position > mViews.length - 1) {
             return null;
         }
-        return mViews.get(position);
+
+        return getViewForPosition(position);
     }
 
     /**
@@ -169,17 +187,14 @@ public class SlidePagerAdapter extends AbstractSlidePagerAdapter<SlideView> {
      *
      * @return The number of weeks between the two dates
      */
-    private List<SlideView> initViews() {
+    private SlideView[] initViews() {
         if (mEndDate.before(mStartDate)) {
             throw new IllegalArgumentException("Start date must be before end date");
         }
         mWeeks = Utilities.getWeeksBetween(mStartDate, mEndDate);
         mWeeks = mWeeks == 0 ? 1 : mWeeks;
-        List<SlideView> views = new ArrayList<>(mWeeks);
-        for (int i = 0; i < mWeeks; i++) {
-            views.add(getWeekSlide(i, mWeeks));
-        }
-        return views;
+
+        return new SlideView[mWeeks];
     }
 
     /**
@@ -194,10 +209,27 @@ public class SlidePagerAdapter extends AbstractSlidePagerAdapter<SlideView> {
         week.setListener(new OnSlideListener() {
             @Override
             public void onDaySelected(int page, int index) {
-                Log.i("onDaySelected", "page : " + page + ", index : " + index);
                 if (mUserPageListener != null) {
                     mUserPageListener.onDaySelected(page, index);
                 }
+            }
+
+            @Override
+            public boolean isDaySelectable(int page, int index) {
+                if (mUserPageListener != null) {
+                    return mUserPageListener.isDaySelectable(page, index);
+                }
+                //Allow by default, let user disable by choice
+                return true;
+            }
+
+            @Override
+            public String getDayTextLabel(int page, int index) {
+                if (mUserPageListener != null) {
+                    return mUserPageListener.getDayTextLabel(page, index);
+                }
+                //Null causes default text to be set
+                return null;
             }
         });
         return week;

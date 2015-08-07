@@ -29,6 +29,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.omadahealth.slidepager.lib.R;
@@ -36,6 +38,7 @@ import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
+import com.github.omadahealth.typefaceview.TypefaceType;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -55,9 +58,16 @@ public class SlideView extends AbstractSlideView {
     private static final String TAG = "SlideView";
 
     /**
-     * The duration for the animation for {@link #mSelectedImageView}
+     * The duration for the animation for {@link #mSelectedImageView} when {@link OnSlideListener#onDaySelected(int, int)}
+     * is allowed
      */
     private static final int SELECTION_ANIMATION_DURATION = 500;
+
+    /**
+     * The duration for the animation for {@link #mSelectedImageView} when {@link OnSlideListener#onDaySelected(int, int)}
+     * is not allowed
+     */
+    private static final long NOT_ALLOWED_SHAKE_ANIMATION_DURATION = 500;
 
     /**
      * An array that holds all the {@link ProgressView} for this layout
@@ -160,13 +170,13 @@ public class SlideView extends AbstractSlideView {
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
 
             mLeftTextView.setVisibility(mShowLeftText && mLeftText != null ? VISIBLE : GONE);
-            mRightTextView.setVisibility(mShowRightText && mRightText != null? VISIBLE : GONE);
+            mRightTextView.setVisibility(mShowRightText && mRightText != null ? VISIBLE : GONE);
 
-            if(mShowLeftText && mLeftTextView != null && mLeftText != null){
-                mLeftTextView.setText(mLeftText);
+            if (mShowLeftText && mLeftTextView != null && mLeftText != null) {
+                mLeftTextView.setText(mLeftText, true);
             }
 
-            if(mShowRightText && mRightTextView != null && mRightText != null){
+            if (mShowRightText && mRightTextView != null && mRightText != null) {
                 mRightTextView.setText(mRightText);
             }
         }
@@ -209,6 +219,9 @@ public class SlideView extends AbstractSlideView {
         mLeftTextView = ButterKnife.findById(this, R.id.left_textview);
         mRightTextView = ButterKnife.findById(this, R.id.right_textview);
 
+        mLeftTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
+        mRightTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
+
         mSelectedImageView = ButterKnife.findById(this, R.id.selected_day_image_view);
         mSelectedImageView.setSelectedViewId(mProgressList.get(SlideView.getSelectedView()).getId());
     }
@@ -220,11 +233,14 @@ public class SlideView extends AbstractSlideView {
      * @param startPosition The starting x position for the animated view
      */
     public void animateSelectedTranslation(final View view, float startPosition) {
-        final Float offset = -1 * this.getWidth() + view.getWidth() / 2 + view.getX();
+        final Float offset = -1f * this.getWidth() + view.getWidth() / 2 + view.getX();
         mSelectedImageView.setTag(R.id.selected_day_image_view, offset);
         mSelectedImageView.setSelectedViewId(view.getId());
 
-        mAnimationSet = new AnimatorSet();
+
+        if(mAnimationSet == null){
+            mAnimationSet = new AnimatorSet();
+        }
         mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, SELECTION_ANIMATION_DURATION, ObjectAnimator.ofFloat(mSelectedImageView, "x", startPosition, offset)));
         mAnimationSet.setDuration(SELECTION_ANIMATION_DURATION);
         mAnimationSet.removeAllListeners();
@@ -236,12 +252,10 @@ public class SlideView extends AbstractSlideView {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                toggleSelectedViews(((ProgressView) view).getIntTag());
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
             }
 
             @Override
@@ -273,12 +287,20 @@ public class SlideView extends AbstractSlideView {
                     @Override
                     public void onClick(View view) {
                         int index = progressView.getIntTag();
-
-                        toggleSelectedViews(index);
-
-                        animateSelectedTranslation(view);
+                        boolean allowed = true;
                         if (mCallback != null) {
-                            mCallback.onDaySelected(mPagePosition, index);
+                            allowed = mCallback.isDaySelectable(mPagePosition, index);
+                        }
+                        if (allowed) {
+                            if (mCallback != null) {
+                                mCallback.onDaySelected(mPagePosition, index);
+                            }
+                            toggleSelectedViews(index);
+                            animateSelectedTranslation(view);
+                        } else {
+                            YoYo.with(Techniques.Shake)
+                                    .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
+                                    .playOn(SlideView.this);
                         }
                     }
                 });
@@ -286,6 +308,11 @@ public class SlideView extends AbstractSlideView {
         }
     }
 
+    /**
+     * Animates the {@link ProgressView}s of this page and sets their attributes.
+     * @param listener A listener to get {@link OnSlidePageChangeListener#getDayProgress(int, int)}
+     * @param attributes The attributes to use
+     */
     @SuppressWarnings("unchecked")
     public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
         final List<View> children = (List<View>) getTag();
@@ -294,12 +321,21 @@ public class SlideView extends AbstractSlideView {
                 if (child instanceof ProgressView) {
                     ((ProgressView) child).loadStyledAttributes(attributes, listener.getDayProgress(mPagePosition, ((ProgressView) child).getIntTag()));
                     animateProgress((ProgressView) child, children, listener);
-                    animateSelectedTranslation(mProgressList.get(mSelectedView));
+
                 }
+            }
+            animateSelectedTranslation(mProgressList.get(mSelectedView));
+
+            if (mCallback != null) {
+                mCallback.onDaySelected(mPagePosition, mSelectedView);
             }
         }
     }
 
+    /**
+     * Displays or hides the streaks of all the {@link ProgressView}s
+     * @param show True to animate them visible, false to immediately hide them
+     */
     @SuppressWarnings("unchecked")
     public void animateSeries(boolean show) {
         final List<View> children = (List<View>) getTag();
@@ -315,12 +351,18 @@ public class SlideView extends AbstractSlideView {
         }
     }
 
+    /**
+     * Resets the state of this page, usually called when we change pages in the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     * @param mAttributes The attributes to reset the views to
+     */
     @SuppressWarnings("unchecked")
     public void resetPage(TypedArray mAttributes) {
         this.setVisibility(View.VISIBLE);
         this.setAlpha(1f);
 
         loadStyledAttributes(mAttributes);
+        mSelectedView = getSelectableIndex();
+
         animateSeries(false);
         getSelectedImageView().resetView();
         final List<View> children = (List<View>) getTag();
@@ -332,8 +374,17 @@ public class SlideView extends AbstractSlideView {
                 }
             }
         }
+        toggleSelectedViews(mSelectedView);
+
     }
 
+    /**
+     * Animates the progress of a {@link ProgressView}
+     *
+     * @param view     The view to animate
+     * @param children The sibling views we use to evaluate streaks showing
+     * @param listener The listener to call to {@link OnSlidePageChangeListener#getDayProgress(int, int)}
+     */
     private void animateProgress(ProgressView view, List<View> children, OnSlidePageChangeListener listener) {
         if (listener != null) {
             ProgressAttr progress = listener.getDayProgress(mPagePosition, view.getIntTag());
@@ -341,15 +392,80 @@ public class SlideView extends AbstractSlideView {
         }
     }
 
+    /**
+     * Public method for animating an individual {@link ProgressView}
+     * @param index The index from [0,6] of the view
+     * @param progress The {@link ProgressAttr} to animate
+     */
+    @SuppressWarnings("unchecked")
+    public void animateProgressView(int index, ProgressAttr progress){
+        final List<View> children = (List<View>) getTag();
+        ProgressView view = getProgressView(index);
+        if(view != null){
+            view.animateProgress(view.getProgress(), progress, mProgressAnimationTime, children);
+        }
+    }
+
+    /**
+     * Sets the selected {@link ProgressView}
+     *
+     * @param selected The index of the selected view in {@link #mProgressList}
+     */
     private void toggleSelectedViews(int selected) {
         mSelectedView = selected;
         for (ProgressView day : mProgressList) {
             if (day.getIntTag() == mSelectedView) {
                 day.isSelected(true);
+                if (mCallback != null) {
+                    String label = mCallback.getDayTextLabel(mPagePosition, day.getIntTag());
+                    if (label != null) {
+                        day.setProgressText(label);
+                    } else {
+                        day.setProgressText();
+                    }
+
+                } else {
+                    day.setProgressText();
+                }
                 continue;
             }
             day.isSelected(false);
+            day.setProgressText();
         }
+    }
+
+    /**
+     * Checks to see what index is selectable on {@link #animatePage(OnSlidePageChangeListener, TypedArray)}
+     * so that we don't automatically select a non selectable date in {@link com.github.omadahealth.slidepager.lib.SlidePager#resetPage(int)}
+     *
+     * @return The largest index selectable before {#mSelectedView}, if not the largest index selectable in {@link SlideView} or 0 if non are
+     */
+    public int getSelectableIndex() {
+        if (mCallback == null) {
+            return mSelectedView;
+        }
+        if (mCallback.isDaySelectable(mPagePosition, mSelectedView)) {
+            return mSelectedView;
+        }
+
+        //Try any position lower than the current one
+        for (int i = mSelectedView; i >= 0; i--) {
+            if (mCallback.isDaySelectable(mPagePosition, i)) {
+                return i;
+            }
+        }
+
+        //Try any position greater
+        if (mProgressList != null) {
+            for (int i = mProgressList.size() - 1; i >= mSelectedView; i--) {
+                if (mCallback.isDaySelectable(mPagePosition, i)) {
+                    return i;
+                }
+            }
+        }
+
+        //Default to 0
+        return 0;
     }
 
     /**
@@ -361,14 +477,38 @@ public class SlideView extends AbstractSlideView {
         this.mCallback = listener;
     }
 
+    /**
+     * Returns the {@link ProgressView} at the given index
+     * @param index The index from [0,6]
+     * @return The view
+     */
+    public ProgressView getProgressView(int index){
+        if(mProgressList == null){
+            return null;
+        }
+        return mProgressList.get(index);
+    }
+
+    /**
+     * Returns the view that displays the currently selected {@link ProgressView}
+     * @return
+     */
     public SelectedImageView getSelectedImageView() {
         return mSelectedImageView;
     }
 
+    /**
+     * Gets the currently selected index
+     * @return
+     */
     public synchronized static int getSelectedView() {
         return mSelectedView;
     }
 
+    /**
+     * Sets the currently selected index
+     * @param selectedView From [0,6]
+     */
     public synchronized static void setSelectedView(int selectedView) {
         SlideView.mSelectedView = selectedView;
     }
