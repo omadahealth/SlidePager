@@ -25,18 +25,23 @@ package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
+import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
+import com.github.omadahealth.typefaceview.TypefaceType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +56,12 @@ public class SlideChartView extends AbstractSlideView {
      * The tag for logging
      */
     private static final String TAG = "SlideView";
+
+    /**
+     * The duration for the animation for {@link #mSelectedView} when {@link OnSlideListener#onDaySelected(int, int)}
+     * is not allowed
+     */
+    private static final long NOT_ALLOWED_SHAKE_ANIMATION_DURATION = 500;
 
     /**
      * An array that holds all the {@link TypefaceTextView} that are at the top
@@ -73,15 +84,30 @@ public class SlideChartView extends AbstractSlideView {
     private List<ImageView> mChartBarList = new ArrayList<>(15);
 
     /**
+     * The callback listener for when views are clicked
+     */
+    private OnSlideListener mCallback;
+
+    /**
      * The list of {@link ProgressAttr} to associate with {@link #mProgressList}.
      * Used in {@link #injectViewsAndAttributes()}
      */
     private List<ChartProgressAttr> mProgressAttr;
 
     /**
+     * The int tag of the selected {@link ProgressView} we store so that we can restore the previous selected day.
+     */
+    private static int mSelectedView;
+
+    /**
      * The default animation time
      */
     private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 1000;
+
+    /**
+     * True of we want to shake the view in {@link #toggleSelectedViews(int)}
+     */
+    private boolean mShakeIfNotSelectable;
 
     /**
      * The xml attributes of this view
@@ -145,6 +171,7 @@ public class SlideChartView extends AbstractSlideView {
             mBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_text_color, getResources().getColor(R.color.default_progress_chart_bar_bottom_text));
             mChartBarColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_color, getResources().getColor(R.color.default_progress_chart_bar_color));
             mChartBarSize = attributes.getDimension(R.styleable.SlidePager_slide_progress_chart_bar_size, getResources().getDimension(R.dimen.default_progress_chart_bar_size));
+            mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
         }
     }
 
@@ -165,6 +192,7 @@ public class SlideChartView extends AbstractSlideView {
             mAttributes = attributes;
             loadStyledAttributes(attributes);
             injectViewsAndAttributes();
+            setListeners();
         }
     }
 
@@ -267,6 +295,61 @@ public class SlideChartView extends AbstractSlideView {
         }
     }
 
+    /**
+     * Set up listeners for all the views in {@link #mProgressList}
+     */
+    private void setListeners() {
+        for (final ProgressView progressView : mProgressList) {
+            if (progressView != null) {
+
+                progressView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int index = progressView.getIntTag();
+                        boolean allowed = true;
+                        if (mCallback != null) {
+                            allowed = mCallback.isDaySelectable(mPagePosition, index);
+                        }
+                        if (allowed) {
+                            if (mCallback != null) {
+                                mCallback.onDaySelected(mPagePosition, index);
+                            }
+                            toggleSelectedViews(index);
+                        } else {
+                            if (mShakeIfNotSelectable) {
+                                YoYo.with(Techniques.Shake)
+                                        .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
+                                        .playOn(SlideChartView.this);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Sets the selected {@link ProgressView}
+     *
+     * @param selected The index of the selected view in {@link #mProgressList}
+     */
+    private void toggleSelectedViews(int selected) {
+        mSelectedView = selected;
+        for (int i = 0; i < mProgressList.size(); i++) {
+            ProgressView day = mProgressList.get(i);
+            TypefaceTextView currentBottomText = mProgressBottomTextList.get(i);
+
+            if (day.getIntTag() == mSelectedView) {
+                day.isSelected(true);
+                currentBottomText.setTypeface(currentBottomText.getTypeface(), Typeface.BOLD);
+                continue;
+            }
+
+            day.isSelected(false);
+            currentBottomText.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()), Typeface.NORMAL);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
         final List<View> children = (List<View>) getTag();
@@ -318,5 +401,14 @@ public class SlideChartView extends AbstractSlideView {
             ProgressAttr progress = listener.getDayProgress(mPagePosition, view.getIntTag());
             view.animateProgress(0, progress, mProgressAnimationTime, children);
         }
+    }
+
+    /**
+     * Sets the listener for click events in this view
+     *
+     * @param listener
+     */
+    public void setListener(OnSlideListener listener) {
+        this.mCallback = listener;
     }
 }

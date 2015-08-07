@@ -189,8 +189,34 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
      * @return
      */
     private SlideChartView getWeekSlide(int pagePosition, int weeks) {
-        //no listener, no day selectable
-        return new SlideChartView(mContext, mAttributeSet, pagePosition, mUserPageListener);
+        SlideChartView week = new SlideChartView(mContext, mAttributeSet, pagePosition, mUserPageListener);
+        week.setListener(new OnSlideListener() {
+            @Override
+            public void onDaySelected(int page, int index) {
+                if (mUserPageListener != null) {
+                    mUserPageListener.onDaySelected(page, index);
+                }
+            }
+
+            @Override
+            public boolean isDaySelectable(int page, int index) {
+                if (mUserPageListener != null) {
+                    return mUserPageListener.isDaySelectable(page, index);
+                }
+                //Allow by default, let user disable by choice
+                return true;
+            }
+
+            @Override
+            public String getDayTextLabel(int page, int index) {
+                if (mUserPageListener != null) {
+                    return mUserPageListener.getDayTextLabel(page, index);
+                }
+                //Null causes default text to be set
+                return null;
+            }
+        });
+        return week;
     }
 
     /**

@@ -39,7 +39,6 @@ import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListene
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.github.omadahealth.typefaceview.TypefaceType;
-import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
@@ -93,6 +92,11 @@ public class SlideView extends AbstractSlideView {
      * True of we want to show {@link #mRightTextView}
      */
     private boolean mShowRightText;
+
+    /**
+     * True of we want to shake the view in {@link #toggleSelectedViews(int)}
+     */
+    private boolean mShakeIfNotSelectable;
 
     /**
      * The current day sliding {@link android.widget.ImageView} we display
@@ -168,6 +172,7 @@ public class SlideView extends AbstractSlideView {
         if (mAttributes != null) {
             mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
+            mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
 
             mLeftTextView.setVisibility(mShowLeftText && mLeftText != null ? VISIBLE : GONE);
             mRightTextView.setVisibility(mShowRightText && mRightText != null ? VISIBLE : GONE);
@@ -243,26 +248,6 @@ public class SlideView extends AbstractSlideView {
         }
         mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, SELECTION_ANIMATION_DURATION, ObjectAnimator.ofFloat(mSelectedImageView, "x", startPosition, offset)));
         mAnimationSet.setDuration(SELECTION_ANIMATION_DURATION);
-        mAnimationSet.removeAllListeners();
-        mAnimationSet.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
         mAnimationSet.start();
     }
 
@@ -298,9 +283,11 @@ public class SlideView extends AbstractSlideView {
                             toggleSelectedViews(index);
                             animateSelectedTranslation(view);
                         } else {
-                            YoYo.with(Techniques.Shake)
-                                    .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
-                                    .playOn(SlideView.this);
+                            if (mShakeIfNotSelectable) {
+                                YoYo.with(Techniques.Shake)
+                                        .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
+                                        .playOn(SlideView.this);
+                            }
                         }
                     }
                 });
