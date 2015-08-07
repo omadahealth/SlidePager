@@ -26,6 +26,7 @@
         <attr name="slide_progress_chart_bar_bottom_text_color" format="color"/>
         <attr name="slide_progress_chart_bar_bottom_special_text_color" format="color" />
         <attr name="slide_progress_chart_color" format="color" />
+        <attr name="slide_progress_chart_bar_size" format="dimension" />
     </declare-styleable>
 
 </resources>

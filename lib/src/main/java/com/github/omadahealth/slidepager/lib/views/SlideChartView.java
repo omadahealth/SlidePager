@@ -73,11 +73,6 @@ public class SlideChartView extends AbstractSlideView {
     private List<ImageView> mChartBarList = new ArrayList<>(15);
 
     /**
-     * The strings that we set in {@link #mProgressBottomTextList}
-     */
-    private static String[] mProgressStrings;
-
-    /**
      * The list of {@link ProgressAttr} to associate with {@link #mProgressList}.
      * Used in {@link #injectViewsAndAttributes()}
      */
@@ -109,9 +104,14 @@ public class SlideChartView extends AbstractSlideView {
     private int mBottomTextColor;
 
     /**
-     * The {@link android.graphics.Color} link of the Bar: {@link SlideChartView#mProgressBottomTextList}
+     * The {@link android.graphics.Color} link of the Bar: {@link SlideChartView#mChartBarList}
      */
     private int mChartBarColor;
+
+    /**
+     * The {@link android.support.annotation.DimenRes} link of the Bar: {@link SlideChartView#mChartBarList}
+     */
+    private float mChartBarSize;
 
     /**
      * The position of this page within the {@link com.github.omadahealth.slidepager.lib.SlidePager}
@@ -144,6 +144,7 @@ public class SlideChartView extends AbstractSlideView {
             mSpecialBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_special_text_color, getResources().getColor(R.color.default_progress_chart_bar_special_bottom_text));
             mBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_text_color, getResources().getColor(R.color.default_progress_chart_bar_bottom_text));
             mChartBarColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_color, getResources().getColor(R.color.default_progress_chart_bar_color));
+            mChartBarSize = attributes.getDimension(R.styleable.SlidePager_slide_progress_chart_bar_size, getResources().getDimension(R.dimen.default_progress_chart_bar_size));
         }
     }
 
@@ -209,21 +210,21 @@ public class SlideChartView extends AbstractSlideView {
         mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_7));
 
         //Chart bars
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_1_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_2_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_3_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_4_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_5_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_6_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_7_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_1_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_2_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_3_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_4_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_5_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_6_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_7_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this,R.id.progress_bottom_axis));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_1_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_2_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_3_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_4_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_5_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_6_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_7_bar_top));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_1_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_2_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_3_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_4_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_5_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_6_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_7_bar_bottom));
+        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_bottom_axis));
 
         //Init the tags of the subviews
         SlideTransformer.initTags(this);
@@ -231,8 +232,8 @@ public class SlideChartView extends AbstractSlideView {
         //Init values and days text
         initTopAndBottomTexts();
 
-        //Init bar colors
-        initBarColors();
+        //Init bar colors and sizes
+        initBarColorsAndSize();
     }
 
     /**
@@ -257,9 +258,12 @@ public class SlideChartView extends AbstractSlideView {
     /**
      * Init the {@link android.graphics.Color} of the {@link #mChartBarList}
      */
-    private void initBarColors() {
-        for(ImageView imageView : mChartBarList) {
+    private void initBarColorsAndSize() {
+        for (ImageView imageView : mChartBarList) {
             imageView.setBackgroundColor(mChartBarColor);
+            if (imageView.getId() != R.id.progress_bottom_axis) {
+                imageView.setMinimumHeight((int) (mChartBarSize / 2.0f));
+            }
         }
     }
 
