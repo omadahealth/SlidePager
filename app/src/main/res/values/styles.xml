@@ -21,6 +21,7 @@
         <item name="slide_start_at_end">true</item>
         <item name="slide_show_streaks">false</item>
         <item name="slide_show_progress_text">false</item>
+        <item name="slide_show_progress_plusmark">false</item>
         <item name="slide_progress_not_completed_outline_color">@color/default_progress_chart_bar_color</item>
         <item name="slide_progress_completed_fill_color">@color/transparent</item>
         <item name="slide_progress_not_completed_fill_color">@color/transparent</item>

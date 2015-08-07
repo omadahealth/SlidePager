@@ -40,15 +40,17 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
-        <item name="tv_typeface">roboto_regular</item>
     </style>
 
     <style name="slideChartTopTextStyle" parent="slideChartTextStyle">
         <item name="android:textColor">@color/default_progress_chart_bar_top_text</item>
+        <item name="tv_typeface">roboto_regular</item>
     </style>
 
     <style name="slideChartBottomTextStyle" parent="slideChartTextStyle">
         <item name="android:textColor">@color/default_progress_chart_bar_bottom_text</item>
+        <item name="android:textSize">@dimen/default_chart_bottom_text_size</item>
+        <item name="tv_typeface">roboto_light</item>
     </style>
 
 </resources>

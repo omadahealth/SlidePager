@@ -28,6 +28,8 @@ import android.content.res.TypedArray;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.github.omadahealth.slidepager.lib.adapter.AbstractSlidePagerAdapter;
@@ -111,6 +113,16 @@ public class SlidePager extends ViewPager {
         if (getAdapter() instanceof AbstractSlidePagerAdapter) {
             transformer.transformPage(((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()), 0);
             super.setPageTransformer(reverseDrawingOrder, transformer);
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        try {
+            return super.onTouchEvent(ev);
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+            return true;
         }
     }
 

@@ -193,6 +193,11 @@ public class ProgressView extends RelativeLayout {
     private boolean mShowProgressText;
 
     /**
+     * Boolean that controls if the {@link #mCheckMark} is visible or not
+     */
+    private boolean mShowProgressPlusMark;
+
+    /**
      * Boolean that controls if we should use the special today colors for this view
      */
     private boolean mIsSpecial;
@@ -222,6 +227,7 @@ public class ProgressView extends RelativeLayout {
 
     private static String INSTANCE_SHOW_STREAKS = "show_streaks";
     private static String INSTANCE_SHOW_PROGRESS_TEXT = "show_progress_text";
+    private static String INSTANCE_SHOW_PROGRESS_PLUSMARK = "show_progress_plusmark";
     private static String INSTANCE_COMPLETED_COLOR = "completed_color";
     private static String INSTANCE_COMPLETED_FILL_COLOR = "completed_fill_color";
     private static String INSTANCE_NOT_COMPLETED_COLOR = "not_completed_color";
@@ -253,6 +259,7 @@ public class ProgressView extends RelativeLayout {
         bundle.putParcelable(INSTANCE_STATE, super.onSaveInstanceState());
         bundle.putBoolean(INSTANCE_SHOW_STREAKS, mShowStreaks);
         bundle.putBoolean(INSTANCE_SHOW_PROGRESS_TEXT, mShowProgressText);
+        bundle.putBoolean(INSTANCE_SHOW_PROGRESS_PLUSMARK, mShowProgressPlusMark);
 
         bundle.putInt(INSTANCE_COMPLETED_COLOR, mCompletedColor);
         bundle.putInt(INSTANCE_COMPLETED_FILL_COLOR, mCompletedFillColor);
@@ -276,6 +283,7 @@ public class ProgressView extends RelativeLayout {
             Resources res = getContext().getResources();
             mShowStreaks = bundle.getBoolean(INSTANCE_SHOW_STREAKS, true);
             mShowProgressText = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_TEXT, true);
+            mShowProgressPlusMark = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_PLUSMARK, true);
 
             mCompletedColor = bundle.getInt(INSTANCE_COMPLETED_COLOR, res.getColor(R.color.default_progress_completed_reach_color));
             mCompletedFillColor = bundle.getInt(INSTANCE_COMPLETED_FILL_COLOR, res.getColor(R.color.default_progress_completed_fill_color));
@@ -337,6 +345,7 @@ public class ProgressView extends RelativeLayout {
         if (attributes != null) {
             mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_show_streaks, true);
             mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, true);
+            mShowProgressPlusMark = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_plusmark, true);
 
             mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_reach_color, res.getColor(R.color.default_progress_completed_reach_color));
             mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
@@ -356,6 +365,7 @@ public class ProgressView extends RelativeLayout {
         } else {
             mShowStreaks = true;
             mShowProgressText = true;
+            mShowProgressPlusMark = true;
 
             mCompletedColor = res.getColor(R.color.default_progress_completed_reach_color);
             mCompletedFillColor = res.getColor(R.color.default_progress_completed_fill_color);
@@ -383,6 +393,7 @@ public class ProgressView extends RelativeLayout {
 
     /**
      * Loads the {@link #mProgressStrings} from {@link com.github.omadahealth.slidepager.lib.R.array#slide_progress_long_text}
+     *
      * @param res
      */
     private void loadProgressTextLabels(Resources res) {
@@ -473,7 +484,7 @@ public class ProgressView extends RelativeLayout {
         mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
         mCircularBar.setClockwiseOutlineArcWidth(mIsFuture ? mNotCompletedFutureOutlineSize : mNotCompletedOutlineSize);
     }
-    
+
     /**
      * Calls {@link #setProgressText(String)} )} with {@link #mProgressStrings}
      * array position for this view
@@ -530,7 +541,7 @@ public class ProgressView extends RelativeLayout {
         } else {
             mCircularBar.setClockwiseReachedArcColor(progress.getProgress() == 100 ? mCompletedColor : mReachColor);
         }
-        if (progress.isSpecial()) {
+        if (progress.isSpecial() && mShowProgressPlusMark) {
             mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.ic_add_plus));
             if (progress.getProgress() < 0.01) {
                 mCheckMark.setAlpha(1f);
@@ -741,6 +752,7 @@ public class ProgressView extends RelativeLayout {
 
     /**
      * Gets the tag of this view, which are from [1,7]
+     *
      * @return
      */
     public Integer getIntTag() {
