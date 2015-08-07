@@ -21,6 +21,8 @@ Designers:
 ### Usage
 
 Look at the example app for a live example on how to use the library.
+If you want to use the classic SlidePager, use the SlidePagerAdapter to populate your views.
+If you want to use the chart SlidePager, use the SlideChartPagerAdapter to populate your views.
 
 #### In XML:
 
