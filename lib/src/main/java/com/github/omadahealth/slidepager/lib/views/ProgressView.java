@@ -398,6 +398,11 @@ public class ProgressView extends RelativeLayout {
      */
     private void loadProgressTextLabels(Resources res) {
         mProgressStrings = res.getStringArray(R.array.slide_progress_long_text);
+        if (mShowProgressText) {
+            getProgressTextView().setVisibility(View.VISIBLE);
+        } else {
+            getProgressTextView().setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -497,12 +502,8 @@ public class ProgressView extends RelativeLayout {
      * Sets the text for the {@link #mProgressText} or {@link View#GONE} if {@link #mShowProgressText} is false
      */
     public void setProgressText(String text) {
-        if (mShowProgressText) {
-            getProgressTextView().setText(text);
-            getProgressTextView().setTextColor(mNotCompletedReachColor);
-        } else {
-            getProgressTextView().setVisibility(View.GONE);
-        }
+        getProgressTextView().setText(text);
+        getProgressTextView().setTextColor(mNotCompletedReachColor);
     }
 
     /**
@@ -593,6 +594,10 @@ public class ProgressView extends RelativeLayout {
         mCircularBar.setCircleFillColor(mFillColor);
         mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
         mCircularBar.setProgress(0);
+
+        if (mAttributes != null && mProgressAttr != null) {
+            loadStyledAttributes(mAttributes, mProgressAttr);
+        }
     }
 
     /**
