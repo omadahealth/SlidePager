@@ -36,9 +36,7 @@ import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.SlideChartView;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by stoyan on 4/3/15.
@@ -67,7 +65,7 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
     /**
      * The list of {@link View} used to retain inflated views
      */
-    private List<SlideChartView> mViews;
+    private SlideChartView[] mViews;
 
     /**
      * Weeks that this view represents
@@ -128,20 +126,40 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
 
     @Override
     public int getCount() {
-        return mViews.size();
+        return mViews.length;
     }
 
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
         SlideChartView currentView;
-        if (mViews.size() > position) {
-            currentView = mViews.get(position);
+        if (mViews.length > position) {
+            currentView = getViewForPosition(position);
         } else {
-            currentView = getWeekSlide(position, mWeeks);
-            mViews.add(currentView);
+            return null;
         }
 
         collection.addView(currentView);
+        return currentView;
+    }
+
+    /**
+     * Gets the {@link SlideView} for the current pager position, uses lazy initialization
+     * to instantiate new views
+     * @param position The position in the pager
+     * @return The existing slide view, or a new one
+     */
+    private SlideChartView getViewForPosition(int position) {
+        if (mViews == null) {
+            this.mViews = initViews();
+        }
+
+        SlideChartView currentView = mViews[position];
+
+        if (currentView == null) {
+            currentView = getWeekSlide(position, mWeeks);
+            mViews[position] = currentView;
+        }
+
         return currentView;
     }
 
@@ -157,10 +175,10 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
 
     @Override
     public SlideChartView getCurrentView(int position) {
-        if (mViews == null || position > mViews.size() - 1) {
+        if (mViews == null || position > mViews.length - 1) {
             return null;
         }
-        return mViews.get(position);
+        return mViews[position];
     }
 
     /**
@@ -169,17 +187,14 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
      *
      * @return The number of weeks between the two dates
      */
-    private List<SlideChartView> initViews() {
+    private SlideChartView[] initViews() {
         if (mEndDate.before(mStartDate)) {
             throw new IllegalArgumentException("Start date must be before end date");
         }
         mWeeks = Utilities.getWeeksBetween(mStartDate, mEndDate);
         mWeeks = mWeeks == 0 ? 1 : mWeeks;
-        List<SlideChartView> views = new ArrayList<>(mWeeks);
-        for (int i = 0; i < mWeeks; i++) {
-            views.add(getWeekSlide(i, mWeeks));
-        }
-        return views;
+
+        return new SlideChartView[mWeeks];
     }
 
     /**
