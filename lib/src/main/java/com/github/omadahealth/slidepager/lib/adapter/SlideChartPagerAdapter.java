@@ -178,7 +178,8 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
         if (mViews == null || position > mViews.length - 1) {
             return null;
         }
-        return mViews[position];
+
+        return getViewForPosition(position);
     }
 
     /**
