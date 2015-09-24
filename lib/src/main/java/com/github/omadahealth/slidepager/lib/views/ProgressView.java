@@ -72,6 +72,11 @@ public class ProgressView extends RelativeLayout {
     private ImageView mRightStreak;
 
     /**
+     * The right streak
+     */
+    private ImageView mCenterStreak;
+
+    /**
      * The completed check mark that goes inside {@link #mCircularBar}
      */
     private ImageView mCheckMark;
@@ -187,7 +192,8 @@ public class ProgressView extends RelativeLayout {
      */
     public enum STREAK {
         LEFT_STREAK,
-        RIGHT_STREAK
+        RIGHT_STREAK,
+        CENTER_STREAK
     }
 
     private static String INSTANCE_SHOW_STREAKS = "show_streaks";
@@ -268,6 +274,7 @@ public class ProgressView extends RelativeLayout {
 
         mLeftStreak = ButterKnife.findById(this, R.id.progress_streak_left);
         mRightStreak = ButterKnife.findById(this, R.id.progress_streak_right);
+        mCenterStreak = ButterKnife.findById(this, R.id.progress_streak_center);
         mCheckMark = ButterKnife.findById(this, R.id.check_mark);
         mCircularBar = ButterKnife.findById(this, R.id.circularbar);
         mProgressText = ButterKnife.findById(this, R.id.progress_text);
@@ -332,6 +339,7 @@ public class ProgressView extends RelativeLayout {
 
     /**
      * Loads the {@link #mProgressStrings} from {@link com.github.omadahealth.slidepager.lib.R.array#slide_progress_long_text}
+     *
      * @param res
      */
     private void loadProgressTextLabels(Resources res) {
@@ -373,22 +381,28 @@ public class ProgressView extends RelativeLayout {
             showCheckMark(true);
 
             if (mShowStreaks && mSiblings != null && mSiblings.size() > 0) {
-                //Previous exists
+                //Previous exists?
+                //Next exists
+                boolean previousComplete = false;
+                boolean nextComplete = false;
                 if (getIntTag() - 1 >= 0) {
                     ProgressView previousDay = mSiblings.get(index - 1);
                     //Previous is complete
-                    boolean complete = previousDay.getProgress() >= 99.95f;
-                    showStreak(complete, ProgressView.STREAK.LEFT_STREAK);
-
+                    previousComplete = previousDay.getProgress() >= 99.95f;
                 }
 
-                //Next exists
                 if (index + 1 < mSiblings.size()) {
                     ProgressView nextDay = mSiblings.get(index + 1);
                     //Next is complete
-                    boolean complete = nextDay.getProgress() >= 99.95f;
-                    showStreak(complete, ProgressView.STREAK.RIGHT_STREAK);
+                    nextComplete = nextDay.getProgress() >= 99.95f;
                 }
+
+                //Show/Hide left
+                showStreak(!previousComplete && nextComplete, ProgressView.STREAK.LEFT_STREAK);
+                //Show/Hide center
+                showStreak(previousComplete && nextComplete, STREAK.CENTER_STREAK);
+                //Show/Hide right
+                showStreak(previousComplete && !nextComplete, ProgressView.STREAK.RIGHT_STREAK);
             }
 
             //Set Color
@@ -405,6 +419,7 @@ public class ProgressView extends RelativeLayout {
 
             showStreak(false, STREAK.RIGHT_STREAK);
             showStreak(false, STREAK.LEFT_STREAK);
+            showStreak(false, STREAK.CENTER_STREAK);
         }
     }
 
@@ -490,7 +505,7 @@ public class ProgressView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(siblings != null){
+                if (siblings != null) {
                     for (View view : siblings) {
                         if (view instanceof ProgressView) {
                             ((ProgressView) view).animateStreaks();
@@ -570,6 +585,9 @@ public class ProgressView extends RelativeLayout {
                 break;
             case RIGHT_STREAK:
                 sideView = mRightStreak;
+                break;
+            case CENTER_STREAK:
+                sideView = mCenterStreak;
                 break;
             default:
                 return;
@@ -685,6 +703,7 @@ public class ProgressView extends RelativeLayout {
 
     /**
      * Gets the tag of this view, which are from [1,7]
+     *
      * @return
      */
     public Integer getIntTag() {

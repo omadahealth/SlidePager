@@ -345,6 +345,7 @@ public class SlideView extends LinearLayout {
                     final ProgressView progressView = (ProgressView) child;
                     progressView.showStreak(show, ProgressView.STREAK.RIGHT_STREAK);
                     progressView.showStreak(show, ProgressView.STREAK.LEFT_STREAK);
+                    progressView.showStreak(show, ProgressView.STREAK.CENTER_STREAK);
                     progressView.showCheckMark(show);
                 }
             }

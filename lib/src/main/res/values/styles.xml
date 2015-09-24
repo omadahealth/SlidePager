@@ -1,6 +1,19 @@
 <resources>
-    <style name="dayStyle">dayStyle>
+    <style name="dayStyle">
         <item name="android:layout_marginLeft">5dp</item>
         <item name="android:layout_marginRight">5dp</item>
+    </style>
+
+    <style name="viewProgressStreakStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignTop">@+id/circularbar_layout</item>
+        <item name="android:layout_alignBottom">@+id/circularbar_layout</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:alpha">0</item>
+        <item name="android:src">@color/default_progress_completed_fill_color</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:layout_marginTop">@dimen/view_progress_circular_bar_margin</item>
+        <item name="android:layout_marginBottom">@dimen/view_progress_circular_bar_margin</item>
     </style>
 </resources>
