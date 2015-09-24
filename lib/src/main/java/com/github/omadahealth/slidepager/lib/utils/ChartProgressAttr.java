@@ -21,6 +21,12 @@ public class ChartProgressAttr extends ProgressAttr {
         this.mBottomText = bottomText;
     }
 
+    public ChartProgressAttr(int progress, Double value, String bottomText, boolean special, boolean isFuture, Integer reachedColor, Integer completedColor, Integer completedDrawable) {
+        super(progress, special, isFuture, reachedColor, completedColor, completedDrawable);
+        this.mValue = value;
+        this.mBottomText = bottomText;
+    }
+
     public Double getValue() {
         return mValue;
     }

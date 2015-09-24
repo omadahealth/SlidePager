@@ -8,4 +8,8 @@
     <color name="chart_background_start">#374953</color>
     <color name="chart_background_end">#38667c</color>
 
+    <color name="orange">#df760d</color>
+    <color name="green">@color/reached_green_color</color>
+    <color name="red">#c1041a</color>
+
 </resources>

@@ -350,11 +350,19 @@ public class ProgressView extends RelativeLayout {
 
         Resources res = getContext().getResources();
         if (attributes != null) {
+//            if(progress == null){
+//                progress = new ProgressAttr(0,0,"");
+//            }
             mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_show_streaks, true);
             mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, true);
             mShowProgressPlusMark = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_plusmark, true);
 
-            mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_reach_color, res.getColor(R.color.default_progress_completed_reach_color));
+
+            mCompletedColor = progress != null && progress.getCompletedColor() != null ?
+                    progress.getCompletedColor()
+                    :
+                    attributes.getColor(R.styleable.SlidePager_slide_progress_completed_reach_color, res.getColor(R.color.default_progress_completed_reach_color));
+
             mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
 
             mNotCompletedReachColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_reach_color, res.getColor(R.color.default_progress_not_completed_reach_color));
@@ -374,7 +382,10 @@ public class ProgressView extends RelativeLayout {
             mShowProgressText = true;
             mShowProgressPlusMark = true;
 
-            mCompletedColor = res.getColor(R.color.default_progress_completed_reach_color);
+            mCompletedColor = progress != null && progress.getCompletedColor() != null ?
+                    progress.getCompletedColor()
+                    :
+                    res.getColor(R.color.default_progress_completed_reach_color);
             mCompletedFillColor = res.getColor(R.color.default_progress_completed_fill_color);
 
             mNotCompletedReachColor = res.getColor(R.color.default_progress_not_completed_reach_color);
@@ -548,7 +559,6 @@ public class ProgressView extends RelativeLayout {
         }
         mIsSpecial = progress.isSpecial();
         setCircleColorsAndSize();
-        mReachColor = mIsSpecial ? mSpecialReachColor : mReachColor;
 
         mSiblings = setSiblings(siblings);
         if (mReachColor != mNotCompletedReachColor) {
@@ -556,14 +566,33 @@ public class ProgressView extends RelativeLayout {
         } else {
             mCircularBar.setClockwiseReachedArcColor(progress.getProgress() == 100 ? mCompletedColor : mReachColor);
         }
-        if (progress.isSpecial() && mShowProgressPlusMark) {
-            mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.ic_add_plus));
+
+        //Reached color
+        if (progress.getReachedColor() != null) {
+            mReachColor = progress.getReachedColor();
+        } else {
+            mReachColor = mIsSpecial ? mSpecialReachColor : mReachColor;
+        }
+
+        //Set CheckMark drawable for non-special
+        if (progress.getCompletedDrawable() != null) {
+            mCheckMark.setImageDrawable(getResources().getDrawable(progress.getCompletedDrawable()));
+        } else {
+            mCheckMark.setImageDrawable(getResources().getDrawable(R.drawable.checkmark_green));
+        }
+
+        //Set Checkmark drawable for special and not completed
+        if (progress.isSpecial() && mShowProgressPlusMark && progress.getProgress() < 99.9) {
+            mCheckMark.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_plus));
+
+            //Set drawable alpha depending on progress
             if (progress.getProgress() < 0.01) {
                 mCheckMark.setAlpha(1f);
             } else {
                 mCheckMark.setAlpha(0f);
             }
         }
+
         mCircularBar.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -632,7 +661,6 @@ public class ProgressView extends RelativeLayout {
             return;
         }
 
-        mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.checkmark_green));
         float start = 0;
         float end = 1f;
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, EASE_IN_DURATION, ObjectAnimator.ofFloat(mCheckMark, "alpha", start, end)));
