@@ -466,12 +466,20 @@ public class ProgressView extends RelativeLayout {
                     ProgressView previousDay = mSiblings.get(index - 1);
                     //Previous is complete
                     previousComplete = previousDay.getProgress() >= 99.95f;
+                } else {
+                    if (mProgressAttr != null) {
+                        previousComplete = mProgressAttr.isStreakLeftOffScreen();
+                    }
                 }
 
                 if (index + 1 < mSiblings.size()) {
                     ProgressView nextDay = mSiblings.get(index + 1);
                     //Next is complete
                     nextComplete = nextDay.getProgress() >= 99.95f;
+                } else {
+                    if (mProgressAttr != null) {
+                        nextComplete = mProgressAttr.isStreakRightOffScreen();
+                    }
                 }
 
                 //Show/Hide left

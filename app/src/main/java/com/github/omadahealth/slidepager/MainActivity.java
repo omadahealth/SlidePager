@@ -138,16 +138,16 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     public ChartProgressAttr getDayProgress(int page, int index) {
         int progress = 0;
         Double value = null;
-//        if (page == 14) {
-//            value = 180.2d;
-//            progress = 100;
-//        } else {
-//            value = 180.2d;
-//            progress = (int) ((index % 4) * 33.33d);
-//        }
-        if(index < 3 || index > 4){
+        if (page == 14) {
+            value = 180.2d;
             progress = 100;
+        } else {
+            value = 180.2d;
+            progress = (int) ((index % 4) * 33.33d);
         }
+//        if(index < 3 || index > 4){
+//            progress = 100;
+//        }
 
 
         String day = Utilities.getSelectedDayText(Utilities.getPreviousDate(16).getTime(), page, index);
@@ -156,8 +156,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
                 progress < 67 ? R.color.orange :
                         R.color.green);
 
-        return new ChartProgressAttr(progress, value, day, page == 15 && index == 5, page == 15 && index == 6, color, color, R.mipmap.ic_check_black_24dp);
-//        return new ChartProgressAttr(progress, value, day, page == 15 && index == 5, page == 15 && index == 6);
+        return new ChartProgressAttr(progress, value, day, page == 15 && index == 5, page == 15 && index == 6, color, color, R.drawable.checkmark_green, false, false);
     }
 
     @Override

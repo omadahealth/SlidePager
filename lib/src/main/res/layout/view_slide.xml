@@ -34,9 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="5dp"
-        android:paddingLeft="@dimen/view_day_progress_margin_padding"
-        android:paddingRight="@dimen/view_day_progress_margin_padding">
+        android:paddingTop="5dp">
 
         <com.github.omadahealth.slidepager.lib.views.ProgressView
             android:id="@+id/progress_1"

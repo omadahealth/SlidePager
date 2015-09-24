@@ -42,6 +42,18 @@ public class ProgressAttr {
      */
     private Integer mCompletedDrawable;
 
+    /**
+     * Determine if a {@link com.github.omadahealth.slidepager.lib.views.ProgressView} should display a streak leftwards off the current page.
+     * True it should, false it shouldn't
+     */
+    private boolean mStreakLeftOffScreen = false;
+
+    /**
+     * Determine if a {@link com.github.omadahealth.slidepager.lib.views.ProgressView} should display a streak leftwards off the current page
+     * True it should, false it shouldn't
+     */
+    private boolean mStreakRightOffScreen = false;
+
     public ProgressAttr(int progress, boolean special, boolean isFuture) {
         this.mProgress = progress;
         this.mSpecial = special;
@@ -58,6 +70,17 @@ public class ProgressAttr {
         this.mReachedColor = reachedColor;
         this.mCompletedColor = completedColor;
         this.mCompletedDrawable = completedDrawable;
+    }
+
+    public ProgressAttr(int progress, boolean special, boolean isFuture, Integer reachedColor, Integer completedColor, Integer completedDrawable, boolean streakLeftOffScreen, boolean streakRightOffScreen) {
+        this.mProgress = progress;
+        this.mSpecial = special;
+        this.mIsFuture = isFuture;
+        this.mReachedColor = reachedColor;
+        this.mCompletedColor = completedColor;
+        this.mCompletedDrawable = completedDrawable;
+        this.mStreakLeftOffScreen = streakLeftOffScreen;
+        this.mStreakRightOffScreen = streakRightOffScreen;
     }
 
     public boolean isSpecial() {
@@ -106,5 +129,13 @@ public class ProgressAttr {
 
     public void setCompletedDrawable(Integer completedDrawable) {
         this.mCompletedDrawable = completedDrawable;
+    }
+
+    public boolean isStreakLeftOffScreen() {
+        return mStreakLeftOffScreen;
+    }
+
+    public boolean isStreakRightOffScreen() {
+        return mStreakRightOffScreen;
     }
 }
