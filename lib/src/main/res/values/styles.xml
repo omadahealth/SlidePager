@@ -1,4 +1,18 @@
 <resources>
+    <style name="CircularBarPagerStyle">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="progress_arc_max">100</item>
+        <item name="arc_progress">0</item>
+        <item name="progress_arc_clockwise_outline_width">@dimen/circular_bar_default_outline_width</item>
+        <item name="progress_arc_counter_clockwise_outline_width">@dimen/circular_bar_default_outline_width</item>
+        <item name="progress_arc_clockwise_width">@dimen/circular_bar_default_reach_width</item>
+        <item name="progress_arc_counter_clockwise_width">@dimen/circular_bar_default_reach_width</item>
+        <item name="progress_start_line_enabled">false</item>
+        <item name="progress_pager_fill_circle_color">@color/default_progress_not_completed_fill_color</item>
+        <item name="progress_arc_clockwise_outline_color">@color/default_progress_not_completed_outline_color</item>
+    </style>
+
     <style name="dayStyle">
         <item name="android:layout_marginLeft">5dp</item>
         <item name="android:layout_marginRight">5dp</item>
@@ -16,4 +30,38 @@
         <item name="android:layout_marginTop">@dimen/view_progress_circular_bar_margin</item>
         <item name="android:layout_marginBottom">@dimen/view_progress_circular_bar_margin</item>
     </style>
+
+    <style name="slideChartProgressViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/view_day_progress_margin_padding_negative</item>
+        <item name="android:layout_marginTop">@dimen/view_day_progress_margin_padding_negative</item>
+    </style>
+
+    <style name="slideChartBarStyle">
+        <item name="android:layout_width">0.75dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:background">@color/default_progress_chart_bar_color</item>
+        <item name="android:minHeight">20dp</item>
+    </style>
+
+    <style name="slideChartTextStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="slideChartTopTextStyle" parent="slideChartTextStyle">
+        <item name="android:textColor">@color/default_progress_chart_bar_top_text</item>
+        <item name="tv_typeface">roboto_regular</item>
+    </style>
+
+    <style name="slideChartBottomTextStyle" parent="slideChartTextStyle">
+        <item name="android:textColor">@color/default_progress_chart_bar_bottom_text</item>
+        <item name="android:textSize">@dimen/default_chart_bottom_text_size</item>
+        <item name="tv_typeface">roboto_light</item>
+    </style>
+
 </resources>

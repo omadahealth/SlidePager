@@ -12,8 +12,25 @@
         <item name="slide_progress_reached_width">3dp</item>
         <item name="slide_start_at_end">true</item>
         <item name="slide_show_streaks">true</item>
+        <item name="slide_show_progress_text">true</item>
         <item name="slide_show_week">true</item>
         <item name="slide_show_date">true</item>
+    </style>
+
+    <style name="SlideChartPagerStyle">
+        <item name="slide_start_at_end">true</item>
+        <item name="slide_show_streaks">false</item>
+        <item name="slide_show_progress_text">false</item>
+        <item name="slide_show_progress_plusmark">false</item>
+        <item name="slide_shake_if_not_selectable">false</item>
+        <item name="slide_progress_not_completed_outline_color">@color/default_progress_chart_bar_color</item>
+        <item name="slide_progress_completed_fill_color">@color/transparent</item>
+        <item name="slide_progress_not_completed_fill_color">@color/transparent</item>
+        <item name="slide_progress_not_completed_outline_size">3dp</item>
+
+        <item name="slide_progress_special_reach_color">#00C853</item>
+        <item name="slide_progress_special_outline_color">@color/default_progress_chart_bar_color</item>
+        <item name="slide_progress_special_fill_color">@color/transparent</item>
     </style>
 
 </resources>

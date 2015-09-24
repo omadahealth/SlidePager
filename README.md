@@ -6,7 +6,7 @@ To include in your project, add this to your build.gradle file:
 
 ```
    //SlidePager
-   compile 'com.github.omadahealth.slidepager:slidepager:1.5.4@aar'
+   compile 'com.github.omadahealth.slidepager:slidepager:1.6.1@aar'
 ```
 ![Demo](app/src/main/res/raw/github_gif.gif)
 
@@ -21,6 +21,8 @@ Designers:
 ### Usage
 
 Look at the example app for a live example on how to use the library.
+If you want to use the classic SlidePager, use the SlidePagerAdapter to populate your views.
+If you want to use the chart SlidePager, use the SlideChartPagerAdapter to populate your views.
 
 #### In XML:
 
@@ -56,14 +58,25 @@ You can change several attributes in the XML file:
 * app:slide_progress_completed_reach_color [color hex] --> The reach color(border) when the progress == 100%
 * app:slide_progress_not_completed_reach_color [color hex] --> The reach color(border) when the progress < 100%
 * app:slide_progress_not_completed_outline_color [color hex] --> The outline color(border) when the progress < 100%
+* app:slide_progress_not_completed_outline_size [dimension] --> The outline size(border) when the progress < 100%
+* app:slide_progress_not_completed_future_outline_size [dimension] --> The outline size(border) when the progress is in the future
 * app:slide_progress_not_completed_fill_color [color hex] --> The fill color(border) when the progress < 100%
 * app:slide_progress_special_reach_color [color hex] --> The reach color(border) when the progress < 100%
 * app:slide_progress_special_outline_color [color hex] --> The outline color(border) when the progress < 100%
 * app:slide_progress_special_fill_color [color hex] --> The fill color(border) when the progress < 100%
+* app:slide_progress_reached_width [dimension] --> The size of the reached progress on the CircularBar
 * app:slide_start_at_end [boolean] --> True if you want the pager to start at the last page instead of 0
 * app:slide_show_streaks [boolean] --> True if you want the connecting streaks to appear between consecutive 100% progress views
+* app:slide_shake_if_not_selectable [boolean] --> True if you want the SlidePager to shake when a day not selectable is clicked
+* app:slide_show_progress_text [boolean] --> True if you want to display the text below the CircularBar
+* app:slide_show_progress_plusmark [boolean] --> True if you want to display the plus mark on an empty special day
 * app:slide_show_week [boolean] --> True if you want to show the left text view
 * app:slide_show_date [boolean] --> True if you want to show the right text view
+* app:slide_progress_chart_bar_top_text_color [color hex] --> The top text color of the SlideChartView
+* app:slide_progress_chart_bar_bottom_text_color [color hex] --> The bottom text color of the SlideChartView
+* app:slide_progress_chart_bar_bottom_special_text_color [color hex] --> The bottom text color of the SlideChartView (special progress)
+* app:slide_progress_chart_color [color hex] --> The color of the bars in SlideChartView
+* app:slide_progress_chart_bar_size [dimension] --> The size of the bars in SlideChartView
 
 ========
 

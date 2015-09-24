@@ -19,11 +19,16 @@ public class ProgressAttr {
      */
     private boolean mSpecial;
 
-    public ProgressAttr(int progress, boolean special) {
+    /**
+     * Determines if this {@link ProgressAttr} is in the future or not, specifying different thickness for the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     */
+    private boolean mIsFuture;
+
+    public ProgressAttr(int progress, boolean special, boolean isFuture) {
         this.mProgress = progress;
         this.mSpecial = special;
+        this.mIsFuture = isFuture;
     }
-
 
     public boolean isSpecial() {
         return mSpecial;
@@ -40,4 +45,13 @@ public class ProgressAttr {
     public void setProgress(int progress) {
         this.mProgress = progress;
     }
+
+    public boolean isFuture() {
+        return mIsFuture;
+    }
+
+    public void setIsFuture(boolean isFuture) {
+        this.mIsFuture = isFuture;
+    }
+
 }

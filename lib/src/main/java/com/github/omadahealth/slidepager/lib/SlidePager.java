@@ -28,11 +28,14 @@ import android.content.res.TypedArray;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
+import com.github.omadahealth.slidepager.lib.adapter.AbstractSlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
+import com.github.omadahealth.slidepager.lib.views.AbstractSlideView;
 import com.github.omadahealth.slidepager.lib.views.ProgressView;
-import com.github.omadahealth.slidepager.lib.views.SlideView;
 
 import java.util.List;
 
@@ -53,7 +56,7 @@ public class SlidePager extends ViewPager {
     private OnSlidePageChangeListener mUserPageListener;
 
     /**
-     * True if we should start at the last position in the {@link SlidePagerAdapter}
+     * True if we should start at the last position in the {@link AbstractSlidePagerAdapter}
      */
     private boolean mStartAtEnd;
 
@@ -75,8 +78,8 @@ public class SlidePager extends ViewPager {
 
     @Override
     public void setAdapter(PagerAdapter adapter) {
-        if (!(adapter instanceof SlidePagerAdapter)) {
-            throw new IllegalArgumentException("PagerAdapter should be a subclass of SlidePagerAdapter");
+        if (!(adapter instanceof AbstractSlidePagerAdapter)) {
+            throw new IllegalArgumentException("PagerAdapter should be a subclass of AbstractSlidePagerAdapter");
         }
 
         super.setAdapter(adapter);
@@ -107,9 +110,19 @@ public class SlidePager extends ViewPager {
             return;
         }
 
-        if (getAdapter() instanceof SlidePagerAdapter) {
-            transformer.transformPage(((SlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()), 0);
+        if (getAdapter() instanceof AbstractSlidePagerAdapter) {
+            transformer.transformPage(((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(getCurrentItem()), 0);
             super.setPageTransformer(reverseDrawingOrder, transformer);
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        try {
+            return super.onTouchEvent(ev);
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+            return true;
         }
     }
 
@@ -140,7 +153,7 @@ public class SlidePager extends ViewPager {
                 if (mUserPageListener != null) {
                     mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
-                if(positionOffset == 0){
+                if (positionOffset == 0) {
                     resetPage(position);
                 }
             }
@@ -150,7 +163,11 @@ public class SlidePager extends ViewPager {
                 if (mUserPageListener != null) {
                     mUserPageListener.onPageSelected(position);
                 }
+                resetPage(position);
 
+                if (position > 0) {
+                    resetPage(position - 1);
+                }
             }
 
             @Override
@@ -183,15 +200,19 @@ public class SlidePager extends ViewPager {
      */
     @SuppressWarnings("unchecked")
     private void resetPage(int position) {
-        SlideView selectedView = (SlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
-        selectedView.resetPage(mAttributes);
+        if (getAdapter() != null) {
+            AbstractSlideView selectedView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
+            if (selectedView != null) {
+                selectedView.resetPage(mAttributes);
+            }
+        }
     }
 
     /**
      * @param position
      */
     private void animatePage(int position) {
-        SlideView slideView = (SlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
+        AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
         slideView.animatePage(mUserPageListener, mAttributes);
     }
 
@@ -200,18 +221,19 @@ public class SlidePager extends ViewPager {
      * @param show
      */
     private void animateSeries(int position, boolean show) {
-        SlideView slideView = (SlideView) ((SlidePagerAdapter) getAdapter()).getCurrentView(position);
+        AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
         slideView.animateSeries(show);
     }
 
     /**
      * Returns the initiated child views in {@link SlideTransformer#initTags(View)}
+     *
      * @param position
      * @return
      */
     @SuppressWarnings("unchecked")
-    public List<View> getChildren(int position) {
-        View selectedView = (((SlidePagerAdapter) getAdapter()).getCurrentView(position));
+    private List<View> getChildren(int position) {
+        View selectedView = (((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position));
 
 
         if (selectedView.getTag() == null) {
@@ -231,6 +253,7 @@ public class SlidePager extends ViewPager {
     /**
      * Gets the attribute set that we pass from xml attr in {@link R.styleable#SlidePager}
      * in {@link #loadStyledAttributes(AttributeSet, int)}
+     *
      * @return
      */
     public TypedArray getAttributeSet() {
@@ -239,6 +262,7 @@ public class SlidePager extends ViewPager {
 
     /**
      * Sets the {@link #mAttributes} that are passed on to the {@link ProgressView} and {@link android.transition.Slide}
+     *
      * @param attributeSet
      */
 

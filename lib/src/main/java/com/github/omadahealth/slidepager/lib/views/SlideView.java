@@ -28,7 +28,6 @@ import android.content.res.TypedArray;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -40,7 +39,6 @@ import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListene
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.github.omadahealth.typefaceview.TypefaceType;
-import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
@@ -52,7 +50,7 @@ import butterknife.ButterKnife;
 /**
  * Created by stoyan on 4/7/15.
  */
-public class SlideView extends LinearLayout {
+public class SlideView extends AbstractSlideView {
     /**
      * The tag for logging
      */
@@ -94,6 +92,11 @@ public class SlideView extends LinearLayout {
      * True of we want to show {@link #mRightTextView}
      */
     private boolean mShowRightText;
+
+    /**
+     * True of we want to shake the view in {@link #toggleSelectedViews(int)}
+     */
+    private boolean mShakeIfNotSelectable;
 
     /**
      * The current day sliding {@link android.widget.ImageView} we display
@@ -169,6 +172,7 @@ public class SlideView extends LinearLayout {
         if (mAttributes != null) {
             mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
+            mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
 
             mLeftTextView.setVisibility(mShowLeftText && mLeftText != null ? VISIBLE : GONE);
             mRightTextView.setVisibility(mShowRightText && mRightText != null ? VISIBLE : GONE);
@@ -198,6 +202,7 @@ public class SlideView extends LinearLayout {
             ButterKnife.inject(this, view);
 
             mAnimationSet = new AnimatorSet();
+            mAttributes = attributes;
             injectViews();
             setListeners();
             loadStyledAttributes(attributes);
@@ -238,31 +243,11 @@ public class SlideView extends LinearLayout {
         mSelectedImageView.setSelectedViewId(view.getId());
 
 
-        if(mAnimationSet == null){
+        if (mAnimationSet == null) {
             mAnimationSet = new AnimatorSet();
         }
         mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, SELECTION_ANIMATION_DURATION, ObjectAnimator.ofFloat(mSelectedImageView, "x", startPosition, offset)));
         mAnimationSet.setDuration(SELECTION_ANIMATION_DURATION);
-        mAnimationSet.removeAllListeners();
-        mAnimationSet.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
         mAnimationSet.start();
     }
 
@@ -298,9 +283,11 @@ public class SlideView extends LinearLayout {
                             toggleSelectedViews(index);
                             animateSelectedTranslation(view);
                         } else {
-                            YoYo.with(Techniques.Shake)
-                                    .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
-                                    .playOn(SlideView.this);
+                            if (mShakeIfNotSelectable) {
+                                YoYo.with(Techniques.Shake)
+                                        .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
+                                        .playOn(SlideView.this);
+                            }
                         }
                     }
                 });
@@ -310,7 +297,8 @@ public class SlideView extends LinearLayout {
 
     /**
      * Animates the {@link ProgressView}s of this page and sets their attributes.
-     * @param listener A listener to get {@link OnSlidePageChangeListener#getDayProgress(int, int)}
+     *
+     * @param listener   A listener to get {@link OnSlidePageChangeListener#getDayProgress(int, int)}
      * @param attributes The attributes to use
      */
     @SuppressWarnings("unchecked")
@@ -334,6 +322,7 @@ public class SlideView extends LinearLayout {
 
     /**
      * Displays or hides the streaks of all the {@link ProgressView}s
+     *
      * @param show True to animate them visible, false to immediately hide them
      */
     @SuppressWarnings("unchecked")
@@ -354,6 +343,7 @@ public class SlideView extends LinearLayout {
 
     /**
      * Resets the state of this page, usually called when we change pages in the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     *
      * @param mAttributes The attributes to reset the views to
      */
     @SuppressWarnings("unchecked")
@@ -395,14 +385,15 @@ public class SlideView extends LinearLayout {
 
     /**
      * Public method for animating an individual {@link ProgressView}
-     * @param index The index from [0,6] of the view
+     *
+     * @param index    The index from [0,6] of the view
      * @param progress The {@link ProgressAttr} to animate
      */
     @SuppressWarnings("unchecked")
-    public void animateProgressView(int index, ProgressAttr progress){
+    public void animateProgressView(int index, ProgressAttr progress) {
         final List<View> children = (List<View>) getTag();
         ProgressView view = getProgressView(index);
-        if(view != null){
+        if (view != null) {
             view.animateProgress(view.getProgress(), progress, mProgressAnimationTime, children);
         }
     }
@@ -480,11 +471,12 @@ public class SlideView extends LinearLayout {
 
     /**
      * Returns the {@link ProgressView} at the given index
+     *
      * @param index The index from [0,6]
      * @return The view
      */
-    public ProgressView getProgressView(int index){
-        if(mProgressList == null){
+    public ProgressView getProgressView(int index) {
+        if (mProgressList == null) {
             return null;
         }
         return mProgressList.get(index);
@@ -492,6 +484,7 @@ public class SlideView extends LinearLayout {
 
     /**
      * Returns the view that displays the currently selected {@link ProgressView}
+     *
      * @return
      */
     public SelectedImageView getSelectedImageView() {
@@ -500,6 +493,7 @@ public class SlideView extends LinearLayout {
 
     /**
      * Gets the currently selected index
+     *
      * @return
      */
     public synchronized static int getSelectedView() {
@@ -508,6 +502,7 @@ public class SlideView extends LinearLayout {
 
     /**
      * Sets the currently selected index
+     *
      * @param selectedView From [0,6]
      */
     public synchronized static void setSelectedView(int selectedView) {
