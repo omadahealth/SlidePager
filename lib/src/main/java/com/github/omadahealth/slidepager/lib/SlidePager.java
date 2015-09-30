@@ -66,6 +66,11 @@ public class SlidePager extends ViewPager {
      */
     private TypedArray mAttributes;
 
+    /**
+     * TODO comment
+     */
+    private int mPageIndex;
+
     public SlidePager(Context context) {
         this(context, null);
     }
@@ -88,6 +93,11 @@ public class SlidePager extends ViewPager {
             int position = adapter.getCount() - 1;
             setCurrentItem(position >= 0 ? position : 0);
         }
+    }
+
+    @Override
+    protected int getChildDrawingOrder(int childCount, int i) {
+        return i;
     }
 
     @Override
@@ -154,8 +164,9 @@ public class SlidePager extends ViewPager {
                     mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
                 if (positionOffset == 0) {
-                    resetPage(position);
+//                    resetPage(position);
                 }
+                mPageIndex = position;
             }
 
             @Override
@@ -166,7 +177,7 @@ public class SlidePager extends ViewPager {
                 resetPage(position);
 
                 if (position > 0) {
-                    resetPage(position - 1);
+//                    resetPage(position - 1);
                 }
             }
 
@@ -181,7 +192,10 @@ public class SlidePager extends ViewPager {
                     case ViewPager.SCROLL_STATE_SETTLING:
                         break;
                     case ViewPager.SCROLL_STATE_IDLE://animate here onPageSelected not called when we hit a wall
-                        animatePage(getCurrentItem());
+                        Log.e(TAG, "SCROLL_STATE_IDLE for page index : " + getCurrentItem() + " mPageIndex : " + mPageIndex);
+                        if (getCurrentItem() == mPageIndex) {
+                            animatePage(getCurrentItem());
+                        }
                         break;
                 }
 

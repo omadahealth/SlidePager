@@ -307,8 +307,9 @@ public class SlideView extends AbstractSlideView {
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof ProgressView) {
-                    ((ProgressView) child).loadStyledAttributes(attributes, listener.getDayProgress(mPagePosition, ((ProgressView) child).getIntTag()));
-                    animateProgress((ProgressView) child, children, listener);
+                    ProgressAttr progressAttr = listener.getDayProgress(mPagePosition, ((ProgressView) child).getIntTag());
+                    ((ProgressView) child).loadStyledAttributes(attributes, progressAttr);
+                    animateProgress((ProgressView) child, children, progressAttr);
 
                 }
             }
@@ -374,11 +375,11 @@ public class SlideView extends AbstractSlideView {
      *
      * @param view     The view to animate
      * @param children The sibling views we use to evaluate streaks showing
-     * @param listener The listener to call to {@link OnSlidePageChangeListener#getDayProgress(int, int)}
+     * @param progressAttr The {@link ProgressAttr} for this view got from the listener
      */
-    private void animateProgress(ProgressView view, List<View> children, OnSlidePageChangeListener listener) {
-        if (listener != null) {
-            ProgressAttr progress = listener.getDayProgress(mPagePosition, view.getIntTag());
+    private void animateProgress(ProgressView view, List<View> children, ProgressAttr progressAttr) {
+        if (progressAttr != null) {
+            ProgressAttr progress = progressAttr;
             view.animateProgress(0, progress, mProgressAnimationTime, children);
         }
     }
