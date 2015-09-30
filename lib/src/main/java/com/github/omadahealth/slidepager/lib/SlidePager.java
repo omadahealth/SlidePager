@@ -67,7 +67,8 @@ public class SlidePager extends ViewPager {
     private TypedArray mAttributes;
 
     /**
-     * TODO comment
+     * The page index saved to load the {@link com.github.omadahealth.slidepager.lib.views.SlideView} only once on
+     * {@link android.support.v4.view.ViewPager.OnPageChangeListener#onPageScrollStateChanged(int)}
      */
     private int mPageIndex;
 
