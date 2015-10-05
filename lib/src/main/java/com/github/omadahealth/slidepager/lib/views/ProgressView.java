@@ -87,6 +87,11 @@ public class ProgressView extends RelativeLayout {
     private CircularBar mCircularBar;
 
     /**
+     * The layout containing both {@link #mCircularBar} and {@link #mLeftStreak #mCenterStreak #mRightStreak}
+     */
+    private RelativeLayout mCircularBarStreaksLayout;
+
+    /**
      * The textview that shows today's day name
      */
     private TypefaceTextView mProgressText;
@@ -198,6 +203,11 @@ public class ProgressView extends RelativeLayout {
     private boolean mShowProgressText;
 
     /**
+     * True of we want to show {@link #mCircularBar}
+     */
+    private boolean mShowCircularBar;
+
+    /**
      * Boolean that controls if the {@link #mCheckMark} is visible or not
      */
     private boolean mShowProgressPlusMark;
@@ -233,6 +243,7 @@ public class ProgressView extends RelativeLayout {
 
     private static String INSTANCE_SHOW_STREAKS = "show_streaks";
     private static String INSTANCE_SHOW_PROGRESS_TEXT = "show_progress_text";
+    private static String INSTANCE_SHOW_CIRCULAR_BAR = "show_circular_bar";
     private static String INSTANCE_SHOW_PROGRESS_PLUSMARK = "show_progress_plusmark";
     private static String INSTANCE_COMPLETED_COLOR = "completed_color";
     private static String INSTANCE_COMPLETED_FILL_COLOR = "completed_fill_color";
@@ -265,6 +276,7 @@ public class ProgressView extends RelativeLayout {
         bundle.putParcelable(INSTANCE_STATE, super.onSaveInstanceState());
         bundle.putBoolean(INSTANCE_SHOW_STREAKS, mShowStreaks);
         bundle.putBoolean(INSTANCE_SHOW_PROGRESS_TEXT, mShowProgressText);
+        bundle.putBoolean(INSTANCE_SHOW_CIRCULAR_BAR, mShowCircularBar);
         bundle.putBoolean(INSTANCE_SHOW_PROGRESS_PLUSMARK, mShowProgressPlusMark);
 
         bundle.putInt(INSTANCE_COMPLETED_COLOR, mCompletedColor);
@@ -289,6 +301,7 @@ public class ProgressView extends RelativeLayout {
             Resources res = getContext().getResources();
             mShowStreaks = bundle.getBoolean(INSTANCE_SHOW_STREAKS, true);
             mShowProgressText = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_TEXT, true);
+            mShowCircularBar = bundle.getBoolean(INSTANCE_SHOW_CIRCULAR_BAR, true);
             mShowProgressPlusMark = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_PLUSMARK, true);
 
             mCompletedColor = bundle.getInt(INSTANCE_COMPLETED_COLOR, res.getColor(R.color.default_progress_completed_reach_color));
@@ -327,6 +340,7 @@ public class ProgressView extends RelativeLayout {
         mCenterStreak = ButterKnife.findById(this, R.id.progress_streak_center);
         mCheckMark = ButterKnife.findById(this, R.id.check_mark);
         mCircularBar = ButterKnife.findById(this, R.id.circularbar);
+        mCircularBarStreaksLayout = ButterKnife.findById(this, R.id.progress_circularbar_streaks_layout);
         mProgressText = ButterKnife.findById(this, R.id.progress_text);
 
         mDefaultProgressTypeface = mProgressText.getCurrentTypeface();
@@ -355,6 +369,7 @@ public class ProgressView extends RelativeLayout {
 //            }
             mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_show_streaks, true);
             mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, true);
+            mShowCircularBar = attributes.getBoolean(R.styleable.SlidePager_slide_show_circular_bars, true);
             mShowProgressPlusMark = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_plusmark, true);
 
 
@@ -380,6 +395,7 @@ public class ProgressView extends RelativeLayout {
         } else {
             mShowStreaks = true;
             mShowProgressText = true;
+            mShowCircularBar = true;
             mShowProgressPlusMark = true;
 
             mCompletedColor = progress != null && progress.getCompletedColor() != null ?
@@ -512,15 +528,20 @@ public class ProgressView extends RelativeLayout {
      * Sets the colors of {@link #mCircularBar}
      */
     public void setCircleColorsAndSize() {
-        mFillColor = mIsSpecial ? mSpecialFillColor : mNotCompletedFillColor;
-        mReachColor = mIsSpecial ? mSpecialReachColor : mNotCompletedReachColor;
-        mOutlineColor = mIsSpecial ? mSpecialOutlineColor : mNotCompletedOutlineColor;
+        if (mShowCircularBar) {
+            mCircularBarStreaksLayout.setVisibility(View.VISIBLE);
+            mFillColor = mIsSpecial ? mSpecialFillColor : mNotCompletedFillColor;
+            mReachColor = mIsSpecial ? mSpecialReachColor : mNotCompletedReachColor;
+            mOutlineColor = mIsSpecial ? mSpecialOutlineColor : mNotCompletedOutlineColor;
 
-        mCircularBar.setClockwiseReachedArcWidth(mReachedWidth);
-        mCircularBar.setCircleFillColor(mFillColor);
-        mCircularBar.setClockwiseReachedArcColor(mReachColor);
-        mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
-        mCircularBar.setClockwiseOutlineArcWidth(mIsFuture ? mNotCompletedFutureOutlineSize : mNotCompletedOutlineSize);
+            mCircularBar.setClockwiseReachedArcWidth(mReachedWidth);
+            mCircularBar.setCircleFillColor(mFillColor);
+            mCircularBar.setClockwiseReachedArcColor(mReachColor);
+            mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
+            mCircularBar.setClockwiseOutlineArcWidth(mIsFuture ? mNotCompletedFutureOutlineSize : mNotCompletedOutlineSize);
+        } else {
+            mCircularBarStreaksLayout.setVisibility(View.GONE);
+        }
     }
 
     /**

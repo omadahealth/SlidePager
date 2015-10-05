@@ -196,13 +196,13 @@ public class SlideView extends AbstractSlideView {
         if (!isInEditMode()) {
             this.mPagePosition = pagePosition;
             this.mUserPageListener = pageListener;
+            this.mAttributes = attributes;
 
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.view_slide, this);
             ButterKnife.inject(this, view);
 
             mAnimationSet = new AnimatorSet();
-            mAttributes = attributes;
             injectViews();
             setListeners();
             loadStyledAttributes(attributes);

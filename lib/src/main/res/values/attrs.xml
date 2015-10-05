@@ -13,12 +13,13 @@
         <attr name="slide_progress_special_fill_color" format="color" />
         <attr name="slide_progress_reached_width" format="dimension" />
         <attr name="slide_start_at_end" format="boolean" />
-        <attr name="slide_show_streaks" format="boolean" />
         <attr name="slide_shake_if_not_selectable" format="boolean" />
         <attr name="slide_show_progress_text" format="boolean" />
         <attr name="slide_show_progress_plusmark" format="boolean" />
         <attr name="slide_show_week" format="boolean" />
         <attr name="slide_show_date" format="boolean" />
+        <attr name="slide_show_streaks" format="boolean" />
+        <attr name="slide_show_circular_bars" format="boolean"/>
         <attr name="slide_progress_text_label" format="enum">
             <enum name="slide_progress_text_short" value="0"/>
             <enum name="slide_progress_text_long" value="1"/>
