@@ -44,6 +44,10 @@ import com.github.omadahealth.slidepager.lib.views.SlideView;
 import java.util.Date;
 
 public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener<ChartProgressAttr> {
+    /**
+     * Tag for logging this class
+     */
+    private static final String TAG = "MainActivity";
 
     /**
      * The slide pager we use
@@ -136,19 +140,24 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
     @Override
     public ChartProgressAttr getDayProgress(int page, int index) {
-        int progress;
+        Log.i(TAG, "Get day progress : " + page + ", " + index);
+        int progress = 0;
         Double value = null;
-        if(page == 15 && (index == 2 || index == 6)){
-            progress = 0;
-        }
-        else {
+        if (page == 14) {
             value = 180.2d;
             progress = 100;
+        } else {
+            value = 180.2d;
+            progress = (int) Math.round((index % 4) * 33.33d);
         }
 
         String day = Utilities.getSelectedDayText(Utilities.getPreviousDate(16).getTime(), page, index);
 
-        return new ChartProgressAttr(progress, value, day, page == 15 && index == 5, page == 15 && index == 6);
+        int color = getResources().getColor(progress < 34 ? R.color.red :
+                progress < 67 ? R.color.orange :
+                        R.color.green);
+
+        return new ChartProgressAttr(progress, value, day, page == 15 && index == 5, page == 15 && index == 6, color, color, R.drawable.checkmark_green, false, false);
     }
 
     @Override

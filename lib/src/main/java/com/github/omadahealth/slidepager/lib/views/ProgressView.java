@@ -72,6 +72,11 @@ public class ProgressView extends RelativeLayout {
     private ImageView mRightStreak;
 
     /**
+     * The right streak
+     */
+    private ImageView mCenterStreak;
+
+    /**
      * The completed check mark that goes inside {@link #mCircularBar}
      */
     private ImageView mCheckMark;
@@ -80,6 +85,11 @@ public class ProgressView extends RelativeLayout {
      * The circular progress bar
      */
     private CircularBar mCircularBar;
+
+    /**
+     * The layout containing both {@link #mCircularBar} and {@link #mLeftStreak #mCenterStreak #mRightStreak}
+     */
+    private RelativeLayout mCircularBarStreaksLayout;
 
     /**
      * The textview that shows today's day name
@@ -193,6 +203,11 @@ public class ProgressView extends RelativeLayout {
     private boolean mShowProgressText;
 
     /**
+     * True of we want to show {@link #mCircularBar}
+     */
+    private boolean mShowCircularBar;
+
+    /**
      * Boolean that controls if the {@link #mCheckMark} is visible or not
      */
     private boolean mShowProgressPlusMark;
@@ -222,11 +237,13 @@ public class ProgressView extends RelativeLayout {
      */
     public enum STREAK {
         LEFT_STREAK,
-        RIGHT_STREAK
+        RIGHT_STREAK,
+        CENTER_STREAK
     }
 
     private static String INSTANCE_SHOW_STREAKS = "show_streaks";
     private static String INSTANCE_SHOW_PROGRESS_TEXT = "show_progress_text";
+    private static String INSTANCE_SHOW_CIRCULAR_BAR = "show_circular_bar";
     private static String INSTANCE_SHOW_PROGRESS_PLUSMARK = "show_progress_plusmark";
     private static String INSTANCE_COMPLETED_COLOR = "completed_color";
     private static String INSTANCE_COMPLETED_FILL_COLOR = "completed_fill_color";
@@ -259,6 +276,7 @@ public class ProgressView extends RelativeLayout {
         bundle.putParcelable(INSTANCE_STATE, super.onSaveInstanceState());
         bundle.putBoolean(INSTANCE_SHOW_STREAKS, mShowStreaks);
         bundle.putBoolean(INSTANCE_SHOW_PROGRESS_TEXT, mShowProgressText);
+        bundle.putBoolean(INSTANCE_SHOW_CIRCULAR_BAR, mShowCircularBar);
         bundle.putBoolean(INSTANCE_SHOW_PROGRESS_PLUSMARK, mShowProgressPlusMark);
 
         bundle.putInt(INSTANCE_COMPLETED_COLOR, mCompletedColor);
@@ -283,6 +301,7 @@ public class ProgressView extends RelativeLayout {
             Resources res = getContext().getResources();
             mShowStreaks = bundle.getBoolean(INSTANCE_SHOW_STREAKS, true);
             mShowProgressText = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_TEXT, true);
+            mShowCircularBar = bundle.getBoolean(INSTANCE_SHOW_CIRCULAR_BAR, true);
             mShowProgressPlusMark = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_PLUSMARK, true);
 
             mCompletedColor = bundle.getInt(INSTANCE_COMPLETED_COLOR, res.getColor(R.color.default_progress_completed_reach_color));
@@ -318,8 +337,10 @@ public class ProgressView extends RelativeLayout {
 
         mLeftStreak = ButterKnife.findById(this, R.id.progress_streak_left);
         mRightStreak = ButterKnife.findById(this, R.id.progress_streak_right);
+        mCenterStreak = ButterKnife.findById(this, R.id.progress_streak_center);
         mCheckMark = ButterKnife.findById(this, R.id.check_mark);
         mCircularBar = ButterKnife.findById(this, R.id.circularbar);
+        mCircularBarStreaksLayout = ButterKnife.findById(this, R.id.progress_circularbar_streaks_layout);
         mProgressText = ButterKnife.findById(this, R.id.progress_text);
 
         mDefaultProgressTypeface = mProgressText.getCurrentTypeface();
@@ -343,11 +364,20 @@ public class ProgressView extends RelativeLayout {
 
         Resources res = getContext().getResources();
         if (attributes != null) {
+//            if(progress == null){
+//                progress = new ProgressAttr(0,0,"");
+//            }
             mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_show_streaks, true);
             mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, true);
+            mShowCircularBar = attributes.getBoolean(R.styleable.SlidePager_slide_show_circular_bars, true);
             mShowProgressPlusMark = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_plusmark, true);
 
-            mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_reach_color, res.getColor(R.color.default_progress_completed_reach_color));
+
+            mCompletedColor = progress != null && progress.getCompletedColor() != null ?
+                    progress.getCompletedColor()
+                    :
+                    attributes.getColor(R.styleable.SlidePager_slide_progress_completed_reach_color, res.getColor(R.color.default_progress_completed_reach_color));
+
             mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
 
             mNotCompletedReachColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_reach_color, res.getColor(R.color.default_progress_not_completed_reach_color));
@@ -365,9 +395,13 @@ public class ProgressView extends RelativeLayout {
         } else {
             mShowStreaks = true;
             mShowProgressText = true;
+            mShowCircularBar = true;
             mShowProgressPlusMark = true;
 
-            mCompletedColor = res.getColor(R.color.default_progress_completed_reach_color);
+            mCompletedColor = progress != null && progress.getCompletedColor() != null ?
+                    progress.getCompletedColor()
+                    :
+                    res.getColor(R.color.default_progress_completed_reach_color);
             mCompletedFillColor = res.getColor(R.color.default_progress_completed_fill_color);
 
             mNotCompletedReachColor = res.getColor(R.color.default_progress_not_completed_reach_color);
@@ -440,22 +474,36 @@ public class ProgressView extends RelativeLayout {
             showCheckMark(true);
 
             if (mShowStreaks && mSiblings != null && mSiblings.size() > 0) {
-                //Previous exists
+                //Previous exists?
+                //Next exists
+                boolean previousComplete = false;
+                boolean nextComplete = false;
                 if (getIntTag() - 1 >= 0) {
                     ProgressView previousDay = mSiblings.get(index - 1);
                     //Previous is complete
-                    boolean complete = previousDay.getProgress() >= 99.95f;
-                    showStreak(complete, ProgressView.STREAK.LEFT_STREAK);
-
+                    previousComplete = previousDay.getProgress() >= 99.95f;
+                } else {
+                    if (mProgressAttr != null) {
+                        previousComplete = mProgressAttr.isStreakLeftOffScreen();
+                    }
                 }
 
-                //Next exists
                 if (index + 1 < mSiblings.size()) {
                     ProgressView nextDay = mSiblings.get(index + 1);
                     //Next is complete
-                    boolean complete = nextDay.getProgress() >= 99.95f;
-                    showStreak(complete, ProgressView.STREAK.RIGHT_STREAK);
+                    nextComplete = nextDay.getProgress() >= 99.95f;
+                } else {
+                    if (mProgressAttr != null) {
+                        nextComplete = mProgressAttr.isStreakRightOffScreen();
+                    }
                 }
+
+                //Show/Hide left
+                showStreak(!previousComplete && nextComplete, ProgressView.STREAK.LEFT_STREAK);
+                //Show/Hide center
+                showStreak(previousComplete && nextComplete, STREAK.CENTER_STREAK);
+                //Show/Hide right
+                showStreak(previousComplete && !nextComplete, ProgressView.STREAK.RIGHT_STREAK);
             }
 
             //Set Color
@@ -472,6 +520,7 @@ public class ProgressView extends RelativeLayout {
 
             showStreak(false, STREAK.RIGHT_STREAK);
             showStreak(false, STREAK.LEFT_STREAK);
+            showStreak(false, STREAK.CENTER_STREAK);
         }
     }
 
@@ -479,15 +528,20 @@ public class ProgressView extends RelativeLayout {
      * Sets the colors of {@link #mCircularBar}
      */
     public void setCircleColorsAndSize() {
-        mFillColor = mIsSpecial ? mSpecialFillColor : mNotCompletedFillColor;
-        mReachColor = mIsSpecial ? mSpecialReachColor : mNotCompletedReachColor;
-        mOutlineColor = mIsSpecial ? mSpecialOutlineColor : mNotCompletedOutlineColor;
+        if (mShowCircularBar) {
+            mCircularBarStreaksLayout.setVisibility(View.VISIBLE);
+            mFillColor = mIsSpecial ? mSpecialFillColor : mNotCompletedFillColor;
+            mReachColor = mIsSpecial ? mSpecialReachColor : mNotCompletedReachColor;
+            mOutlineColor = mIsSpecial ? mSpecialOutlineColor : mNotCompletedOutlineColor;
 
-        mCircularBar.setClockwiseReachedArcWidth(mReachedWidth);
-        mCircularBar.setCircleFillColor(mFillColor);
-        mCircularBar.setClockwiseReachedArcColor(mReachColor);
-        mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
-        mCircularBar.setClockwiseOutlineArcWidth(mIsFuture ? mNotCompletedFutureOutlineSize : mNotCompletedOutlineSize);
+            mCircularBar.setClockwiseReachedArcWidth(mReachedWidth);
+            mCircularBar.setCircleFillColor(mFillColor);
+            mCircularBar.setClockwiseReachedArcColor(mReachColor);
+            mCircularBar.setClockwiseOutlineArcColor(mOutlineColor);
+            mCircularBar.setClockwiseOutlineArcWidth(mIsFuture ? mNotCompletedFutureOutlineSize : mNotCompletedOutlineSize);
+        } else {
+            mCircularBarStreaksLayout.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -534,7 +588,6 @@ public class ProgressView extends RelativeLayout {
         }
         mIsSpecial = progress.isSpecial();
         setCircleColorsAndSize();
-        mReachColor = mIsSpecial ? mSpecialReachColor : mReachColor;
 
         mSiblings = setSiblings(siblings);
         if (mReachColor != mNotCompletedReachColor) {
@@ -542,14 +595,33 @@ public class ProgressView extends RelativeLayout {
         } else {
             mCircularBar.setClockwiseReachedArcColor(progress.getProgress() == 100 ? mCompletedColor : mReachColor);
         }
-        if (progress.isSpecial() && mShowProgressPlusMark) {
-            mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.ic_add_plus));
+
+        //Reached color
+        if (progress.getReachedColor() != null) {
+            mReachColor = progress.getReachedColor();
+        } else {
+            mReachColor = mIsSpecial ? mSpecialReachColor : mReachColor;
+        }
+
+        //Set CheckMark drawable for non-special
+        if (progress.getCompletedDrawable() != null) {
+            mCheckMark.setImageDrawable(getResources().getDrawable(progress.getCompletedDrawable()));
+        } else {
+            mCheckMark.setImageDrawable(getResources().getDrawable(R.drawable.checkmark_green));
+        }
+
+        //Set Checkmark drawable for special and not completed
+        if (progress.isSpecial() && mShowProgressPlusMark && progress.getProgress() < 99.9) {
+            mCheckMark.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_plus));
+
+            //Set drawable alpha depending on progress
             if (progress.getProgress() < 0.01) {
                 mCheckMark.setAlpha(1f);
             } else {
                 mCheckMark.setAlpha(0f);
             }
         }
+
         mCircularBar.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -618,7 +690,6 @@ public class ProgressView extends RelativeLayout {
             return;
         }
 
-        mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.checkmark_green));
         float start = 0;
         float end = 1f;
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, EASE_IN_DURATION, ObjectAnimator.ofFloat(mCheckMark, "alpha", start, end)));
@@ -642,6 +713,9 @@ public class ProgressView extends RelativeLayout {
                 break;
             case RIGHT_STREAK:
                 sideView = mRightStreak;
+                break;
+            case CENTER_STREAK:
+                sideView = mCenterStreak;
                 break;
             default:
                 return;
