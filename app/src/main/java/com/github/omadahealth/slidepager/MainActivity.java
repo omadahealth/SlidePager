@@ -148,7 +148,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
             progress = 100;
         } else {
             value = 180.2d;
-            progress = (int) ((index % 4) * 33.33d);
+            progress = (int) Math.round((index % 4) * 33.33d);
         }
 
         String day = Utilities.getSelectedDayText(Utilities.getPreviousDate(16).getTime(), page, index);
