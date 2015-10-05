@@ -63,6 +63,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/view_progress_text_padding"
         android:singleLine="true"
+        android:gravity="center"
         android:text="M"
         android:textColor="@android:color/white"
         android:textSize="@dimen/not_selected_progress_view_text_size" />

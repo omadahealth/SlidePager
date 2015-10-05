@@ -16,7 +16,8 @@
             android:id="@+id/slidepager1"
             style="@style/SlidePagerStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:slide_show_circular_bars="false"/>
 
         <Button
             android:id="@+id/change_button"

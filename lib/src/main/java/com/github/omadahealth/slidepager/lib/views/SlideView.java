@@ -394,7 +394,7 @@ public class SlideView extends AbstractSlideView {
     public void animateProgressView(int index, ProgressAttr progress) {
         final List<View> children = (List<View>) getTag();
         ProgressView view = getProgressView(index);
-        if (view != null) {
+        if (view != null && view.isShowCircularBar()) {
             view.animateProgress(view.getProgress(), progress, mProgressAnimationTime, children);
         }
     }

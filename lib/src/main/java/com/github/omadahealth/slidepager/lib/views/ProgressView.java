@@ -205,7 +205,7 @@ public class ProgressView extends RelativeLayout {
     /**
      * True of we want to show {@link #mCircularBar}
      */
-    private boolean mShowCircularBar;
+    private boolean mShowCircularBar = true;
 
     /**
      * Boolean that controls if the {@link #mCheckMark} is visible or not
@@ -583,7 +583,7 @@ public class ProgressView extends RelativeLayout {
      * @param siblings The sibling views we use to evaluate streaks showing
      */
     public void animateProgress(int start, ProgressAttr progress, int duration, final List<View> siblings) {
-        if (progress == null) {
+        if (progress == null || !mShowCircularBar) {
             return;
         }
         mIsSpecial = progress.isSpecial();
@@ -836,6 +836,10 @@ public class ProgressView extends RelativeLayout {
      */
     public Integer getIntTag() {
         return Integer.parseInt((String) getTag());
+    }
+
+    public boolean isShowCircularBar() {
+        return mShowCircularBar;
     }
 
 }
