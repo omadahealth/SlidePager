@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
-        android:id="@+id/bar_view_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <com.github.omadahealth.slidepager.lib.views.BarView
-            android:id="@+id/barview"
+
+        <RelativeLayout
+            android:id="@+id/bar_view_layout"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/view_day_progress_margin_padding"
-            android:layout_marginRight="@dimen/view_day_progress_margin_padding"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"/>
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
 
-        <ImageView
-            android:id="@+id/bar_chart_check_mark"
-            android:layout_width="@dimen/view_day_progress_dim"
-            android:layout_height="@dimen/view_day_progress_check"
-            android:scaleType="fitEnd"
-            android:layout_alignBottom="@+id/barview"
+            <com.github.omadahealth.slidepager.lib.views.BarView
+                android:id="@+id/barview"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="7dp"
+                android:layout_marginLeft="@dimen/view_day_progress_margin_padding"
+                android:layout_marginRight="@dimen/view_day_progress_margin_padding"
+                android:layout_marginTop="7dp" />
+
+            <ImageView
+                android:id="@+id/bar_chart_check_mark"
+                android:layout_width="@dimen/view_day_progress_dim"
+                android:layout_height="@dimen/view_day_progress_check"
+                android:layout_alignBottom="@+id/barview"
+                android:layout_centerHorizontal="true"
+                android:alpha="0"
+                android:scaleType="fitEnd" />
+
+        </RelativeLayout>
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/bar_chart_progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bar_view_layout"
             android:layout_centerHorizontal="true"
-            android:alpha="0"
-             />
-
+            android:layout_marginTop="5dp"
+            android:singleLine="true"
+            android:text="M"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/not_selected_progress_view_text_size" />
     </RelativeLayout>
-
-    <com.github.omadahealth.typefaceview.TypefaceTextView
-        android:id="@+id/bar_chart_progress_text"
-        android:layout_below="@+id/bar_view_layout"
-        android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"
-        android:singleLine="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:text="M"
-        android:textSize="@dimen/not_selected_progress_view_text_size"/>
-</RelativeLayout>
+</layout>

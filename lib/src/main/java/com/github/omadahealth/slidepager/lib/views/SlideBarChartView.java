@@ -12,9 +12,9 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
+import com.github.omadahealth.slidepager.lib.databinding.ViewBarchartSlideBinding;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
-import com.github.omadahealth.slidepager.lib.utils.BarChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
@@ -121,6 +121,11 @@ public class SlideBarChartView extends AbstractSlideView{
     private int mPagePosition;
 
     /**
+     * Data binding for this class
+     */
+    private ViewBarchartSlideBinding mBinding;
+
+    /**
      * The animation time in milliseconds that we animate the progress
      */
     private int mProgressAnimationTime = DEFAULT_PROGRESS_ANIMATION_TIME;
@@ -185,42 +190,42 @@ public class SlideBarChartView extends AbstractSlideView{
             mChartProgressAttr.add(mUserPageListener.getDayProgress(mPagePosition, i));
         }
 
-//        //Progress top texts
-//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_1));
-//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_2));
-//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_3));
-//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_4));
-//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_5));
-//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_6));
-//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_7));
-//
-//        //Progress bar
-//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_1).loadStyledAttributes(mAttributes, mChartProgressAttr.get(0)));
-//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_2).loadStyledAttributes(mAttributes, mChartProgressAttr.get(1)));
-//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_3).loadStyledAttributes(mAttributes, mChartProgressAttr.get(2)));
-//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_4).loadStyledAttributes(mAttributes, mChartProgressAttr.get(3)));
-//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_5).loadStyledAttributes(mAttributes, mChartProgressAttr.get(4)));
-//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_6).loadStyledAttributes(mAttributes, mChartProgressAttr.get(5)));
-//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_7).loadStyledAttributes(mAttributes, mChartProgressAttr.get(6)));
-//
-//        //Progress bottom texts
-//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_1));
-//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_2));
-//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_3));
-//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_4));
-//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_5));
-//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_6));
-//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_7));
-//
-//
-//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_1_bar));
-//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_2_bar));
-//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_3_bar));
-//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_4_bar));
-//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_5_bar));
-//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_6_bar));
-//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_7_bar));
-//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_bottom_axis));
+        //Progress top texts
+        mProgressTopTextList.add(mBinding.barProgressBottomText1);
+        mProgressTopTextList.add(mBinding.barProgressBottomText2);
+        mProgressTopTextList.add(mBinding.barProgressBottomText3);
+        mProgressTopTextList.add(mBinding.barProgressBottomText4);
+        mProgressTopTextList.add(mBinding.barProgressBottomText5);
+        mProgressTopTextList.add(mBinding.barProgressBottomText6);
+        mProgressTopTextList.add(mBinding.barProgressBottomText7);
+
+        //Progress bar
+        mChartProgressList.add(mBinding.progress1.loadStyledAttributes(mAttributes, mChartProgressAttr.get(0)));
+        mChartProgressList.add(mBinding.progress2.loadStyledAttributes(mAttributes, mChartProgressAttr.get(1)));
+        mChartProgressList.add(mBinding.progress3.loadStyledAttributes(mAttributes, mChartProgressAttr.get(2)));
+        mChartProgressList.add(mBinding.progress4.loadStyledAttributes(mAttributes, mChartProgressAttr.get(3)));
+        mChartProgressList.add(mBinding.progress5.loadStyledAttributes(mAttributes, mChartProgressAttr.get(4)));
+        mChartProgressList.add(mBinding.progress6.loadStyledAttributes(mAttributes, mChartProgressAttr.get(5)));
+        mChartProgressList.add(mBinding.progress7.loadStyledAttributes(mAttributes, mChartProgressAttr.get(6)));
+
+        //Progress bottom texts
+        mProgressBottomTextList.add(mBinding.barProgressBottomText1);
+        mProgressBottomTextList.add(mBinding.barProgressBottomText2);
+        mProgressBottomTextList.add(mBinding.barProgressBottomText3);
+        mProgressBottomTextList.add(mBinding.barProgressBottomText4);
+        mProgressBottomTextList.add(mBinding.barProgressBottomText5);
+        mProgressBottomTextList.add(mBinding.barProgressBottomText6);
+        mProgressBottomTextList.add(mBinding.barProgressBottomText7);
+
+        //Progress vertical bars
+        mChartBarList.add(mBinding.barProgress1Bar);
+        mChartBarList.add(mBinding.barProgress2Bar);
+        mChartBarList.add(mBinding.barProgress3Bar);
+        mChartBarList.add(mBinding.barProgress4Bar);
+        mChartBarList.add(mBinding.barProgress5Bar);
+        mChartBarList.add(mBinding.barProgress6Bar);
+        mChartBarList.add(mBinding.barProgress7Bar);
+        mChartBarList.add(mBinding.barProgressBottomAxis);
 
         //Init the tags of the subviews
         SlideTransformer.initTags(this);

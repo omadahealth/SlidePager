@@ -3,6 +3,7 @@ package com.github.omadahealth.slidepager.lib.views;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -17,6 +18,7 @@ import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.OrangeGangsters.circularbarpager.library.CircularBar;
 import com.github.omadahealth.slidepager.lib.R;
+import com.github.omadahealth.slidepager.lib.databinding.ViewBarChartProgressBinding;
 import com.github.omadahealth.slidepager.lib.utils.BarChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
@@ -146,7 +148,10 @@ public class BarChartProgressView extends RelativeLayout {
      */
     private ChartProgressAttr mChartProgressAttr;
 
-    private ViewProgressChartBarBinding mBinding;
+    /**
+     * Data binding for this class
+     */
+    private ViewBarChartProgressBinding mBinding;
 
 
 
@@ -208,10 +213,10 @@ public class BarChartProgressView extends RelativeLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.view_bar_chart_progress, this);
 //        ButterKnife.inject(this, view);
-//        mBinding = DataBindingUtil.inflate(inflater, R.layout.view_bar_chart_progress, this, true);
-//        mCheckMark = ButterKnife.findById(this, R.id.bar_chart_check_mark);
-//        mBarView = ButterKnife.findById(this, R.id.barview);
-//        mProgressText = ButterKnife.findById(this, R.id.bar_chart_progress_text);
+          mBinding = DataBindingUtil.inflate(inflater, R.layout.view_bar_chart_progress, this, true);
+        mCheckMark = mBinding.barChartCheckMark;
+        mBarView = mBinding.barview;
+        mProgressText = mBinding.barChartProgressText;
 
         mDefaultProgressTypeface = mProgressText.getCurrentTypeface();
 
@@ -454,7 +459,7 @@ public class BarChartProgressView extends RelativeLayout {
             return;
         }
 
-        mCheckMark.setImageDrawable(getResources().getDrawable(R.mipmap.checkmark_green));
+        mCheckMark.setImageDrawable(getResources().getDrawable(R.drawable.checkmark_green));
         float start = 0;
         float end = 1f;
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, EASE_IN_DURATION, ObjectAnimator.ofFloat(mCheckMark, "alpha", start, end)));

@@ -19,54 +19,7 @@ import java.util.Date;
  * Created by dae.park on 10/5/15.
  */
 public class SlideBarChartPagerAdapter extends AbstractSlidePagerAdapter<SlideBarChartView> {
-    /**
-     * The maximum number of weeks before we change the {@link #getLeftText(int, int)}
-     */
-    private static final int DEFAULT_MAX_WEEKS = 10;
 
-    /**
-     * The start date of the {@link SlidePager}
-     */
-    private Date mStartDate;
-
-    /**
-     * The end date of the {@link SlidePager}
-     */
-    private Date mEndDate;
-
-    /**
-     * The context of the app
-     */
-    private Context mContext;
-
-    /**
-     * The list of {@link View} used to retain inflated views
-     */
-    private SlideBarChartView[] mViews;
-
-    /**
-     * Weeks that this view represents
-     */
-    private int mWeeks;
-
-    /**
-     * The weeks in the program
-     */
-    private final int mMaxWeeks;
-
-    /**
-     * A user defined {@link ViewPager.OnPageChangeListener}
-     */
-    private OnSlidePageChangeListener mUserPageListener;
-
-    /**
-     * The attribute set from xml
-     */
-    private TypedArray mAttributeSet;
-
-    public void setAttributeSet(TypedArray attributeSet) {
-        this.mAttributeSet = attributeSet;
-    }
 
     /**
      * Calls {@link #SlideBarChartPagerAdapter(Context, Date, Date)} with the end date being set
@@ -92,13 +45,7 @@ public class SlideBarChartPagerAdapter extends AbstractSlidePagerAdapter<SlideBa
     }
 
     public SlideBarChartPagerAdapter(Context context, Date startDate, Date endDate, TypedArray attributes, OnSlidePageChangeListener pageListener, int maxWeeks) {
-        this.mContext = context;
-        this.mStartDate = startDate;
-        this.mEndDate = endDate;
-        this.mMaxWeeks = maxWeeks;
-        this.mUserPageListener = pageListener;
-        setAttributeSet(attributes);
-        this.mViews = initViews();
+        super(context, startDate, endDate, attributes, pageListener, maxWeeks);
     }
 
     @Override
@@ -166,7 +113,7 @@ public class SlideBarChartPagerAdapter extends AbstractSlidePagerAdapter<SlideBa
      *
      * @return The number of weeks between the two dates
      */
-    private SlideBarChartView[] initViews() {
+    protected SlideBarChartView[] initViews() {
         if (mEndDate.before(mStartDate)) {
             throw new IllegalArgumentException("Start date must be before end date");
         }
@@ -182,7 +129,7 @@ public class SlideBarChartPagerAdapter extends AbstractSlidePagerAdapter<SlideBa
      *
      * @return
      */
-    private SlideBarChartView getWeekSlide(int pagePosition, int weeks) {
+    protected SlideBarChartView getWeekSlide(int pagePosition, int weeks) {
         SlideBarChartView week = new SlideBarChartView(mContext, mAttributeSet, pagePosition, mUserPageListener);
         week.setListener(new OnSlideListener() {
             @Override
@@ -213,15 +160,6 @@ public class SlideBarChartPagerAdapter extends AbstractSlidePagerAdapter<SlideBa
         return week;
     }
 
-    /**
-     * Returns the left text for the {@link SlideView}
-     *
-     * @return
-     */
-    private String getLeftText(int pagePosition, int totalWeeks) {
-
-        return Utilities.getWeekOfText(pagePosition, totalWeeks, mMaxWeeks);
-    }
 
     /**
      * Returns the right text for the {@link SlideView}
