@@ -1,31 +1,7 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2015 Omada Health, Inc
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -36,9 +12,9 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
-import com.github.omadahealth.slidepager.lib.databinding.ViewChartSlideBinding;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
+import com.github.omadahealth.slidepager.lib.utils.BarChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
@@ -49,9 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by stoyan on 4/7/15.
+ * Created by dae.park on 10/5/15.
  */
-public class SlideChartView extends AbstractSlideView {
+public class SlideBarChartView extends AbstractSlideView{
     /**
      * The tag for logging
      */
@@ -71,7 +47,7 @@ public class SlideChartView extends AbstractSlideView {
     /**
      * An array that holds all the {@link ProgressView} for this layout
      */
-    private List<ProgressView> mProgressList = new ArrayList<>(7);
+    private List<BarChartProgressView> mChartProgressList = new ArrayList<>(7);
 
     /**
      * An array that holds all the {@link TypefaceTextView} that are at the bottom
@@ -89,10 +65,10 @@ public class SlideChartView extends AbstractSlideView {
     private OnSlideListener mCallback;
 
     /**
-     * The list of {@link ProgressAttr} to associate with {@link #mProgressList}.
+     * The list of {@link ProgressAttr} to associate with {@link #mChartProgressList}.
      * Used in {@link #injectViewsAndAttributes()}
      */
-    private List<ChartProgressAttr> mProgressAttr;
+    private List<ChartProgressAttr> mChartProgressAttr;
 
     /**
      * The int tag of the selected {@link ProgressView} we store so that we can restore the previous selected day.
@@ -154,16 +130,11 @@ public class SlideChartView extends AbstractSlideView {
      */
     private OnSlidePageChangeListener<ChartProgressAttr> mUserPageListener;
 
-    /**
-     * The binding object created in {@link #init(Context, TypedArray, int, OnSlidePageChangeListener)}
-     */
-    private ViewChartSlideBinding mBinding;
-
-    public SlideChartView(Context context) {
+    public SlideBarChartView(Context context) {
         this(context, null, -1, null);
     }
 
-    public SlideChartView(Context context, TypedArray attributes, int pagePosition, OnSlidePageChangeListener pageListener) {
+    public SlideBarChartView(Context context, TypedArray attributes, int pagePosition, OnSlidePageChangeListener pageListener) {
         super(context, null);
         init(context, attributes, pagePosition, pageListener);
     }
@@ -175,13 +146,12 @@ public class SlideChartView extends AbstractSlideView {
             mSpecialBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_special_text_color, getResources().getColor(R.color.default_progress_chart_bar_special_bottom_text));
             mBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_text_color, getResources().getColor(R.color.default_progress_chart_bar_bottom_text));
             mChartBarColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_color, getResources().getColor(R.color.default_progress_chart_bar_color));
-            mChartBarSize = attributes.getDimension(R.styleable.SlidePager_slide_progress_chart_bar_size, getResources().getDimension(R.dimen.default_progress_chart_bar_size));
             mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
         }
     }
 
     /**
-     * Bind the views, set the listeners and attrs
+     * Initiate the view and start butterknife injection
      *
      * @param context
      */
@@ -189,8 +159,10 @@ public class SlideChartView extends AbstractSlideView {
         if (!isInEditMode()) {
             this.mPagePosition = pagePosition;
             this.mUserPageListener = pageListener;
+
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mBinding = DataBindingUtil.inflate(inflater, R.layout.view_chart_slide, this, true);
+            View view = inflater.inflate(R.layout.view_barchart_slide, this);
+//            ButterKnife.inject(this, view);
 
             mAttributes = attributes;
             loadStyledAttributes(attributes);
@@ -200,7 +172,7 @@ public class SlideChartView extends AbstractSlideView {
     }
 
     /**
-     * Inject the views into {@link #mProgressList}
+     * Inject the views into {@link #mChartProgressList}
      */
     private void injectViewsAndAttributes() {
         if (mUserPageListener == null) {
@@ -208,54 +180,47 @@ public class SlideChartView extends AbstractSlideView {
         }
 
         //Init the ProgressAttr for this page
-        mProgressAttr = new ArrayList<>();
+        mChartProgressAttr = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            mProgressAttr.add(mUserPageListener.getDayProgress(mPagePosition, i));
+            mChartProgressAttr.add(mUserPageListener.getDayProgress(mPagePosition, i));
         }
 
-        //Progress top texts
-        mProgressTopTextList.add(mBinding.progressTopText1);
-        mProgressTopTextList.add(mBinding.progressTopText2);
-        mProgressTopTextList.add(mBinding.progressTopText3);
-        mProgressTopTextList.add(mBinding.progressTopText4);
-        mProgressTopTextList.add(mBinding.progressTopText5);
-        mProgressTopTextList.add(mBinding.progressTopText6);
-        mProgressTopTextList.add(mBinding.progressTopText7);
-
-        //Progress circles
-        mProgressList.add(mBinding.progress1.loadStyledAttributes(mAttributes, mProgressAttr.get(0)));
-        mProgressList.add(mBinding.progress2.loadStyledAttributes(mAttributes, mProgressAttr.get(1)));
-        mProgressList.add(mBinding.progress3.loadStyledAttributes(mAttributes, mProgressAttr.get(2)));
-        mProgressList.add(mBinding.progress4.loadStyledAttributes(mAttributes, mProgressAttr.get(3)));
-        mProgressList.add(mBinding.progress5.loadStyledAttributes(mAttributes, mProgressAttr.get(4)));
-        mProgressList.add(mBinding.progress6.loadStyledAttributes(mAttributes, mProgressAttr.get(5)));
-        mProgressList.add(mBinding.progress7.loadStyledAttributes(mAttributes, mProgressAttr.get(6)));
-
-        //Progress bottom texts
-        mProgressBottomTextList.add(mBinding.progressBottomText1);
-        mProgressBottomTextList.add(mBinding.progressBottomText2);
-        mProgressBottomTextList.add(mBinding.progressBottomText3);
-        mProgressBottomTextList.add(mBinding.progressBottomText4);
-        mProgressBottomTextList.add(mBinding.progressBottomText5);
-        mProgressBottomTextList.add(mBinding.progressBottomText6);
-        mProgressBottomTextList.add(mBinding.progressBottomText7);
-
-        //Chart bars
-        mChartBarList.add(mBinding.progress1BarTop);
-        mChartBarList.add(mBinding.progress2BarTop);
-        mChartBarList.add(mBinding.progress3BarTop);
-        mChartBarList.add(mBinding.progress4BarTop);
-        mChartBarList.add(mBinding.progress5BarTop);
-        mChartBarList.add(mBinding.progress6BarTop);
-        mChartBarList.add(mBinding.progress7BarTop);
-        mChartBarList.add(mBinding.progress1BarBottom);
-        mChartBarList.add(mBinding.progress2BarBottom);
-        mChartBarList.add(mBinding.progress3BarBottom);
-        mChartBarList.add(mBinding.progress4BarBottom);
-        mChartBarList.add(mBinding.progress5BarBottom);
-        mChartBarList.add(mBinding.progress6BarBottom);
-        mChartBarList.add(mBinding.progress7BarBottom);
-        mChartBarList.add(mBinding.progressBottomAxis);
+//        //Progress top texts
+//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_1));
+//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_2));
+//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_3));
+//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_4));
+//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_5));
+//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_6));
+//        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_top_text_7));
+//
+//        //Progress bar
+//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_1).loadStyledAttributes(mAttributes, mChartProgressAttr.get(0)));
+//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_2).loadStyledAttributes(mAttributes, mChartProgressAttr.get(1)));
+//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_3).loadStyledAttributes(mAttributes, mChartProgressAttr.get(2)));
+//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_4).loadStyledAttributes(mAttributes, mChartProgressAttr.get(3)));
+//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_5).loadStyledAttributes(mAttributes, mChartProgressAttr.get(4)));
+//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_6).loadStyledAttributes(mAttributes, mChartProgressAttr.get(5)));
+//        mChartProgressList.add(ButterKnife.<BarChartProgressView>findById(this, R.id.progress_7).loadStyledAttributes(mAttributes, mChartProgressAttr.get(6)));
+//
+//        //Progress bottom texts
+//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_1));
+//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_2));
+//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_3));
+//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_4));
+//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_5));
+//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_6));
+//        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.bar_progress_bottom_text_7));
+//
+//
+//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_1_bar));
+//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_2_bar));
+//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_3_bar));
+//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_4_bar));
+//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_5_bar));
+//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_6_bar));
+//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_7_bar));
+//        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.bar_progress_bottom_axis));
 
         //Init the tags of the subviews
         SlideTransformer.initTags(this);
@@ -273,7 +238,7 @@ public class SlideChartView extends AbstractSlideView {
     private void initTopAndBottomTexts() {
         //Set the top text to be the values
         for (int i = 0; i < mProgressTopTextList.size(); i++) {
-            String oneDecimal = Utilities.formatWeight(mProgressAttr.get(i).getValue());
+            String oneDecimal = Utilities.formatWeight(mChartProgressAttr.get(i).getValue());
             mProgressTopTextList.get(i).setText(oneDecimal);
             mProgressTopTextList.get(i).setTextColor(mTopTextColor);
         }
@@ -281,8 +246,8 @@ public class SlideChartView extends AbstractSlideView {
         //Set the bottom texts to be the day values and set the color if special
         for (int i = 0; i < mProgressBottomTextList.size(); i++) {
             TypefaceTextView currentTextView = mProgressBottomTextList.get(i);
-            currentTextView.setTextColor(mProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mBottomTextColor);
-            currentTextView.setText(mProgressAttr.get(i).getBottomText());
+            currentTextView.setTextColor(mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mBottomTextColor);
+            currentTextView.setText(mChartProgressAttr.get(i).getBottomText());
         }
     }
 
@@ -292,23 +257,20 @@ public class SlideChartView extends AbstractSlideView {
     private void initBarColorsAndSize() {
         for (ImageView imageView : mChartBarList) {
             imageView.setBackgroundColor(mChartBarColor);
-            if (imageView.getId() != R.id.progress_bottom_axis) {
-                imageView.setMinimumHeight((int) (mChartBarSize / 2.0f));
-            }
         }
     }
 
     /**
-     * Set up listeners for all the views in {@link #mProgressList}
+     * Set up listeners for all the views in {@link #mChartProgressList}
      */
     private void setListeners() {
-        for (final ProgressView progressView : mProgressList) {
-            if (progressView != null) {
+        for (final BarChartProgressView barChartProgressView : mChartProgressList) {
+            if (barChartProgressView != null) {
 
-                progressView.setOnClickListener(new OnClickListener() {
+                barChartProgressView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int index = progressView.getIntTag();
+                        int index = barChartProgressView.getIntTag();
                         boolean allowed = true;
                         if (mCallback != null) {
                             allowed = mCallback.isDaySelectable(mPagePosition, index);
@@ -322,7 +284,7 @@ public class SlideChartView extends AbstractSlideView {
                             if (mShakeIfNotSelectable) {
                                 YoYo.with(Techniques.Shake)
                                         .duration(NOT_ALLOWED_SHAKE_ANIMATION_DURATION)
-                                        .playOn(SlideChartView.this);
+                                        .playOn(SlideBarChartView.this);
                             }
                         }
                     }
@@ -334,12 +296,12 @@ public class SlideChartView extends AbstractSlideView {
     /**
      * Sets the selected {@link ProgressView}
      *
-     * @param selected The index of the selected view in {@link #mProgressList}
+     * @param selected The index of the selected view in {@link #mChartProgressList}
      */
     private void toggleSelectedViews(int selected) {
         mSelectedView = selected;
-        for (int i = 0; i < mProgressList.size(); i++) {
-            ProgressView day = mProgressList.get(i);
+        for (int i = 0; i < mChartProgressList.size(); i++) {
+            BarChartProgressView day = mChartProgressList.get(i);
             TypefaceTextView currentBottomText = mProgressBottomTextList.get(i);
 
             if (day.getIntTag() == mSelectedView) {
@@ -358,9 +320,9 @@ public class SlideChartView extends AbstractSlideView {
         final List<View> children = (List<View>) getTag();
         if (children != null) {
             for (final View child : children) {
-                if (child instanceof ProgressView) {
-                    ((ProgressView) child).loadStyledAttributes(attributes, listener.getDayProgress(mPagePosition, ((ProgressView) child).getIntTag()));
-                    animateProgress((ProgressView) child, children, listener);
+                if (child instanceof BarChartProgressView) {
+                    ((BarChartProgressView) child).loadStyledAttributes(attributes, (ChartProgressAttr) listener.getDayProgress(mPagePosition, ((BarChartProgressView) child).getIntTag()));
+                    animateProgress((BarChartProgressView) child, children, listener);
                 }
             }
         }
@@ -371,11 +333,9 @@ public class SlideChartView extends AbstractSlideView {
         final List<View> children = (List<View>) getTag();
         if (children != null) {
             for (final View child : children) {
-                if (child instanceof ProgressView) {
-                    final ProgressView progressView = (ProgressView) child;
-                    progressView.showStreak(show, ProgressView.STREAK.RIGHT_STREAK);
-                    progressView.showStreak(show, ProgressView.STREAK.LEFT_STREAK);
-                    progressView.showCheckMark(show);
+                if (child instanceof BarChartProgressView) {
+                    final BarChartProgressView barChartProgressView = (BarChartProgressView) child;
+                    barChartProgressView.showCheckMark(show);
                 }
             }
         }
@@ -391,22 +351,20 @@ public class SlideChartView extends AbstractSlideView {
         final List<View> children = (List<View>) getTag();
         if (children != null) {
             for (final View child : children) {
-                if (child instanceof ProgressView) {
-                    ProgressView progressView = (ProgressView) child;
-                    progressView.reset();
+                if (child instanceof BarChartProgressView) {
+                    BarChartProgressView barChartProgressView = (BarChartProgressView) child;
+                    barChartProgressView.reset();
                 }
             }
         }
     }
 
-    private void animateProgress(ProgressView view, List<View> children, OnSlidePageChangeListener listener) {
+    private void animateProgress(BarChartProgressView view, List<View> children, OnSlidePageChangeListener listener) {
         if (listener != null) {
             ProgressAttr progress = listener.getDayProgress(mPagePosition, view.getIntTag());
-            view.animateProgress(0, progress, mProgressAnimationTime, children);
+            view.animateProgress(0, (ChartProgressAttr) progress, mProgressAnimationTime, children);
         }
     }
-
-
 
     /**
      * Sets the listener for click events in this view

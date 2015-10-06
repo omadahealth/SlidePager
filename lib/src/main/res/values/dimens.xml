@@ -21,4 +21,6 @@
     <dimen name="circular_bar_default_outline_width">0.75dp</dimen>
     <dimen name="circular_bar_default_future_outline_width">1.5dp</dimen>
     <dimen name="circular_bar_default_reach_width">3dp</dimen>
+
+    <dimen name="bar_view_default_width">10dp</dimen>
 </resources>
