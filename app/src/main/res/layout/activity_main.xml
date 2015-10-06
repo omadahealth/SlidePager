@@ -1,45 +1,47 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.github.omadahealth.slidepager.lib.SlidePager
-            android:id="@+id/slidepager1"
-            style="@style/SlidePagerStyle"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:slide_show_circular_bars="false"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/change_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Change VAL" />
+            <com.github.omadahealth.slidepager.lib.SlidePager
+                android:id="@+id/slide_pager"
+                style="@style/SlidePagerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:sp_slide_show_circular_bars="@{false}" />
+
+            <Button
+                android:id="@+id/change_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Change VAL" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.github.omadahealth.slidepager.lib.SlidePager
+                android:id="@+id/chart_pager"
+                style="@style/SlideChartPagerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/progress_chart_background" />
+        </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <com.github.omadahealth.slidepager.lib.SlidePager
-            android:id="@+id/slidepager2"
-            style="@style/SlideChartPagerStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/progress_chart_background" />
-    </LinearLayout>
-
-</LinearLayout>
+</layout>

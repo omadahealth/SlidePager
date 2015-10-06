@@ -25,6 +25,7 @@ package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.databinding.DataBindingUtil;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.omadahealth.slidepager.lib.R;
+import com.github.omadahealth.slidepager.lib.databinding.ViewSlideBinding;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
@@ -45,8 +47,6 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by stoyan on 4/7/15.
  */
@@ -57,13 +57,13 @@ public class SlideView extends AbstractSlideView {
     private static final String TAG = "SlideView";
 
     /**
-     * The duration for the animation for {@link #mSelectedImageView} when {@link OnSlideListener#onDaySelected(int, int)}
+     * The duration for the animation for {@link ViewSlideBinding#selectedDayImageView} when {@link OnSlideListener#onDaySelected(int, int)}
      * is allowed
      */
     private static final int SELECTION_ANIMATION_DURATION = 500;
 
     /**
-     * The duration for the animation for {@link #mSelectedImageView} when {@link OnSlideListener#onDaySelected(int, int)}
+     * The duration for the animation for {@link ViewSlideBinding#selectedDayImageView} when {@link OnSlideListener#onDaySelected(int, int)}
      * is not allowed
      */
     private static final long NOT_ALLOWED_SHAKE_ANIMATION_DURATION = 500;
@@ -74,22 +74,12 @@ public class SlideView extends AbstractSlideView {
     private List<ProgressView> mProgressList = new ArrayList<>(7);
 
     /**
-     * The left textview
-     */
-    private TypefaceTextView mLeftTextView;
-
-    /**
-     * The right textview
-     */
-    private TypefaceTextView mRightTextView;
-
-    /**
-     * True of we want to show {@link #mLeftTextView}
+     * True of we want to show {@link ViewSlideBinding#leftTextView}
      */
     private boolean mShowLeftText;
 
     /**
-     * True of we want to show {@link #mRightTextView}
+     * True of we want to show {@link ViewSlideBinding#rightTextView}
      */
     private boolean mShowRightText;
 
@@ -97,12 +87,6 @@ public class SlideView extends AbstractSlideView {
      * True of we want to shake the view in {@link #toggleSelectedViews(int)}
      */
     private boolean mShakeIfNotSelectable;
-
-    /**
-     * The current day sliding {@link android.widget.ImageView} we display
-     * below the currently selected {@link ProgressView} from {@link #mProgressList}
-     */
-    private SelectedImageView mSelectedImageView;
 
     /**
      * The callback listener for when views are clicked
@@ -126,7 +110,7 @@ public class SlideView extends AbstractSlideView {
 
     /**
      * The int tag of the selected {@link ProgressView} we store so that we can
-     * translate the {@link #mSelectedImageView} to the same day when we transition between
+     * translate the {@link ViewSlideBinding#selectedDayImageView} to the same day when we transition between
      * different instances of this class
      */
     private static int mSelectedView;
@@ -137,12 +121,12 @@ public class SlideView extends AbstractSlideView {
     private int mPagePosition;
 
     /**
-     * The text for the {@link #mLeftTextView}
+     * The text for the {@link ViewSlideBinding#leftTextView}
      */
     private String mLeftText;
 
     /**
-     * The text for the {@link #mRightTextView}
+     * The text for the {@link ViewSlideBinding#rightTextView}
      */
     private String mRightText;
 
@@ -155,6 +139,11 @@ public class SlideView extends AbstractSlideView {
      * A user defined {@link ViewPager.OnPageChangeListener}
      */
     private OnSlidePageChangeListener mUserPageListener;
+
+    /**
+     * The binding object created in {@link #init(Context, TypedArray, int, OnSlidePageChangeListener)}
+     */
+    private ViewSlideBinding mBinding;
 
     public SlideView(Context context) {
         this(context, null, -1, null, null, null);
@@ -174,21 +163,21 @@ public class SlideView extends AbstractSlideView {
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
             mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
 
-            mLeftTextView.setVisibility(mShowLeftText && mLeftText != null ? VISIBLE : GONE);
-            mRightTextView.setVisibility(mShowRightText && mRightText != null ? VISIBLE : GONE);
+            mBinding.leftTextView.setVisibility(mShowLeftText && mLeftText != null ? VISIBLE : GONE);
+            mBinding.rightTextView.setVisibility(mShowRightText && mRightText != null ? VISIBLE : GONE);
 
-            if (mShowLeftText && mLeftTextView != null && mLeftText != null) {
-                mLeftTextView.setText(mLeftText, true);
+            if (mShowLeftText && mBinding.leftTextView != null && mLeftText != null) {
+                mBinding.leftTextView.setText(mLeftText, true);
             }
 
-            if (mShowRightText && mRightTextView != null && mRightText != null) {
-                mRightTextView.setText(mRightText);
+            if (mShowRightText && mBinding.rightTextView != null && mRightText != null) {
+                mBinding.rightTextView.setText(mRightText);
             }
         }
     }
 
     /**
-     * Initiate the view and start butterknife injection
+     * Bind the view and init the listeners and attrs
      *
      * @param context
      */
@@ -199,8 +188,7 @@ public class SlideView extends AbstractSlideView {
             this.mAttributes = attributes;
 
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.view_slide, this);
-            ButterKnife.inject(this, view);
+            mBinding = DataBindingUtil.inflate(inflater, R.layout.view_slide, this, true);
 
             mAnimationSet = new AnimatorSet();
             injectViews();
@@ -213,52 +201,48 @@ public class SlideView extends AbstractSlideView {
      * Inject the views into {@link #mProgressList}
      */
     private void injectViews() {
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_1).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 0) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_2).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 1) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_3).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 2) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_4).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 3) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_5).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 4) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_6).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 5) : null));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_7).loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 6) : null));
+        mProgressList.add(mBinding.progress1.loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 0) : null));
+        mProgressList.add(mBinding.progress2.loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 1) : null));
+        mProgressList.add(mBinding.progress3.loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 2) : null));
+        mProgressList.add(mBinding.progress4.loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 3) : null));
+        mProgressList.add(mBinding.progress5.loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 4) : null));
+        mProgressList.add(mBinding.progress6.loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 5) : null));
+        mProgressList.add(mBinding.progress7.loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 6) : null));
 
-        mLeftTextView = ButterKnife.findById(this, R.id.left_textview);
-        mRightTextView = ButterKnife.findById(this, R.id.right_textview);
+        mBinding.leftTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
+        mBinding.rightTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
 
-        mLeftTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
-        mRightTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
-
-        mSelectedImageView = ButterKnife.findById(this, R.id.selected_day_image_view);
-        mSelectedImageView.setSelectedViewId(mProgressList.get(SlideView.getSelectedView()).getId());
+        mBinding.selectedDayImageView.setSelectedViewId(mProgressList.get(SlideView.getSelectedView()).getId());
     }
 
     /**
-     * Animates the translation of the {@link #mSelectedImageView}
+     * Animates the translation of the {@link ViewSlideBinding#selectedDayImageView}
      *
      * @param view          The view to use to set the animation position
      * @param startPosition The starting x position for the animated view
      */
     public void animateSelectedTranslation(final View view, float startPosition) {
         final Float offset = -1f * this.getWidth() + view.getWidth() / 2 + view.getX();
-        mSelectedImageView.setTag(R.id.selected_day_image_view, offset);
-        mSelectedImageView.setSelectedViewId(view.getId());
+        mBinding.selectedDayImageView.setTag(R.id.selected_day_image_view, offset);
+        mBinding.selectedDayImageView.setSelectedViewId(view.getId());
 
 
         if (mAnimationSet == null) {
             mAnimationSet = new AnimatorSet();
         }
-        mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, SELECTION_ANIMATION_DURATION, ObjectAnimator.ofFloat(mSelectedImageView, "x", startPosition, offset)));
+        mAnimationSet.playSequentially(Glider.glide(Skill.QuadEaseInOut, SELECTION_ANIMATION_DURATION, ObjectAnimator.ofFloat(mBinding.selectedDayImageView, "x", startPosition, offset)));
         mAnimationSet.setDuration(SELECTION_ANIMATION_DURATION);
         mAnimationSet.start();
     }
 
     /**
      * Calls {@link #animateSelectedTranslation(View, float)} with the start
-     * position set to the {@link #mSelectedImageView#getX()}
+     * position set to the {@link ViewSlideBinding#selectedDayImageView#getX()}
      *
      * @param view The view to use to set the animation position
      */
     public void animateSelectedTranslation(View view) {
-        animateSelectedTranslation(view, mSelectedImageView.getX());
+        animateSelectedTranslation(view, mBinding.selectedDayImageView.getX());
     }
 
     /**
@@ -345,14 +329,14 @@ public class SlideView extends AbstractSlideView {
     /**
      * Resets the state of this page, usually called when we change pages in the {@link com.github.omadahealth.slidepager.lib.SlidePager}
      *
-     * @param mAttributes The attributes to reset the views to
+     * @param attributes The attributes to reset the views to
      */
     @SuppressWarnings("unchecked")
-    public void resetPage(TypedArray mAttributes) {
+    public void resetPage(TypedArray attributes) {
         this.setVisibility(View.VISIBLE);
         this.setAlpha(1f);
 
-        loadStyledAttributes(mAttributes);
+        loadStyledAttributes(attributes);
         mSelectedView = getSelectableIndex();
 
         animateSeries(false);
@@ -489,7 +473,7 @@ public class SlideView extends AbstractSlideView {
      * @return
      */
     public SelectedImageView getSelectedImageView() {
-        return mSelectedImageView;
+        return mBinding.selectedDayImageView;
     }
 
     /**

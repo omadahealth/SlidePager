@@ -145,8 +145,8 @@ public class SlideTransformer implements ViewPager.PageTransformer {
     public static LinkedHashMap<Integer, Ratio> getViewRatios() {
         if (mRatios == null) {
             mRatios = new LinkedHashMap<>();
-            mRatios.put(R.id.left_textview, new Ratio(4.0f, 1.0f));
-            mRatios.put(R.id.right_textview, new Ratio(1.0f, 4.0f));
+            mRatios.put(R.id.left_text_view, new Ratio(4.0f, 1.0f));
+            mRatios.put(R.id.right_text_view, new Ratio(1.0f, 4.0f));
 
             mRatios.put(R.id.progress_1, new Ratio(4.0f, 1.0f));
             mRatios.put(R.id.progress_2, new Ratio(3.5f, 1.5f));

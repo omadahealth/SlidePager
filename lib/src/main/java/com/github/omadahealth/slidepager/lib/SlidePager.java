@@ -25,6 +25,7 @@ package com.github.omadahealth.slidepager.lib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.databinding.BindingAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -135,6 +136,14 @@ public class SlidePager extends ViewPager {
             Log.e(TAG, e.toString());
             return true;
         }
+    }
+
+    @BindingAdapter("sp_slide_show_circular_bars")
+    public static void showCircularBars(SlidePager slidePager, Boolean visible) {
+        if (visible == null) {
+            visible = true;
+        }
+        ProgressView.setShowCircularBar(visible);
     }
 
     /**

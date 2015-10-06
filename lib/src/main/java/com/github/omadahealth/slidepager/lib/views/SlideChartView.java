@@ -25,6 +25,7 @@ package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
+import com.github.omadahealth.slidepager.lib.databinding.ViewChartSlideBinding;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
@@ -45,8 +47,6 @@ import com.github.omadahealth.typefaceview.TypefaceType;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.ButterKnife;
 
 /**
  * Created by stoyan on 4/7/15.
@@ -154,6 +154,11 @@ public class SlideChartView extends AbstractSlideView {
      */
     private OnSlidePageChangeListener<ChartProgressAttr> mUserPageListener;
 
+    /**
+     * The binding object created in {@link #init(Context, TypedArray, int, OnSlidePageChangeListener)}
+     */
+    private ViewChartSlideBinding mBinding;
+
     public SlideChartView(Context context) {
         this(context, null, -1, null);
     }
@@ -176,7 +181,7 @@ public class SlideChartView extends AbstractSlideView {
     }
 
     /**
-     * Initiate the view and start butterknife injection
+     * Bind the views, set the listeners and attrs
      *
      * @param context
      */
@@ -184,10 +189,8 @@ public class SlideChartView extends AbstractSlideView {
         if (!isInEditMode()) {
             this.mPagePosition = pagePosition;
             this.mUserPageListener = pageListener;
-
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.view_chart_slide, this);
-            ButterKnife.inject(this, view);
+            mBinding = DataBindingUtil.inflate(inflater, R.layout.view_chart_slide, this, true);
 
             mAttributes = attributes;
             loadStyledAttributes(attributes);
@@ -211,48 +214,48 @@ public class SlideChartView extends AbstractSlideView {
         }
 
         //Progress top texts
-        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_top_text_1));
-        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_top_text_2));
-        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_top_text_3));
-        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_top_text_4));
-        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_top_text_5));
-        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_top_text_6));
-        mProgressTopTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_top_text_7));
+        mProgressTopTextList.add(mBinding.progressTopText1);
+        mProgressTopTextList.add(mBinding.progressTopText2);
+        mProgressTopTextList.add(mBinding.progressTopText3);
+        mProgressTopTextList.add(mBinding.progressTopText4);
+        mProgressTopTextList.add(mBinding.progressTopText5);
+        mProgressTopTextList.add(mBinding.progressTopText6);
+        mProgressTopTextList.add(mBinding.progressTopText7);
 
         //Progress circles
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_1).loadStyledAttributes(mAttributes, mProgressAttr.get(0)));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_2).loadStyledAttributes(mAttributes, mProgressAttr.get(1)));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_3).loadStyledAttributes(mAttributes, mProgressAttr.get(2)));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_4).loadStyledAttributes(mAttributes, mProgressAttr.get(3)));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_5).loadStyledAttributes(mAttributes, mProgressAttr.get(4)));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_6).loadStyledAttributes(mAttributes, mProgressAttr.get(5)));
-        mProgressList.add(ButterKnife.<ProgressView>findById(this, R.id.progress_7).loadStyledAttributes(mAttributes, mProgressAttr.get(6)));
+        mProgressList.add(mBinding.progress1.loadStyledAttributes(mAttributes, mProgressAttr.get(0)));
+        mProgressList.add(mBinding.progress2.loadStyledAttributes(mAttributes, mProgressAttr.get(1)));
+        mProgressList.add(mBinding.progress3.loadStyledAttributes(mAttributes, mProgressAttr.get(2)));
+        mProgressList.add(mBinding.progress4.loadStyledAttributes(mAttributes, mProgressAttr.get(3)));
+        mProgressList.add(mBinding.progress5.loadStyledAttributes(mAttributes, mProgressAttr.get(4)));
+        mProgressList.add(mBinding.progress6.loadStyledAttributes(mAttributes, mProgressAttr.get(5)));
+        mProgressList.add(mBinding.progress7.loadStyledAttributes(mAttributes, mProgressAttr.get(6)));
 
         //Progress bottom texts
-        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_1));
-        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_2));
-        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_3));
-        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_4));
-        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_5));
-        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_6));
-        mProgressBottomTextList.add(ButterKnife.<TypefaceTextView>findById(this, R.id.progress_bottom_text_7));
+        mProgressBottomTextList.add(mBinding.progressBottomText1);
+        mProgressBottomTextList.add(mBinding.progressBottomText2);
+        mProgressBottomTextList.add(mBinding.progressBottomText3);
+        mProgressBottomTextList.add(mBinding.progressBottomText4);
+        mProgressBottomTextList.add(mBinding.progressBottomText5);
+        mProgressBottomTextList.add(mBinding.progressBottomText6);
+        mProgressBottomTextList.add(mBinding.progressBottomText7);
 
         //Chart bars
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_1_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_2_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_3_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_4_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_5_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_6_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_7_bar_top));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_1_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_2_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_3_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_4_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_5_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_6_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_7_bar_bottom));
-        mChartBarList.add(ButterKnife.<ImageView>findById(this, R.id.progress_bottom_axis));
+        mChartBarList.add(mBinding.progress1BarTop);
+        mChartBarList.add(mBinding.progress2BarTop);
+        mChartBarList.add(mBinding.progress3BarTop);
+        mChartBarList.add(mBinding.progress4BarTop);
+        mChartBarList.add(mBinding.progress5BarTop);
+        mChartBarList.add(mBinding.progress6BarTop);
+        mChartBarList.add(mBinding.progress7BarTop);
+        mChartBarList.add(mBinding.progress1BarBottom);
+        mChartBarList.add(mBinding.progress2BarBottom);
+        mChartBarList.add(mBinding.progress3BarBottom);
+        mChartBarList.add(mBinding.progress4BarBottom);
+        mChartBarList.add(mBinding.progress5BarBottom);
+        mChartBarList.add(mBinding.progress6BarBottom);
+        mChartBarList.add(mBinding.progress7BarBottom);
+        mChartBarList.add(mBinding.progressBottomAxis);
 
         //Init the tags of the subviews
         SlideTransformer.initTags(this);

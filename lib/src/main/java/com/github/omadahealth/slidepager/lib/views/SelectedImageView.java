@@ -31,17 +31,21 @@ public class SelectedImageView extends ImageView {
 
     public SelectedImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!resetWidth) {
+                    getLayoutParams().width = 2 * getMeasuredWidth();
+                    resetWidth = true;
+                }
+                resetView();
+            }
+        });
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-
-        if (!resetWidth) {
-            getLayoutParams().width = 2 * w;
-            resetWidth = true;
-        }
-        resetView();
     }
 
     /**
