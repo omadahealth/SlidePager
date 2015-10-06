@@ -6,7 +6,7 @@ To include in your project, add this to your build.gradle file:
 
 ```
    //SlidePager
-   compile 'com.github.omadahealth.slidepager:slidepager:1.6.1@aar'
+   compile 'com.github.omadahealth.slidepager:slidepager:1.8.0@aar'
 ```
 ![Demo](app/src/main/res/raw/github_gif.gif)
 

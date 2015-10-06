@@ -1,66 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_day_progress_dim">
-
-        <ImageView
-            android:id="@+id/progress_streak_left"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/view_day_progress_dim"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:src="@color/default_progress_completed_fill_color"
-            android:alpha="0"
-            android:visibility="invisible" />
-
-        <ImageView
-            android:id="@+id/progress_streak_right"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/view_day_progress_dim"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:src="@color/default_progress_completed_fill_color"
-            android:alpha="0"
-            android:visibility="visible" />
-    </LinearLayout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
-        android:id="@+id/circularbar_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <com.github.OrangeGangsters.circularbarpager.library.CircularBar
-            android:id="@+id/circularbar"
-            android:layout_height="@dimen/view_day_progress_dim"
-            android:layout_width="@dimen/view_day_progress_dim"
-            android:layout_marginLeft="@dimen/view_day_progress_margin_padding"
-            android:layout_marginRight="@dimen/view_day_progress_margin_padding"/>
+        <RelativeLayout
+            android:id="@+id/progress_circularbar_streaks_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/check_mark"
-            android:layout_width="@dimen/view_day_progress_dim"
-            android:layout_height="@dimen/view_day_progress_check"
-            android:scaleType="centerInside"
-            android:layout_centerInParent="true"
-            android:alpha="0"
-            android:src="@mipmap/checkmark_green" />
+            <ImageView
+                android:id="@+id/progress_streak_left"
+                style="@style/viewProgressStreakStyle"
+                android:layout_alignLeft="@+id/circularbar_layout"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/view_progress_margin_streak_side"
+                android:src="@drawable/ic_streak_left" />
 
+            <ImageView
+                android:id="@+id/progress_streak_center"
+                style="@style/viewProgressStreakStyle"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_streak_center" />
+
+            <ImageView
+                android:id="@+id/progress_streak_right"
+                style="@style/viewProgressStreakStyle"
+                android:layout_alignParentLeft="true"
+                android:layout_alignRight="@+id/circularbar_layout"
+                android:layout_marginRight="@dimen/view_progress_margin_streak_side"
+                android:src="@drawable/ic_streak_right" />
+
+            <RelativeLayout
+                android:id="@+id/circularbar_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true">
+
+                <com.github.OrangeGangsters.circularbarpager.library.CircularBar
+                    android:id="@+id/circular_bar"
+                    android:layout_width="@dimen/view_day_progress_dim"
+                    android:layout_height="@dimen/view_day_progress_dim"
+                    android:layout_marginLeft="@dimen/view_day_progress_margin_padding"
+                    android:layout_marginRight="@dimen/view_day_progress_margin_padding" />
+
+                <ImageView
+                    android:id="@+id/check_mark"
+                    android:layout_width="@dimen/view_day_progress_dim"
+                    android:layout_height="@dimen/view_day_progress_check"
+                    android:layout_centerInParent="true"
+                    android:alpha="0"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/checkmark_green" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <com.github.omadahealth.typefaceview.TypefaceTextView
+            android:id="@+id/progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_circularbar_streaks_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/view_progress_text_padding"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="M"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/not_selected_progress_view_text_size" />
     </RelativeLayout>
-
-    <com.github.omadahealth.typefaceview.TypefaceTextView
-        android:id="@+id/progress_text"
-        android:layout_below="@+id/circularbar_layout"
-        android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"
-        android:singleLine="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:text="M"
-        android:textSize="@dimen/not_selected_progress_view_text_size"/>
-</RelativeLayout>
+</layout>

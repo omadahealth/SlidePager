@@ -25,6 +25,7 @@ package com.github.omadahealth.slidepager.lib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.databinding.BindingAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -66,6 +67,12 @@ public class SlidePager extends ViewPager {
      */
     private TypedArray mAttributes;
 
+    /**
+     * The page index saved to load the {@link com.github.omadahealth.slidepager.lib.views.SlideView} only once on
+     * {@link android.support.v4.view.ViewPager.OnPageChangeListener#onPageScrollStateChanged(int)}
+     */
+    private int mPageIndex;
+
     public SlidePager(Context context) {
         this(context, null);
     }
@@ -88,6 +95,11 @@ public class SlidePager extends ViewPager {
             int position = adapter.getCount() - 1;
             setCurrentItem(position >= 0 ? position : 0);
         }
+    }
+
+    @Override
+    protected int getChildDrawingOrder(int childCount, int i) {
+        return i;
     }
 
     @Override
@@ -126,6 +138,14 @@ public class SlidePager extends ViewPager {
         }
     }
 
+    @BindingAdapter("sp_slide_show_circular_bars")
+    public static void showCircularBars(SlidePager slidePager, Boolean visible) {
+        if (visible == null) {
+            visible = true;
+        }
+        ProgressView.setShowCircularBar(visible);
+    }
+
     /**
      * Loads the styles and attributes defined in the xml tag of this class
      *
@@ -154,8 +174,9 @@ public class SlidePager extends ViewPager {
                     mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
                 if (positionOffset == 0) {
-                    resetPage(position);
+//                    resetPage(position);
                 }
+                mPageIndex = position;
             }
 
             @Override
@@ -166,7 +187,7 @@ public class SlidePager extends ViewPager {
                 resetPage(position);
 
                 if (position > 0) {
-                    resetPage(position - 1);
+//                    resetPage(position - 1);
                 }
             }
 
@@ -181,7 +202,10 @@ public class SlidePager extends ViewPager {
                     case ViewPager.SCROLL_STATE_SETTLING:
                         break;
                     case ViewPager.SCROLL_STATE_IDLE://animate here onPageSelected not called when we hit a wall
-                        animatePage(getCurrentItem());
+                        Log.e(TAG, "SCROLL_STATE_IDLE for page index : " + getCurrentItem() + " mPageIndex : " + mPageIndex);
+                        if (getCurrentItem() == mPageIndex) {
+                            animatePage(getCurrentItem());
+                        }
                         break;
                 }
 
