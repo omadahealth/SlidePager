@@ -82,9 +82,9 @@
 
                 <com.github.omadahealth.slidepager.lib.views.BarChartProgressView
                     android:id="@+id/progress_1"
-                    style="@style/slideChartProgressViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
                     android:tag="0" />
 
 
@@ -104,9 +104,9 @@
 
                 <com.github.omadahealth.slidepager.lib.views.BarChartProgressView
                     android:id="@+id/progress_2"
-                    style="@style/slideChartProgressViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
                     android:tag="1" />
             </RelativeLayout>
 
@@ -120,13 +120,14 @@
                     style="@style/slideChartBarStyle"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
                     android:tag="0" />
 
                 <com.github.omadahealth.slidepager.lib.views.BarChartProgressView
                     android:id="@+id/progress_3"
-                    style="@style/slideChartProgressViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
                     android:tag="2" />
 
             </RelativeLayout>
@@ -144,9 +145,9 @@
 
                 <com.github.omadahealth.slidepager.lib.views.BarChartProgressView
                     android:id="@+id/progress_4"
-                    style="@style/slideChartProgressViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
                     android:tag="3" />
 
             </RelativeLayout>
@@ -164,9 +165,9 @@
 
                 <com.github.omadahealth.slidepager.lib.views.BarChartProgressView
                     android:id="@+id/progress_5"
-                    style="@style/slideChartProgressViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
                     android:tag="4" />
 
             </RelativeLayout>
@@ -184,9 +185,9 @@
 
                 <com.github.omadahealth.slidepager.lib.views.BarChartProgressView
                     android:id="@+id/progress_6"
-                    style="@style/slideChartProgressViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
                     android:tag="5" />
 
             </RelativeLayout>
@@ -204,9 +205,9 @@
 
                 <com.github.omadahealth.slidepager.lib.views.BarChartProgressView
                     android:id="@+id/progress_7"
-                    style="@style/slideChartProgressViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
                     android:tag="6" />
 
             </RelativeLayout>

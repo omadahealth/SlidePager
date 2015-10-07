@@ -359,8 +359,9 @@ public class SlideChartView extends AbstractSlideView {
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof ProgressView) {
-                    ((ProgressView) child).loadStyledAttributes(attributes, listener.getDayProgress(mPagePosition, ((ProgressView) child).getIntTag()));
-                    animateProgress((ProgressView) child, children, listener);
+                    ProgressAttr progressAttr = listener.getDayProgress(mPagePosition, ((ProgressView) child).getIntTag());
+                    ((ProgressView) child).loadStyledAttributes(attributes, progressAttr);
+                    animateProgress((ProgressView) child, children, progressAttr);
                 }
             }
         }
@@ -399,13 +400,11 @@ public class SlideChartView extends AbstractSlideView {
         }
     }
 
-    private void animateProgress(ProgressView view, List<View> children, OnSlidePageChangeListener listener) {
-        if (listener != null) {
-            ProgressAttr progress = listener.getDayProgress(mPagePosition, view.getIntTag());
-            view.animateProgress(0, progress, mProgressAnimationTime, children);
+    private void animateProgress(ProgressView view, List<View> children, ProgressAttr chartProgressAttr) {
+        if (chartProgressAttr != null) {
+            view.animateProgress(0, chartProgressAttr, mProgressAnimationTime, children);
         }
     }
-
 
 
     /**

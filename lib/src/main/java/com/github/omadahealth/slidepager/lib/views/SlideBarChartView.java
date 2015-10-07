@@ -2,6 +2,7 @@ package com.github.omadahealth.slidepager.lib.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.github.omadahealth.typefaceview.TypefaceType;
+import com.nineoldandroids.animation.Animator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ import java.util.List;
 /**
  * Created by dae.park on 10/5/15.
  */
-public class SlideBarChartView extends AbstractSlideView{
+public class SlideBarChartView extends AbstractSlideView {
     /**
      * The tag for logging
      */
@@ -164,11 +166,8 @@ public class SlideBarChartView extends AbstractSlideView{
         if (!isInEditMode()) {
             this.mPagePosition = pagePosition;
             this.mUserPageListener = pageListener;
-
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.view_barchart_slide, this);
-//            ButterKnife.inject(this, view);
-
+            mBinding = DataBindingUtil.inflate(inflater, R.layout.view_barchart_slide, this, true);
             mAttributes = attributes;
             loadStyledAttributes(attributes);
             injectViewsAndAttributes();
@@ -191,13 +190,13 @@ public class SlideBarChartView extends AbstractSlideView{
         }
 
         //Progress top texts
-        mProgressTopTextList.add(mBinding.barProgressBottomText1);
-        mProgressTopTextList.add(mBinding.barProgressBottomText2);
-        mProgressTopTextList.add(mBinding.barProgressBottomText3);
-        mProgressTopTextList.add(mBinding.barProgressBottomText4);
-        mProgressTopTextList.add(mBinding.barProgressBottomText5);
-        mProgressTopTextList.add(mBinding.barProgressBottomText6);
-        mProgressTopTextList.add(mBinding.barProgressBottomText7);
+        mProgressTopTextList.add(mBinding.barProgressTopText1);
+        mProgressTopTextList.add(mBinding.barProgressTopText2);
+        mProgressTopTextList.add(mBinding.barProgressTopText3);
+        mProgressTopTextList.add(mBinding.barProgressTopText4);
+        mProgressTopTextList.add(mBinding.barProgressTopText5);
+        mProgressTopTextList.add(mBinding.barProgressTopText6);
+        mProgressTopTextList.add(mBinding.barProgressTopText7);
 
         //Progress bar
         mChartProgressList.add(mBinding.progress1.loadStyledAttributes(mAttributes, mChartProgressAttr.get(0)));
@@ -320,14 +319,20 @@ public class SlideBarChartView extends AbstractSlideView{
         }
     }
 
+    @Override
+    public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes) {
+        animatePage(onPageListener, attributes, 0);
+    }
+
     @SuppressWarnings("unchecked")
-    public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
+    public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes, final int position) {
         final List<View> children = (List<View>) getTag();
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof BarChartProgressView) {
-                    ((BarChartProgressView) child).loadStyledAttributes(attributes, (ChartProgressAttr) listener.getDayProgress(mPagePosition, ((BarChartProgressView) child).getIntTag()));
-                    animateProgress((BarChartProgressView) child, children, listener);
+                    ProgressAttr progressAttr = onPageListener.getDayProgress(mPagePosition, ((BarChartProgressView) child).getIntTag());
+                    ((BarChartProgressView) child).loadStyledAttributes(attributes, (ChartProgressAttr) progressAttr);
+                    animateProgress((BarChartProgressView) child, children, progressAttr);
                 }
             }
         }
@@ -364,10 +369,9 @@ public class SlideBarChartView extends AbstractSlideView{
         }
     }
 
-    private void animateProgress(BarChartProgressView view, List<View> children, OnSlidePageChangeListener listener) {
-        if (listener != null) {
-            ProgressAttr progress = listener.getDayProgress(mPagePosition, view.getIntTag());
-            view.animateProgress(0, (ChartProgressAttr) progress, mProgressAnimationTime, children);
+    private void animateProgress(BarChartProgressView view, List<View> children, ProgressAttr progressAttr) {
+        if (progressAttr != null) {
+            view.animateProgress(0, (ChartProgressAttr) progressAttr, mProgressAnimationTime, children);
         }
     }
 

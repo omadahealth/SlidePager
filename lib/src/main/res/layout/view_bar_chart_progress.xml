@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:BarView="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
 
         <RelativeLayout
             android:id="@+id/bar_view_layout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true">
 
             <com.github.omadahealth.slidepager.lib.views.BarView
                 android:id="@+id/barview"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="7dp"
-                android:layout_marginLeft="@dimen/view_day_progress_margin_padding"
-                android:layout_marginRight="@dimen/view_day_progress_margin_padding"
-                android:layout_marginTop="7dp" />
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                 />
 
             <ImageView
                 android:id="@+id/bar_chart_check_mark"
                 android:layout_width="@dimen/view_day_progress_dim"
                 android:layout_height="@dimen/view_day_progress_check"
-                android:layout_alignBottom="@+id/barview"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:alpha="0"
                 android:scaleType="fitEnd" />

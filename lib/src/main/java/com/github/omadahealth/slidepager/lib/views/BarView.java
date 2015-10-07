@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
@@ -48,7 +49,7 @@ public class BarView extends View implements Animator.AnimatorListener {
     /**
      * Current progress, can not exceed the {@link #mMax} progress.
      */
-    private float mProgress = 0;
+    private boolean mCompleted;
 
     /**
      * The clockwise progress area bar color
@@ -101,7 +102,7 @@ public class BarView extends View implements Animator.AnimatorListener {
     private static final String INSTANCE_BAR_WIDTH = "bar_width";
     private static final String INSTANCE_BAR_COLOR = "bar_color";
     private static final String INSTANCE_MAX = "max";
-    private static final String INSTANCE_PROGRESS = "progress";
+    private static final String INSTANCE_COMPLETED = "progress";
     private static final String INSTANCE_SUFFIX = "suffix";
     private static final String INSTANCE_PREFIX = "prefix";
 
@@ -118,7 +119,7 @@ public class BarView extends View implements Animator.AnimatorListener {
 
         mContext = context;
 
-        default_bar_width = dp2px(5f);
+        default_bar_width = dp2px(10f);
 
         mListeners = new ArrayList<>();
         loadStyledAttributes(attrs, defStyleAttr);
@@ -135,7 +136,7 @@ public class BarView extends View implements Animator.AnimatorListener {
 
 
         //Draw the bar
-        canvas.drawRoundRect(mBarRectF, mBarWidth, mBarWidth, mBarFillPaint);
+        canvas.drawRoundRect(mBarRectF, mBarWidth / 2, mBarWidth / 2, mBarFillPaint);
 
     }
 
@@ -147,7 +148,7 @@ public class BarView extends View implements Animator.AnimatorListener {
         bundle.putFloat(INSTANCE_BAR_WIDTH, getBarWidth());
         bundle.putInt(INSTANCE_BAR_COLOR, getBarColor());
         bundle.putInt(INSTANCE_MAX, getMax());
-        bundle.putFloat(INSTANCE_PROGRESS, getProgress());
+        bundle.putBoolean(INSTANCE_COMPLETED, getCompleted());
         bundle.putString(INSTANCE_SUFFIX, getSuffix());
         bundle.putString(INSTANCE_PREFIX, getPrefix());
         return bundle;
@@ -161,7 +162,7 @@ public class BarView extends View implements Animator.AnimatorListener {
             mBarColor = bundle.getInt(INSTANCE_BAR_COLOR);
             initializePainters();
             setMax(bundle.getInt(INSTANCE_MAX));
-            setProgress(bundle.getFloat(INSTANCE_PROGRESS));
+            setCompleted(bundle.getBoolean(INSTANCE_COMPLETED));
             setPrefix(bundle.getString(INSTANCE_PREFIX));
             setSuffix(bundle.getString(INSTANCE_SUFFIX));
             super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATE));
@@ -183,7 +184,6 @@ public class BarView extends View implements Animator.AnimatorListener {
             mBarColor = attributes.getColor(R.styleable.CircularViewPager_progress_arc_clockwise_color, default_bar_color);
             mBarWidth = attributes.getDimension(R.styleable.CircularViewPager_progress_arc_clockwise_width, default_bar_width);
             setMax(attributes.getInt(R.styleable.CircularViewPager_progress_arc_max, 100));
-            setProgress(attributes.getInt(R.styleable.CircularViewPager_arc_progress, 0));
 
             attributes.recycle();
 
@@ -223,7 +223,9 @@ public class BarView extends View implements Animator.AnimatorListener {
      * Calculates the coordinates of {@link #mBarRectF}
      */
     private void calculateDrawRectF() {
+        setPadding(getPaddingLeft(), (int) mBarWidth / 2, getPaddingRight(), getPaddingBottom());
         mBarRectF = getBarRect(mBarWidth / 2);
+
     }
 
     /**
@@ -289,8 +291,11 @@ public class BarView extends View implements Animator.AnimatorListener {
      * @param duration The the time to run the animation over
      */
     public void animateProgress(int start, int end, int duration) {
+        ViewGroup parent = (ViewGroup) getParent();
+        int heightToReach = (parent.getMeasuredHeight() * end) / 100;
+
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(Glider.glide(Skill.QuadEaseInOut, duration, ObjectAnimator.ofFloat(this, "progress", start, end)));
+        set.playTogether(Glider.glide(Skill.QuadEaseInOut, duration, ObjectAnimator.ofInt(this, "minimumHeight", start, heightToReach)));
         set.setDuration(duration);
         set = addListenersToSet(set);
         set.start();
@@ -373,8 +378,8 @@ public class BarView extends View implements Animator.AnimatorListener {
      *
      * @return
      */
-    public float getProgress() {
-        return mProgress;
+    public boolean getCompleted() {
+        return mCompleted;
     }
 
     /**
@@ -458,11 +463,10 @@ public class BarView extends View implements Animator.AnimatorListener {
     }
 
     /**
-     * @param newProgress
+     * @param completed
      */
-    public void setProgress(float newProgress) {
-        mProgress = newProgress;
-        invalidate();
+    public void setCompleted(boolean completed) {
+        mCompleted = completed;
     }
 
     /**

@@ -154,7 +154,6 @@ public class BarChartProgressView extends RelativeLayout {
     private ViewBarChartProgressBinding mBinding;
 
 
-
     private static String INSTANCE_SHOW_PROGRESS_TEXT = "show_bar_progress_text";
     private static String INSTANCE_COMPLETED_BAR_COLOR = "bar_completed_color";
     private static String INSTANCE_NOT_COMPLETED_BAR_COLOR = "not_completed_color";
@@ -212,8 +211,8 @@ public class BarChartProgressView extends RelativeLayout {
     private void injectViews(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.view_bar_chart_progress, this);
-//        ButterKnife.inject(this, view);
-          mBinding = DataBindingUtil.inflate(inflater, R.layout.view_bar_chart_progress, this, true);
+
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.view_bar_chart_progress, this, true);
         mCheckMark = mBinding.barChartCheckMark;
         mBarView = mBinding.barview;
         mProgressText = mBinding.barChartProgressText;
@@ -304,7 +303,7 @@ public class BarChartProgressView extends RelativeLayout {
      */
     public void animateCheckMark() {
         int index = getIntTag();
-        if (getBarView().getProgress() >= 99.95f) {
+        if (getBarView().getCompleted()) {
 
             //Show checkmark if the next sibling doesn't have a 100% progress
             //But if this day is the last day of the week, should check next week
@@ -313,11 +312,10 @@ public class BarChartProgressView extends RelativeLayout {
                 if (index + 1 < mSiblings.size()) {
                     BarChartProgressView nextDay = mSiblings.get(index + 1);
                     //Next is complete
-                    boolean complete = nextDay.getProgress() >= 99.95f;
-                    if(complete) {
+                    boolean complete = nextDay.getCompleted();
+                    if (complete) {
                         showCheckMark(false);
-                    } else
-                    {
+                    } else {
                         showCheckMark(true);
                     }
                 }//TODO figure out a way check the first day of next week to show/not show checkmark
@@ -394,7 +392,6 @@ public class BarChartProgressView extends RelativeLayout {
         mSiblings = setSiblings(siblings);
         mBarView.setBarColor(progress.getProgress() == 100 ? mCompletedColor : mBarColor);
 
-
         mBarView.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -423,7 +420,9 @@ public class BarChartProgressView extends RelativeLayout {
 
             }
         });
-        mBarView.animateProgress(start, progress.getProgress(), duration);
+        mBarView.setCompleted(progress.getProgress() == 100);
+        //TODO real maximum for dividing
+        mBarView.animateProgress(start, (int) (progress.getValue() / 200.0f * 100.0f), duration);
 
     }
 
@@ -434,7 +433,7 @@ public class BarChartProgressView extends RelativeLayout {
     public void reset() {
         setProgressText();
         mBarView.setBarColor(mBarColor);
-        mBarView.setProgress(0);
+        mBarView.setCompleted(false);
 
         if (mAttributes != null && mChartProgressAttr != null) {
             loadStyledAttributes(mAttributes, mChartProgressAttr);
@@ -492,12 +491,12 @@ public class BarChartProgressView extends RelativeLayout {
     }
 
     /**
-     * Returns the current {@link #mBarView#getProgress()} using {@link Math#round(float)}
+     * Returns the current {@link #mBarView#getCompleted()} using {@link Math#round(float)}
      *
-     * @return The {@link #mBarView#getProgress()}
+     * @return The {@link #mBarView#getCompleted()}
      */
-    public int getProgress() {
-        return Math.round(mBarView != null ? mBarView.getProgress() : 0f);
+    public boolean getCompleted() {
+        return mBarView != null && mBarView.getCompleted();
     }
 
     /**
