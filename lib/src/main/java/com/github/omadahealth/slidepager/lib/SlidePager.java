@@ -32,6 +32,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.github.omadahealth.slidepager.lib.adapter.AbstractSlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
@@ -129,13 +130,20 @@ public class SlidePager extends ViewPager {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        Log.i(TAG, "SlidePager click :" + (ev.getAction() & MotionEvent.ACTION_MASK));
+        onTouchEvent(ev);
+        return super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
         try {
-            return super.onTouchEvent(ev);
+            return super.onTouchEvent(event);
         } catch (Exception e) {
             Log.e(TAG, e.toString());
-            return true;
         }
+        return false;
     }
 
     @BindingAdapter("sp_slide_show_circular_bars")
