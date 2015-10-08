@@ -223,7 +223,7 @@ public class BarView extends View implements Animator.AnimatorListener {
      * Calculates the coordinates of {@link #mBarRectF}
      */
     private void calculateDrawRectF() {
-        setPadding(getPaddingLeft(), (int) mBarWidth / 2, getPaddingRight(), getPaddingBottom());
+
         mBarRectF = getBarRect(mBarWidth / 2);
 
     }
@@ -259,8 +259,8 @@ public class BarView extends View implements Animator.AnimatorListener {
         mBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBarFillPaint.setColor(mBarColor);
         mBarFillPaint.setAntiAlias(true);
-        mBarFillPaint.setStrokeWidth(mBarWidth);
-        mBarFillPaint.setStyle(Paint.Style.STROKE);
+        mBarFillPaint.setStrokeWidth(0);
+        mBarFillPaint.setStyle(Paint.Style.FILL);
     }
 
     @Override
@@ -294,13 +294,13 @@ public class BarView extends View implements Animator.AnimatorListener {
     public void animateProgress(int start, int end, int duration, int delay) {
         ViewGroup parent = (ViewGroup) getParent();
         int heightToReach = (parent.getMeasuredHeight() * end) / 120;
-        int initialHeight = (int) (mBarWidth*1.5);
+        int initialHeight = (int) mBarWidth;
         heightToReach = (heightToReach < initialHeight) ? initialHeight : heightToReach;
         if(end==-1) {
             heightToReach = 0;
         }
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(Glider.glide(Skill.QuadEaseInOut, duration, ObjectAnimator.ofInt(this, "minimumHeight", start, heightToReach)));
+        set.playTogether(Glider.glide(Skill.QuintEaseIn, duration, ObjectAnimator.ofInt(this, "minimumHeight", start, heightToReach)));
         set.setDuration(duration);
         set.setStartDelay(delay);
         set = addListenersToSet(set);

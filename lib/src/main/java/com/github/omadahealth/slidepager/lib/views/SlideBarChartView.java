@@ -79,7 +79,7 @@ public class SlideBarChartView extends AbstractSlideView {
     /**
      * The default animation time
      */
-    private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 300;
+    private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 150;
 
     /**
      * True of we want to shake the view in {@link #toggleSelectedViews(int)}
@@ -110,11 +110,6 @@ public class SlideBarChartView extends AbstractSlideView {
      * The {@link android.graphics.Color} link of the Bar: {@link SlideChartView#mChartBarList}
      */
     private int mChartBarColor;
-
-    /**
-     * The {@link android.support.annotation.DimenRes} link of the Bar: {@link SlideChartView#mChartBarList}
-     */
-    private float mChartBarSize;
 
     /**
      * The position of this page within the {@link com.github.omadahealth.slidepager.lib.SlidePager}
@@ -342,7 +337,7 @@ public class SlideBarChartView extends AbstractSlideView {
     @SuppressWarnings("unchecked")
     public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes, final int position, final int delay) {
         final List<View> children = (List<View>) getTag();
-        List<BarChartProgressView> listView = new ArrayList<>();
+        final List<BarChartProgressView> listView = new ArrayList<>();
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof BarChartProgressView) {
@@ -363,12 +358,18 @@ public class SlideBarChartView extends AbstractSlideView {
             animateProgress(barChartProgressView, children, progressAttr, new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    animatePage(onPageListener, attributes, position + 1, (position + 1) * 60);
+                    animatePage(onPageListener, attributes, position + 1, (position + 1) * 70);
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-
+                    if(position==6)
+                    {
+                        for (final BarChartProgressView child: listView)
+                        {
+                            child.animateCheckMark();
+                        }
+                    }
                 }
 
                 @Override

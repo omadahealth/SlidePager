@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,13 +20,10 @@ import com.github.omadahealth.slidepager.lib.databinding.ViewBarChartProgressBin
 import com.github.omadahealth.slidepager.lib.utils.BarChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
-import com.github.omadahealth.typefaceview.TypefaceTextView;
-import com.github.omadahealth.typefaceview.TypefaceType;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -50,16 +45,6 @@ public class BarChartProgressView extends RelativeLayout {
      * The progress bar view
      */
     private BarView mBarView;
-
-    /**
-     * The Textview that shows today's day name
-     */
-    private TypefaceTextView mProgressText;
-
-    /**
-     * The default {@link #mProgressText} is initialized in its attrs
-     */
-    private TypefaceType mDefaultProgressTypeface;
 
     /**
      * The duration of the easing in of the checkmark
@@ -101,16 +86,6 @@ public class BarChartProgressView extends RelativeLayout {
     private float mBarWidth;
 
     /**
-     * The strings that we set in {@link #mProgressText}
-     */
-    private static String[] mProgressStrings;
-
-    /**
-     * Boolean that controls if the {@link #mProgressText} is visible or not
-     */
-    private boolean mShowProgressText;
-
-    /**
      * Boolean to indicate if it is after today. Used to set the color of the bar
      */
     private boolean mIsFuture;
@@ -142,6 +117,10 @@ public class BarChartProgressView extends RelativeLayout {
     private boolean mBarVisibleNullValue;
 
     /**
+     * true if the progress==100;
+     */
+    private Boolean mCompleted=null;
+    /**
      * Check mark visibility on goal completion
      */
 
@@ -152,7 +131,6 @@ public class BarChartProgressView extends RelativeLayout {
     private ViewBarChartProgressBinding mBinding;
 
 
-    private static String INSTANCE_SHOW_PROGRESS_TEXT = "show_bar_progress_text";
     private static String INSTANCE_COMPLETED_BAR_COLOR = "bar_completed_color";
     private static String INSTANCE_NOT_COMPLETED_BAR_COLOR = "not_completed_color";
     private static String INSTANCE_FUTURE_COLOR = "bar_future_color";
@@ -181,7 +159,6 @@ public class BarChartProgressView extends RelativeLayout {
     protected Parcelable onSaveInstanceState() {
         final Bundle bundle = new Bundle();
         bundle.putParcelable(INSTANCE_STATE, super.onSaveInstanceState());
-        bundle.putBoolean(INSTANCE_SHOW_PROGRESS_TEXT, mShowProgressText);
         bundle.putInt(INSTANCE_COMPLETED_BAR_COLOR, mCompletedColor);
         bundle.putInt(INSTANCE_NOT_COMPLETED_BAR_COLOR, mNotCompletedColor);
         bundle.putInt(INSTANCE_FUTURE_COLOR, mFutureColor);
@@ -198,7 +175,6 @@ public class BarChartProgressView extends RelativeLayout {
         if (state instanceof Bundle) {
             final Bundle bundle = (Bundle) state;
             Resources res = getContext().getResources();
-            mShowProgressText = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_TEXT, true);
             mCompletedColor = bundle.getInt(INSTANCE_COMPLETED_BAR_COLOR, res.getColor(R.color.default_progress_completed_reach_color));
             mNotCompletedColor = bundle.getInt(INSTANCE_NOT_COMPLETED_BAR_COLOR, res.getColor(R.color.default_progress_not_completed_reach_color));
             mTodayColor = bundle.getInt(INSTANCE_TODAY_COLOR, res.getColor(R.color.default_progress_special_reach_color));
@@ -224,11 +200,6 @@ public class BarChartProgressView extends RelativeLayout {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.view_bar_chart_progress, this, true);
         mCheckMark = mBinding.barChartCheckMark;
         mBarView = mBinding.barview;
-        mProgressText = mBinding.barChartProgressText;
-
-        mDefaultProgressTypeface = mProgressText.getCurrentTypeface();
-
-        mProgressText.setTypeface(TypefaceTextView.getFont(context, TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
         loadStyledAttributes(mAttributes, mChartProgressAttr);
     }
 
@@ -245,7 +216,6 @@ public class BarChartProgressView extends RelativeLayout {
 
         Resources res = getContext().getResources();
         if (attributes != null) {
-            mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, false);
             mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_bar_chart_completed_color, res.getColor(R.color.default_progress_completed_reach_color));
             mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_bar_chart_not_completed_color, res.getColor(R.color.default_progress_not_completed_reach_color));
             mFutureColor = attributes.getColor(R.styleable.SlidePager_slide_progress_bar_chart_future_color, res.getColor(R.color.default_progress_chart_bar_color));
@@ -256,7 +226,6 @@ public class BarChartProgressView extends RelativeLayout {
             //Do not recycle attributes, we need them for the future views
 
         } else {
-            mShowProgressText = true;
             mCompletedColor = res.getColor(R.color.default_progress_completed_reach_color);
             mNotCompletedColor = res.getColor(R.color.default_progress_not_completed_reach_color);
             mFutureColor = res.getColor(R.color.default_progress_chart_bar_color);
@@ -265,7 +234,6 @@ public class BarChartProgressView extends RelativeLayout {
             mBarVisibleNullValue = true;
             mCheckMarkVisible = true;
         }
-        loadProgressTextLabels(res);
 
         setBarColorsAndSize();
 
@@ -274,19 +242,6 @@ public class BarChartProgressView extends RelativeLayout {
         return this;
     }
 
-    /**
-     * Loads the {@link #mProgressStrings} from {@link com.github.omadahealth.slidepager.lib.R.array#slide_progress_long_text}
-     *
-     * @param res
-     */
-    private void loadProgressTextLabels(Resources res) {
-        mProgressStrings = res.getStringArray(R.array.slide_progress_long_text);
-        if (mShowProgressText) {
-            getProgressTextView().setVisibility(View.VISIBLE);
-        } else {
-            getProgressTextView().setVisibility(View.GONE);
-        }
-    }
 
     /**
      * Initiates the animation listener for the {@link CircularBar} so we can animate the streaks in
@@ -337,33 +292,9 @@ public class BarChartProgressView extends RelativeLayout {
 
     }
 
-    /**
-     * Calls {@link #setProgressText(String)} )} with {@link #mProgressStrings}
-     * array position for this view
-     */
-    public void setProgressText() {
-        setProgressText(mProgressStrings[getIntTag()]);
-    }
 
-    /**
-     * Sets the text for the {@link #mProgressText} or {@link View#GONE} if {@link #mShowProgressText} is false
-     */
-    public void setProgressText(String text) {
-        getProgressTextView().setText(text);
-        getProgressTextView().setTextColor(mCompletedColor);
-    }
-
-    /**
-     * Sets the font type of {@link #mProgressText}
-     *
-     * @param selected True for {@link TypefaceType#ROBOTO_BOLD}, false for {@link TypefaceType#ROBOTO_THIN}
-     */
     public void isSelected(boolean selected) {
-        Resources res = getContext().getResources();
-        Typeface typeface = TypefaceTextView.getFont(getContext(),
-                selected ? TypefaceType.ROBOTO_BOLD.getAssetFileName() : mDefaultProgressTypeface.getAssetFileName());
-        mProgressText.setTypeface(typeface);
-        mProgressText.setTextSize(TypedValue.COMPLEX_UNIT_PX, selected ? res.getDimension(R.dimen.selected_progress_view_text_size) : res.getDimension(R.dimen.not_selected_progress_view_text_size));
+
     }
 
     /**
@@ -379,11 +310,12 @@ public class BarChartProgressView extends RelativeLayout {
         if (progress == null) {
             return;
         }
+        mBarView.setMinimumHeight(0);
         mIsFuture = progress.isFuture();
         mIsToday = progress.isSpecial();
         setBarColorsAndSize();
 
-        mBarView.setMinimumHeight(0);
+
         mBarView.addListener(animatorListener);
         mBarView.addListener(new Animator.AnimatorListener() {
             @Override
@@ -393,7 +325,6 @@ public class BarChartProgressView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                animateCheckMark();
             }
 
             @Override
@@ -421,12 +352,7 @@ public class BarChartProgressView extends RelativeLayout {
      * {@link #mBarView}
      */
     public void reset() {
-        setProgressText();
         mBarView.setBarColor(mBarColor);
-        mBarView.clearAnimation();
-
-        mCheckMark.clearAnimation();
-
         if (mAttributes != null && mChartProgressAttr != null) {
             loadStyledAttributes(mAttributes, mChartProgressAttr);
         }
@@ -473,9 +399,6 @@ public class BarChartProgressView extends RelativeLayout {
         mBarView.addListener(listener);
     }
 
-    public TypefaceTextView getProgressTextView() {
-        return mProgressText;
-    }
 
     /**
      * Returns the contained {@link BarView}
@@ -489,10 +412,13 @@ public class BarChartProgressView extends RelativeLayout {
     /**
      * Returns the current {@link #mBarView#getCompleted()} using {@link Math#round(float)}
      *
-     * @return The {@link #mBarView#getCompleted()}
+     * @return The {@link ChartProgressAttr#getProgress()}
      */
     public boolean getCompleted() {
-        return mChartProgressAttr != null ? mChartProgressAttr.getProgress() == 100 : false;
+        if(mCompleted==null) {
+            mCompleted = mChartProgressAttr != null ? mChartProgressAttr.getProgress() == 100 : null;
+        }
+        return mCompleted==null ? false : mCompleted;
     }
 
     /**

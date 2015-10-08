@@ -22,7 +22,7 @@
     <dimen name="circular_bar_default_future_outline_width">1.5dp</dimen>
     <dimen name="circular_bar_default_reach_width">3dp</dimen>
 
-    <dimen name="bar_view_default_width">10dp</dimen>
-    <dimen name="bar_chart_check_width">13dp</dimen>
+    <dimen name="bar_view_default_width">15dp</dimen>
+    <dimen name="bar_chart_check_width">11dp</dimen>
 
 </resources>
