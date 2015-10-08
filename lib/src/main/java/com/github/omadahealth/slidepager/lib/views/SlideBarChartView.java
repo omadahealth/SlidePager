@@ -250,7 +250,8 @@ public class SlideBarChartView extends AbstractSlideView {
         //Set the top text to be the values
         for (int i = 0; i < mProgressTopTextList.size(); i++) {
             int intValue = (mChartProgressAttr.get(i).getValue()).intValue();
-            mProgressTopTextList.get(i).setText("" + intValue);
+            String topText= intValue==0? "-": ""+intValue;
+            mProgressTopTextList.get(i).setText(topText);
             mProgressTopTextList.get(i).setTextColor(mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mTopTextColor);
         }
 
@@ -354,7 +355,7 @@ public class SlideBarChartView extends AbstractSlideView {
             final BarChartProgressView barChartProgressView = listView.get(position);
             ProgressAttr progressAttr = onPageListener.getDayProgress(mPagePosition, barChartProgressView.getIntTag());
             barChartProgressView.loadStyledAttributes(attributes, (ChartProgressAttr) progressAttr);
-            if(mMaxStep==0){
+            if (mMaxStep == 0) {
                 initMaxStep();
             }
             barChartProgressView.setMaxSteps(mMaxStep);

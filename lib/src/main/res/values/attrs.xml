@@ -36,7 +36,7 @@
         <attr name="slide_progress_bar_chart_today_color" format="color"/>
         <attr name="slide_progress_bar_chart_not_completed_color" format="color"/>
         <attr name="slide_progress_bar_chart_completed_color" format="color"/>
-        <attr name="slide_progress_bar_chart_null_bar_value_display" format="boolean"/>
+        <attr name="slide_progress_bar_chart_null_value_bar_display" format="boolean"/>
         <attr name="slide_progress_bar_chart_check_mark_visible" format="boolean"/>
 
     </declare-styleable>

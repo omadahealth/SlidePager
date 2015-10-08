@@ -287,15 +287,18 @@ public class BarView extends View implements Animator.AnimatorListener {
      * Animate the change in progress of this view
      *
      * @param start    The value to start from, between 0-100
-     * @param end      The value to set it to, between 0-100
+     * @param end      The value to set it to, between 0-100, if -1, there is no bar for null value, otherwise
+     *                 a circle will be animated.
      * @param duration The the time to run the animation over
      */
     public void animateProgress(int start, int end, int duration, int delay) {
         ViewGroup parent = (ViewGroup) getParent();
         int heightToReach = (parent.getMeasuredHeight() * end) / 120;
         int initialHeight = (int) (mBarWidth*1.5);
-        // int initialHeight = par;
         heightToReach = (heightToReach < initialHeight) ? initialHeight : heightToReach;
+        if(end==-1) {
+            heightToReach = 0;
+        }
         AnimatorSet set = new AnimatorSet();
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, duration, ObjectAnimator.ofInt(this, "minimumHeight", start, heightToReach)));
         set.setDuration(duration);

@@ -47,12 +47,12 @@ public class BarChartProgressView extends RelativeLayout {
     private ImageView mCheckMark;
 
     /**
-     * The circular progress bar
+     * The progress bar view
      */
     private BarView mBarView;
 
     /**
-     * The textview that shows today's day name
+     * The Textview that shows today's day name
      */
     private TypefaceTextView mProgressText;
 
@@ -62,7 +62,7 @@ public class BarChartProgressView extends RelativeLayout {
     private TypefaceType mDefaultProgressTypeface;
 
     /**
-     * The duration of the easing in
+     * The duration of the easing in of the checkmark
      */
     private static final int EASE_IN_DURATION = 350;
 
@@ -106,22 +106,17 @@ public class BarChartProgressView extends RelativeLayout {
     private static String[] mProgressStrings;
 
     /**
-     * The sibling {@link ProgressView} of this class
-     */
-    private List<BarChartProgressView> mSiblings;
-
-    /**
      * Boolean that controls if the {@link #mProgressText} is visible or not
      */
     private boolean mShowProgressText;
 
     /**
-     * Boolean that controls if we should use the future size for this view
+     * Boolean to indicate if it is after today. Used to set the color of the bar
      */
     private boolean mIsFuture;
 
     /**
-     * boolean to indicate if it is today
+     * Boolean to indicate if it is today. Used to set the color of the bar
      */
     private boolean mIsToday;
 
@@ -136,9 +131,21 @@ public class BarChartProgressView extends RelativeLayout {
     private ChartProgressAttr mChartProgressAttr;
 
     /**
-     * max step for the week, used to scale the bars
+     * max step for the week, used to scale the bars. Max value for the week is the highest bar for the week
+     * then other bars are scaled off that
      */
     private int mMaxStep;
+
+    /**
+     * True if the null value still shows the bar (as a circle)
+     */
+    private boolean mBarVisibleNullValue;
+
+    /**
+     * Check mark visibility on goal completion
+     */
+
+    private boolean mCheckMarkVisible;
     /**
      * Data binding for this class
      */
@@ -151,6 +158,10 @@ public class BarChartProgressView extends RelativeLayout {
     private static String INSTANCE_FUTURE_COLOR = "bar_future_color";
     private static String INSTANCE_BAR_WIDTH = "bar_width";
     private static String INSTANCE_TODAY_COLOR = "today_color";
+    private static String INSTANCE_SHOW_NULL_VAL = "show_null_val";
+    private static String INSTANCE_SHOW_CHECKMARK = "show_checkmark";
+
+
 
 
     public BarChartProgressView(Context context) {
@@ -176,6 +187,8 @@ public class BarChartProgressView extends RelativeLayout {
         bundle.putInt(INSTANCE_FUTURE_COLOR, mFutureColor);
         bundle.putInt(INSTANCE_TODAY_COLOR, mTodayColor);
         bundle.putFloat(INSTANCE_BAR_WIDTH, mBarWidth);
+        bundle.putBoolean(INSTANCE_SHOW_NULL_VAL, mBarVisibleNullValue);
+        bundle.putBoolean(INSTANCE_SHOW_CHECKMARK, mCheckMarkVisible);
 
         return bundle;
     }
@@ -188,9 +201,11 @@ public class BarChartProgressView extends RelativeLayout {
             mShowProgressText = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_TEXT, true);
             mCompletedColor = bundle.getInt(INSTANCE_COMPLETED_BAR_COLOR, res.getColor(R.color.default_progress_completed_reach_color));
             mNotCompletedColor = bundle.getInt(INSTANCE_NOT_COMPLETED_BAR_COLOR, res.getColor(R.color.default_progress_not_completed_reach_color));
-            mTodayColor = bundle.getInt(INSTANCE_FUTURE_COLOR, res.getColor(R.color.default_progress_special_reach_color));
+            mTodayColor = bundle.getInt(INSTANCE_TODAY_COLOR, res.getColor(R.color.default_progress_special_reach_color));
+            mFutureColor = bundle.getInt(INSTANCE_FUTURE_COLOR, res.getColor(R.color.default_progress_chart_bar_color));
             mBarWidth = bundle.getFloat(INSTANCE_BAR_WIDTH, res.getDimension(R.dimen.bar_view_default_width));
-
+            mBarVisibleNullValue = bundle.getBoolean(INSTANCE_SHOW_NULL_VAL, true);
+            mCheckMarkVisible = bundle.getBoolean(INSTANCE_SHOW_CHECKMARK, true);
             super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATE));
             return;
         }
@@ -230,13 +245,16 @@ public class BarChartProgressView extends RelativeLayout {
 
         Resources res = getContext().getResources();
         if (attributes != null) {
-            mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, true);
-            mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_reach_color, res.getColor(R.color.default_progress_completed_reach_color));
-            mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_reach_color, res.getColor(R.color.default_progress_not_completed_reach_color));
+            mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, false);
+            mCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_bar_chart_completed_color, res.getColor(R.color.default_progress_completed_reach_color));
+            mNotCompletedColor = attributes.getColor(R.styleable.SlidePager_slide_progress_bar_chart_not_completed_color, res.getColor(R.color.default_progress_not_completed_reach_color));
             mFutureColor = attributes.getColor(R.styleable.SlidePager_slide_progress_bar_chart_future_color, res.getColor(R.color.default_progress_chart_bar_color));
             mTodayColor = attributes.getColor(R.styleable.SlidePager_slide_progress_bar_chart_today_color, res.getColor(R.color.default_progress_special_reach_color));
             mBarWidth = attributes.getDimension(R.styleable.SlidePager_slide_progress_bar_chart_bar_width, res.getDimension(R.dimen.bar_view_default_width));
+            mBarVisibleNullValue = attributes.getBoolean(R.styleable.SlidePager_slide_progress_bar_chart_null_value_bar_display, true);
+            mCheckMarkVisible = attributes.getBoolean(R.styleable.SlidePager_slide_progress_bar_chart_check_mark_visible, true);
             //Do not recycle attributes, we need them for the future views
+
         } else {
             mShowProgressText = true;
             mCompletedColor = res.getColor(R.color.default_progress_completed_reach_color);
@@ -244,6 +262,8 @@ public class BarChartProgressView extends RelativeLayout {
             mFutureColor = res.getColor(R.color.default_progress_chart_bar_color);
             mTodayColor = res.getColor(R.color.default_progress_special_reach_color);
             mBarWidth = res.getDimension(R.dimen.bar_view_default_width);
+            mBarVisibleNullValue = true;
+            mCheckMarkVisible = true;
         }
         loadProgressTextLabels(res);
 
@@ -307,10 +327,10 @@ public class BarChartProgressView extends RelativeLayout {
      * Sets the colors of {@link #mBarView}
      */
     public void setBarColorsAndSize() {
-        if(mIsToday) {
+        if (mIsToday) {
             mBarColor = !getCompleted() ? mTodayColor : mCompletedColor;
-        } else{
-        mBarColor = mIsFuture ? mFutureColor : getCompleted() ? mCompletedColor : mNotCompletedColor;
+        } else {
+            mBarColor = mIsFuture ? mFutureColor : getCompleted() ? mCompletedColor : mNotCompletedColor;
         }
         mBarView.setBarWidth(mBarWidth);
         mBarView.setBarColor(mBarColor);
@@ -363,7 +383,6 @@ public class BarChartProgressView extends RelativeLayout {
         mIsToday = progress.isSpecial();
         setBarColorsAndSize();
 
-        mSiblings = setSiblings(siblings);
         mBarView.setMinimumHeight(0);
         mBarView.addListener(animatorListener);
         mBarView.addListener(new Animator.AnimatorListener() {
@@ -389,8 +408,10 @@ public class BarChartProgressView extends RelativeLayout {
         });
         mBarView.setCompleted(progress.getProgress() == 100);
 
-        int endValue = (int)((progress.getValue() / (double) mMaxStep)*100.0);
-
+        int endValue = (int) ((progress.getValue() / (double) mMaxStep) * 100.0);
+        if(!mBarVisibleNullValue){
+            endValue=-1;
+        }
         mBarView.animateProgress(0, endValue, duration, delay);
 
     }
@@ -417,6 +438,9 @@ public class BarChartProgressView extends RelativeLayout {
      * @param show True to show, false to hide
      */
     public void showCheckMark(boolean show) {
+        if(!mCheckMarkVisible) {
+            return;
+        }
         AnimatorSet set = new AnimatorSet();
         //Immediately remove them
         if (!show) {
@@ -472,24 +496,6 @@ public class BarChartProgressView extends RelativeLayout {
     }
 
     /**
-     * Sets the {@link #mSiblings} after removing any non {@link ProgressView}
-     * from the list supplied
-     *
-     * @param views The views in the layout
-     */
-    public static List<BarChartProgressView> setSiblings(List<View> views) {
-        List<BarChartProgressView> siblings = new ArrayList<>();
-        if (views != null) {
-            for (View view : views) {
-                if (view instanceof BarChartProgressView) {
-                    siblings.add((BarChartProgressView) view);
-                }
-            }
-        }
-        return siblings;
-    }
-
-    /**
      * Gets the tag of this view, which are from [1,7]
      *
      * @return
@@ -500,6 +506,7 @@ public class BarChartProgressView extends RelativeLayout {
 
     /**
      * used to let the each day's views know the week's max step for bar scaling
+     *
      * @param maxSteps
      */
     public void setMaxSteps(int maxSteps) {
