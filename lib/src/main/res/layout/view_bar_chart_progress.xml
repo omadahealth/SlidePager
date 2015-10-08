@@ -19,16 +19,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
                  />
 
             <ImageView
                 android:id="@+id/bar_chart_check_mark"
-                android:layout_width="@dimen/view_day_progress_dim"
-                android:layout_height="@dimen/view_day_progress_check"
+                android:layout_width="@dimen/bar_chart_check_width"
+                android:layout_height="@dimen/bar_chart_check_width"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
+                android:paddingBottom="6dp"
                 android:alpha="0"
-                android:scaleType="fitEnd" />
+                android:scaleType="fitEnd"
+                />
 
         </RelativeLayout>
 

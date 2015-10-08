@@ -18,7 +18,6 @@ import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
-import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.github.omadahealth.typefaceview.TypefaceType;
 import com.nineoldandroids.animation.Animator;
@@ -80,7 +79,7 @@ public class SlideBarChartView extends AbstractSlideView {
     /**
      * The default animation time
      */
-    private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 1000;
+    private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 300;
 
     /**
      * True of we want to shake the view in {@link #toggleSelectedViews(int)}
@@ -121,6 +120,11 @@ public class SlideBarChartView extends AbstractSlideView {
      * The position of this page within the {@link com.github.omadahealth.slidepager.lib.SlidePager}
      */
     private int mPagePosition;
+
+    /**
+     * Max step for the week. used to scale the bars
+     */
+    private int mMaxStep = 0;
 
     /**
      * Data binding for this class
@@ -234,6 +238,9 @@ public class SlideBarChartView extends AbstractSlideView {
 
         //Init bar colors and sizes
         initBarColorsAndSize();
+
+        //Init the maxstep for the week for scaling;
+        initMaxStep();
     }
 
     /**
@@ -242,9 +249,9 @@ public class SlideBarChartView extends AbstractSlideView {
     private void initTopAndBottomTexts() {
         //Set the top text to be the values
         for (int i = 0; i < mProgressTopTextList.size(); i++) {
-            String oneDecimal = Utilities.formatWeight(mChartProgressAttr.get(i).getValue());
-            mProgressTopTextList.get(i).setText(oneDecimal);
-            mProgressTopTextList.get(i).setTextColor(mTopTextColor);
+            int intValue = (mChartProgressAttr.get(i).getValue()).intValue();
+            mProgressTopTextList.get(i).setText("" + intValue);
+            mProgressTopTextList.get(i).setTextColor(mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mTopTextColor);
         }
 
         //Set the bottom texts to be the day values and set the color if special
@@ -261,6 +268,13 @@ public class SlideBarChartView extends AbstractSlideView {
     private void initBarColorsAndSize() {
         for (ImageView imageView : mChartBarList) {
             imageView.setBackgroundColor(mChartBarColor);
+        }
+    }
+
+    private void initMaxStep() {
+        for (int i = 0; i < 6; i++) {
+            int steps = mChartProgressAttr.get(i).getValue().intValue();
+            mMaxStep = steps > mMaxStep ? steps : mMaxStep;
         }
     }
 
@@ -321,22 +335,55 @@ public class SlideBarChartView extends AbstractSlideView {
 
     @Override
     public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes) {
-        animatePage(onPageListener, attributes, 0);
+        animatePage(onPageListener, attributes, 0, 0);
     }
 
     @SuppressWarnings("unchecked")
-    public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes, final int position) {
+    public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes, final int position, final int delay) {
         final List<View> children = (List<View>) getTag();
+        List<BarChartProgressView> listView = new ArrayList<>();
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof BarChartProgressView) {
-                    ProgressAttr progressAttr = onPageListener.getDayProgress(mPagePosition, ((BarChartProgressView) child).getIntTag());
-                    ((BarChartProgressView) child).loadStyledAttributes(attributes, (ChartProgressAttr) progressAttr);
-                    animateProgress((BarChartProgressView) child, children, progressAttr);
+                    listView.add((BarChartProgressView) child);
                 }
             }
+            if (position > listView.size() - 1) {
+                return;
+            }
+            final BarChartProgressView barChartProgressView = listView.get(position);
+            ProgressAttr progressAttr = onPageListener.getDayProgress(mPagePosition, barChartProgressView.getIntTag());
+            barChartProgressView.loadStyledAttributes(attributes, (ChartProgressAttr) progressAttr);
+            if(mMaxStep==0){
+                initMaxStep();
+            }
+            barChartProgressView.setMaxSteps(mMaxStep);
+
+            animateProgress(barChartProgressView, children, progressAttr, new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    animatePage(onPageListener, attributes, position + 1, (position + 1) * 60);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            }, delay);
         }
+
     }
+
 
     @SuppressWarnings("unchecked")
     public void animateSeries(boolean show) {
@@ -369,14 +416,14 @@ public class SlideBarChartView extends AbstractSlideView {
         }
     }
 
-    private void animateProgress(BarChartProgressView view, List<View> children, ProgressAttr progressAttr) {
+    private void animateProgress(BarChartProgressView view, List<View> children, ProgressAttr progressAttr, Animator.AnimatorListener animatorListener, int delay) {
         if (progressAttr != null) {
-            view.animateProgress(0, (ChartProgressAttr) progressAttr, mProgressAnimationTime, children);
+            view.animateProgress(0, (ChartProgressAttr) progressAttr, mProgressAnimationTime, delay, children, animatorListener);
         }
     }
 
     /**
-     * Sets the listener for click events in this view
+     * Sets the listener for  click events in this view
      *
      * @param listener
      */

@@ -159,17 +159,22 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     public ChartProgressAttr getDayProgress(int page, int index) {
         int progress;
         Double value = null;
-        if(page == 15 && (index == 2 || index == 6)){
+        if (page == 14 && (index == 2 || (index > 3))) {
             progress = 0;
-        }
-        else {
+
+        } else {
+
             value = 180.2d;
             progress = 100;
         }
-
+        if (page == 14 && index == 3) {
+            value = 150d;
+            progress = 80;
+        }
         String day = Utilities.getSelectedDayText(Utilities.getPreviousDate(16).getTime(), page, index);
 
-        return new ChartProgressAttr(progress, value, day, page == 15 && index == 5, page == 15 && index == 6);
+
+        return new ChartProgressAttr(progress, value, day, page == 14 && index == 3, page == 14 && index > 3);
     }
 
     @Override

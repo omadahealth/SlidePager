@@ -47,7 +47,7 @@ public class BarView extends View implements Animator.AnimatorListener {
     private int mMax = DEFAULT_BAR_MAX;
 
     /**
-     * Current progress, can not exceed the {@link #mMax} progress.
+     * If the goal is completed it returns 1
      */
     private boolean mCompleted;
 
@@ -290,13 +290,16 @@ public class BarView extends View implements Animator.AnimatorListener {
      * @param end      The value to set it to, between 0-100
      * @param duration The the time to run the animation over
      */
-    public void animateProgress(int start, int end, int duration) {
+    public void animateProgress(int start, int end, int duration, int delay) {
         ViewGroup parent = (ViewGroup) getParent();
-        int heightToReach = (parent.getMeasuredHeight() * end) / 100;
-
+        int heightToReach = (parent.getMeasuredHeight() * end) / 120;
+        int initialHeight = (int) (mBarWidth*1.5);
+        // int initialHeight = par;
+        heightToReach = (heightToReach < initialHeight) ? initialHeight : heightToReach;
         AnimatorSet set = new AnimatorSet();
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, duration, ObjectAnimator.ofInt(this, "minimumHeight", start, heightToReach)));
         set.setDuration(duration);
+        set.setStartDelay(delay);
         set = addListenersToSet(set);
         set.start();
     }
