@@ -347,41 +347,66 @@ public class SlideBarChartView extends AbstractSlideView {
             if (position > listView.size() - 1) {
                 return;
             }
-            final BarChartProgressView barChartProgressView = listView.get(position);
-            ProgressAttr progressAttr = onPageListener.getDayProgress(mPagePosition, barChartProgressView.getIntTag());
-            barChartProgressView.loadStyledAttributes(attributes, (ChartProgressAttr) progressAttr);
+
             if (mMaxStep == 0) {
                 initMaxStep();
             }
-            barChartProgressView.setMaxSteps(mMaxStep);
+            ProgressAttr progressAttr;
+            for (final BarChartProgressView bar : listView) {
+                bar.setMaxSteps(mMaxStep);
+                progressAttr = onPageListener.getDayProgress(mPagePosition, bar.getIntTag());
+                bar.loadStyledAttributes(attributes, (ChartProgressAttr) progressAttr);
+                animateProgress(bar, progressAttr, new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
 
-            animateProgress(barChartProgressView, children, progressAttr, new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    animatePage(onPageListener, attributes, position + 1, (position + 1) * 70);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    if(position==6)
-                    {
-                        for (final BarChartProgressView child: listView)
-                        {
-                            child.animateCheckMark();
-                        }
                     }
-                }
 
-                @Override
-                public void onAnimationCancel(Animator animation) {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        bar.animateCheckMark();
+                    }
 
-                }
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
 
-                @Override
-                public void onAnimationRepeat(Animator animation) {
+                    }
 
-                }
-            }, delay);
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                }, 0);
+//                bar.animate();
+            }
+
+//            animateProgress(barChartProgressView, children, progressAttr, new Animator.AnimatorListener() {
+//                @Override
+//                public void onAnimationStart(Animator animation) {
+//                    animatePage(onPageListener, attributes, position + 1, (position + 1) * 70);
+//                }
+//
+//                @Override
+//                public void onAnimationEnd(Animator animation) {
+//                    if(position==6)
+//                    {
+//                        for (final BarChartProgressView child: listView)
+//                        {
+//                            child.animateCheckMark();
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onAnimationCancel(Animator animation) {
+//
+//                }
+//
+//                @Override
+//                public void onAnimationRepeat(Animator animation) {
+//
+//                }
+//            }, delay);
         }
 
     }
@@ -418,9 +443,9 @@ public class SlideBarChartView extends AbstractSlideView {
         }
     }
 
-    private void animateProgress(BarChartProgressView view, List<View> children, ProgressAttr progressAttr, Animator.AnimatorListener animatorListener, int delay) {
+    private void animateProgress(BarChartProgressView view, ProgressAttr progressAttr, Animator.AnimatorListener animatorListener, int delay) {
         if (progressAttr != null) {
-            view.animateProgress(0, (ChartProgressAttr) progressAttr, mProgressAnimationTime, delay, children, animatorListener);
+            view.animateProgress(0, (ChartProgressAttr) progressAttr, mProgressAnimationTime, delay, animatorListener);
         }
     }
 

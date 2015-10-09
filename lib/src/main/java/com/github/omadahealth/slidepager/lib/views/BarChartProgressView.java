@@ -306,7 +306,7 @@ public class BarChartProgressView extends RelativeLayout {
      * @param duration The duration in milliseconds of the animation
      * @param siblings The sibling views we use to evaluate streaks showing
      */
-    public void animateProgress(int start, ChartProgressAttr progress, int duration, int delay, final List<View> siblings, Animator.AnimatorListener animatorListener) {
+    public void animateProgress(int start, ChartProgressAttr progress, int duration, int delay, Animator.AnimatorListener animatorListener) {
         if (progress == null) {
             return;
         }
