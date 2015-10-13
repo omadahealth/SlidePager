@@ -24,7 +24,6 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
-import java.util.List;
 
 
 /**
@@ -123,8 +122,14 @@ public class BarChartProgressView extends RelativeLayout {
     /**
      * Check mark visibility on goal completion
      */
-
     private boolean mCheckMarkVisible;
+
+    /**
+     * If the view resets while {@link #mCheckMark} is easing in, it will use this boolean to know that, and hide it
+     */
+    private boolean mShowCheckMark=false;
+
+
     /**
      * Data binding for this class
      */
@@ -138,7 +143,6 @@ public class BarChartProgressView extends RelativeLayout {
     private static String INSTANCE_TODAY_COLOR = "today_color";
     private static String INSTANCE_SHOW_NULL_VAL = "show_null_val";
     private static String INSTANCE_SHOW_CHECKMARK = "show_checkmark";
-
 
 
 
@@ -304,27 +308,23 @@ public class BarChartProgressView extends RelativeLayout {
      * @param start    0-100
      * @param progress A {@link BarChartProgressAttr} object, containing the progress end (0-100) and the boolean to know if the day is special
      * @param duration The duration in milliseconds of the animation
-     * @param siblings The sibling views we use to evaluate streaks showing
      */
     public void animateProgress(int start, ChartProgressAttr progress, int duration, int delay, Animator.AnimatorListener animatorListener) {
         if (progress == null) {
             return;
         }
-        mBarView.setMinimumHeight(0);
         mIsFuture = progress.isFuture();
         mIsToday = progress.isSpecial();
+        showCheckMark(false);
         setBarColorsAndSize();
-
-
-        mBarView.addListener(animatorListener);
         mBarView.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                animateCheckMark();
             }
 
             @Override
@@ -353,6 +353,7 @@ public class BarChartProgressView extends RelativeLayout {
      */
     public void reset() {
         mBarView.setBarColor(mBarColor);
+        showCheckMark(false);
         if (mAttributes != null && mChartProgressAttr != null) {
             loadStyledAttributes(mAttributes, mChartProgressAttr);
         }
@@ -367,6 +368,7 @@ public class BarChartProgressView extends RelativeLayout {
         if(!mCheckMarkVisible) {
             return;
         }
+        mShowCheckMark=show;
         AnimatorSet set = new AnimatorSet();
         //Immediately remove them
         if (!show) {
@@ -380,11 +382,34 @@ public class BarChartProgressView extends RelativeLayout {
         }
 
         mCheckMark.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_steps));
-
         float start = 0;
         float end = 1f;
         set.playTogether(Glider.glide(Skill.QuadEaseInOut, EASE_IN_DURATION, ObjectAnimator.ofFloat(mCheckMark, "alpha", start, end)));
         set.setDuration(EASE_IN_DURATION);
+        set.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                // resets the checkmark
+                if(!mShowCheckMark){
+                    mCheckMark.setAlpha(0f);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         set.start();
     }
 

@@ -64,7 +64,7 @@
         <LinearLayout
             android:id="@+id/bar_progress_views_ll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_above="@+id/bar_progress_bottom_axis"
             android:layout_below="@+id/progress_top_text_ll"
             android:orientation="horizontal">
@@ -76,7 +76,7 @@
 
                 <ImageView
                     android:id="@+id/bar_progress_1_bar"
-                    style="@style/slideChartBarStyle"
+                    style="@style/slideBarChartBarStyle"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true" />
 
@@ -98,7 +98,7 @@
 
                 <ImageView
                     android:id="@+id/bar_progress_2_bar"
-                    style="@style/slideChartBarStyle"
+                    style="@style/slideBarChartBarStyle"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true" />
 
@@ -117,7 +117,7 @@
 
                 <ImageView
                     android:id="@+id/bar_progress_3_bar"
-                    style="@style/slideChartBarStyle"
+                    style="@style/slideBarChartBarStyle"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentBottom="true"
@@ -139,7 +139,7 @@
 
                 <ImageView
                     android:id="@+id/bar_progress_4_bar"
-                    style="@style/slideChartBarStyle"
+                    style="@style/slideBarChartBarStyle"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true" />
 
@@ -159,7 +159,7 @@
 
                 <ImageView
                     android:id="@+id/bar_progress_5_bar"
-                    style="@style/slideChartBarStyle"
+                    style="@style/slideBarChartBarStyle"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true" />
 
@@ -179,7 +179,7 @@
 
                 <ImageView
                     android:id="@+id/bar_progress_6_bar"
-                    style="@style/slideChartBarStyle"
+                    style="@style/slideBarChartBarStyle"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true" />
 
@@ -199,7 +199,7 @@
 
                 <ImageView
                     android:id="@+id/bar_progress_7_bar"
-                    style="@style/slideChartBarStyle"
+                    style="@style/slideBarChartBarStyle"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true" />
 
