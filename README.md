@@ -1,5 +1,5 @@
-SlidePager
-================
+SlidePager       [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-SlidePager-green.svg?style=flat)](https://android-arsenal.com/details/1/2618)
+==========
 A ViewPager implementation that is useful for navigating through views that can be grouped, such as days in a week (API 14+).
 
 To include in your project, add this to your build.gradle file:
