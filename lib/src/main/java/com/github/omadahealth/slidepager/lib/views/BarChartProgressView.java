@@ -304,7 +304,6 @@ public class BarChartProgressView extends RelativeLayout {
      * @param start    0-100
      * @param progress A {@link BarChartProgressAttr} object, containing the progress end (0-100) and the boolean to know if the day is special
      * @param duration The duration in milliseconds of the animation
-     * @param siblings The sibling views we use to evaluate streaks showing
      */
     public void animateProgress(int start, ChartProgressAttr progress, int duration, int delay, Animator.AnimatorListener animatorListener) {
         if (progress == null) {
