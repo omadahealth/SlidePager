@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.github.omadahealth.typefaceview.TypefaceType;
 import com.nineoldandroids.animation.Animator;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,7 +81,12 @@ public class SlideBarChartView extends AbstractSlideView {
     /**
      * The default animation time
      */
-    private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 150;
+    private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 600;
+
+    /**
+     * The defauly animation delay
+     */
+    private static final int DEFAULT_PROGRESS_ANIMATION_DELAY = 60;
 
     /**
      * True of we want to shake the view in {@link #toggleSelectedViews(int)}
@@ -132,9 +139,15 @@ public class SlideBarChartView extends AbstractSlideView {
     private int mProgressAnimationTime = DEFAULT_PROGRESS_ANIMATION_TIME;
 
     /**
+     * Delay between the start of the animation
+     */
+
+    private int mDelay = DEFAULT_PROGRESS_ANIMATION_DELAY;
+    /**
      * A user defined {@link ViewPager.OnPageChangeListener}
      */
     private OnSlidePageChangeListener<ChartProgressAttr> mUserPageListener;
+
 
     public SlideBarChartView(Context context) {
         this(context, null, -1, null);
@@ -153,6 +166,8 @@ public class SlideBarChartView extends AbstractSlideView {
             mBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_text_color, getResources().getColor(R.color.default_progress_chart_bar_bottom_text));
             mChartBarColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_color, getResources().getColor(R.color.default_progress_chart_bar_color));
             mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
+            mDelay = attributes.getInt(R.styleable.SlidePager_slide_progress_bar_chart_animation_delay, DEFAULT_PROGRESS_ANIMATION_DELAY);
+            mProgressAnimationTime = attributes.getInt(R.styleable.SlidePager_slide_progress_bar_chart_animation_time, DEFAULT_PROGRESS_ANIMATION_TIME );
         }
     }
 
@@ -245,7 +260,7 @@ public class SlideBarChartView extends AbstractSlideView {
         //Set the top text to be the values
         for (int i = 0; i < mProgressTopTextList.size(); i++) {
             int intValue = (mChartProgressAttr.get(i).getValue()).intValue();
-            String topText= intValue==0? "-": ""+intValue;
+            String topText = intValue == 0 ? "-" : "" + intValue;
             mProgressTopTextList.get(i).setText(topText);
             mProgressTopTextList.get(i).setTextColor(mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mTopTextColor);
         }
@@ -331,17 +346,25 @@ public class SlideBarChartView extends AbstractSlideView {
 
     @Override
     public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes) {
-        animatePage(onPageListener, attributes, 0, 0);
+        animatePage(onPageListener, attributes, 0);
+    }
+
+    @Override
+    public void animateSeries(boolean show) {
+
     }
 
     @SuppressWarnings("unchecked")
-    public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes, final int position, final int delay) {
+    public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes, final int position) {
         final List<View> children = (List<View>) getTag();
         final List<BarChartProgressView> listView = new ArrayList<>();
         if (children != null) {
+            Date date = new Date();
             for (final View child : children) {
                 if (child instanceof BarChartProgressView) {
                     listView.add((BarChartProgressView) child);
+                    ((BarChartProgressView) child).getBarView().setMinimumHeight(0);
+
                 }
             }
             if (position > listView.size() - 1) {
@@ -352,86 +375,23 @@ public class SlideBarChartView extends AbstractSlideView {
                 initMaxStep();
             }
             ProgressAttr progressAttr;
+            int index = 0;
             for (final BarChartProgressView bar : listView) {
                 bar.setMaxSteps(mMaxStep);
                 progressAttr = onPageListener.getDayProgress(mPagePosition, bar.getIntTag());
                 bar.loadStyledAttributes(attributes, (ChartProgressAttr) progressAttr);
-                animateProgress(bar, progressAttr, new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        bar.animateCheckMark();
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                }, 0);
-//                bar.animate();
-            }
-
-//            animateProgress(barChartProgressView, children, progressAttr, new Animator.AnimatorListener() {
-//                @Override
-//                public void onAnimationStart(Animator animation) {
-//                    animatePage(onPageListener, attributes, position + 1, (position + 1) * 70);
-//                }
-//
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    if(position==6)
-//                    {
-//                        for (final BarChartProgressView child: listView)
-//                        {
-//                            child.animateCheckMark();
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onAnimationCancel(Animator animation) {
-//
-//                }
-//
-//                @Override
-//                public void onAnimationRepeat(Animator animation) {
-//
-//                }
-//            }, delay);
-        }
-
-    }
-
-
-    @SuppressWarnings("unchecked")
-    public void animateSeries(boolean show) {
-        final List<View> children = (List<View>) getTag();
-        if (children != null) {
-            for (final View child : children) {
-                if (child instanceof BarChartProgressView) {
-                    final BarChartProgressView barChartProgressView = (BarChartProgressView) child;
-                    barChartProgressView.showCheckMark(show);
-                }
+                animateProgress(bar, progressAttr, null, index * mDelay);
+                index++;
             }
         }
     }
+
 
     @SuppressWarnings("unchecked")
     public void resetPage(TypedArray mAttributes) {
         this.setVisibility(View.VISIBLE);
         this.setAlpha(1f);
-
         loadStyledAttributes(mAttributes);
-        animateSeries(false);
         final List<View> children = (List<View>) getTag();
         if (children != null) {
             for (final View child : children) {

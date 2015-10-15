@@ -38,6 +38,9 @@
         <attr name="slide_progress_bar_chart_completed_color" format="color"/>
         <attr name="slide_progress_bar_chart_null_value_bar_display" format="boolean"/>
         <attr name="slide_progress_bar_chart_check_mark_visible" format="boolean"/>
+        <attr name="slide_progress_bar_chart_animation_time" format="integer"/>
+        <attr name="slide_progress_bar_chart_animation_delay" format="integer"/>
+
 
     </declare-styleable>
 
