@@ -82,7 +82,7 @@ public class SlideTransformer implements ViewPager.PageTransformer {
             return;
         }
 
-        if (view.getTag() == null) {
+        if (view.getTag(R.id.slide_transformer_tag_key) == null || !(view.getTag(R.id.slide_transformer_tag_key) instanceof List)) {
             initTags(view);
         }
 
@@ -91,8 +91,8 @@ public class SlideTransformer implements ViewPager.PageTransformer {
         //Stop the root page from moving during animation
         lockPage(view, position);
 
-        if (view.getTag() instanceof List) {
-            List<View> children = (List<View>) view.getTag();
+        if (view.getTag(R.id.slide_transformer_tag_key) instanceof List) {
+            List<View> children = (List<View>) view.getTag(R.id.slide_transformer_tag_key);
 
             if (getViewRatios() != null) {
                 for (View child : children) {
@@ -131,7 +131,7 @@ public class SlideTransformer implements ViewPager.PageTransformer {
             }
         }
 
-        view.setTag(subViews);
+        view.setTag(R.id.slide_transformer_tag_key, subViews);
     }
 
     /**

@@ -355,7 +355,7 @@ public class SlideChartView extends AbstractSlideView {
 
     @SuppressWarnings("unchecked")
     public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
-        final List<View> children = (List<View>) getTag();
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof ProgressView) {
@@ -368,7 +368,7 @@ public class SlideChartView extends AbstractSlideView {
 
     @SuppressWarnings("unchecked")
     public void animateSeries(boolean show) {
-        final List<View> children = (List<View>) getTag();
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof ProgressView) {
@@ -388,7 +388,7 @@ public class SlideChartView extends AbstractSlideView {
 
         loadStyledAttributes(mAttributes);
         animateSeries(false);
-        final List<View> children = (List<View>) getTag();
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof ProgressView) {
