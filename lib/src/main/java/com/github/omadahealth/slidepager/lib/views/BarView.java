@@ -291,11 +291,11 @@ public class BarView extends View implements Animator.AnimatorListener {
      * @param start    The value to start from, between 0-100
      * @param end      The value to set it to, between 0-100, if -1, there is no bar for null value, otherwise
      *                 a circle will be animated.
-     * @param duration The the time to run the animation over, it will be scaled from the default based off it's value
+     * @param duration The the time to run the animation over,
      */
     public void animateProgress(int start, int end, int duration, int delay) {
         ViewGroup parent = (ViewGroup) getParent();
-        int heightToReach = (parent.getMeasuredHeight() * end) / 120;
+        int heightToReach = (parent.getMeasuredHeight() * end) / 102;
         int initialHeight = (int) mBarWidth;
         heightToReach = (heightToReach < initialHeight) ? initialHeight : heightToReach;
         if (end == -1) {
@@ -305,7 +305,8 @@ public class BarView extends View implements Animator.AnimatorListener {
         setPivotY(heightToReach);
         setMinimumHeight(heightToReach);
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(ObjectAnimator.ofInt(this, "visibility", View.VISIBLE), Glider.glide(Skill.QuadEaseIn, duration, ObjectAnimator.ofFloat(this, "scaleY", 0, 1)));
+        setVisibility(VISIBLE);
+        set.playTogether(Glider.glide(Skill.BounceEaseOut, duration, ObjectAnimator.ofFloat(this, "scaleY", 0, 1)));
         set.setDuration(duration);
         set.setStartDelay(delay);
         set = addListenersToSet(set);

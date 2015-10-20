@@ -81,12 +81,12 @@ public class SlideBarChartView extends AbstractSlideView {
     /**
      * The default animation time
      */
-    private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 600;
+    private static final int DEFAULT_PROGRESS_ANIMATION_TIME = 1000;
 
     /**
      * The defauly animation delay
      */
-    private static final int DEFAULT_PROGRESS_ANIMATION_DELAY = 60;
+    private static final int DEFAULT_PROGRESS_ANIMATION_DELAY = 0;
 
     /**
      * True of we want to shake the view in {@link #toggleSelectedViews(int)}
@@ -261,8 +261,10 @@ public class SlideBarChartView extends AbstractSlideView {
         for (int i = 0; i < mProgressTopTextList.size(); i++) {
             int intValue = (mChartProgressAttr.get(i).getValue()).intValue();
             String topText = intValue == 0 ? "-" : "" + intValue;
-            mProgressTopTextList.get(i).setText(topText);
+            mProgressTopTextList.get(i).setText(mChartProgressAttr.get(i).isFuture() ? "" : topText);
             mProgressTopTextList.get(i).setTextColor(mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mTopTextColor);
+
+
         }
 
         //Set the bottom texts to be the day values and set the color if special
@@ -407,6 +409,10 @@ public class SlideBarChartView extends AbstractSlideView {
         if (progressAttr != null) {
             view.animateProgress(0, (ChartProgressAttr) progressAttr, mProgressAnimationTime, delay, animatorListener);
         }
+    }
+
+    public BarChartProgressView getProgressBarAtPosition(int position){
+        return mChartProgressList.get(position);
     }
 
     /**
