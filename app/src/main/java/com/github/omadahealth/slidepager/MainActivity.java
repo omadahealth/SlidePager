@@ -98,7 +98,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
         //SlidePagerAdapter
         mStartDate = Utilities.getPreviousDate(DEFAULT_PROGRAM_WEEKS);
-        mSlidePager = (SlidePager) findViewById(R.id.slidepager1);
+        mSlidePager = (SlidePager) findViewById(R.id.slide_pager);
         final SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, mStartDate, new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
         SlideView.setSelectedView(0);
         mSlidePager.setAdapter(adapterOne);
@@ -122,18 +122,18 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
 
         //SlideChartPagerAdapter
-//        mSlideChartPager = (SlidePager) findViewById(R.id.slidepager2);
-//        SlideChartPagerAdapter adapterChart = new SlideChartPagerAdapter(this, Utilities.getPreviousDate(16), new Date(), mSlideChartPager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
-//        mSlideChartPager.setAdapter(adapterChart);
-//        mSlideChartPager.setOnPageChangeListener(this);
-//        mSlideChartPager.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                mSlideChartPager.refreshPage();
-//            }
-//        });
+        mSlideChartPager = (SlidePager) findViewById(R.id.chart_pager);
+        SlideChartPagerAdapter adapterChart = new SlideChartPagerAdapter(this, Utilities.getPreviousDate(16), new Date(), mSlideChartPager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
+        mSlideChartPager.setAdapter(adapterChart);
+        mSlideChartPager.setOnPageChangeListener(this);
+        mSlideChartPager.post(new Runnable() {
+            @Override
+            public void run() {
+                mSlideChartPager.refreshPage();
+            }
+        });
 
-        mSlideBarChartPager = (SlidePager) findViewById(R.id.slidepager3);
+        mSlideBarChartPager = (SlidePager) findViewById(R.id.bar_chart_pager);
         SlideBarChartPagerAdapter adapterBarChart = new SlideBarChartPagerAdapter(this, Utilities.getPreviousDate(16), new Date(), mSlideBarChartPager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
         mSlideBarChartPager.setAdapter(adapterBarChart);
         mSlideBarChartPager.setOnPageChangeListener(this);

@@ -411,6 +411,11 @@ public class SlideBarChartView extends AbstractSlideView {
         }
     }
 
+    /**
+     *
+     * @param position
+     * @return  {@link BarChartProgressView} for given position in the current week
+     */
     public BarChartProgressView getProgressBarAtPosition(int position){
         return mChartProgressList.get(position);
     }
