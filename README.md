@@ -1,14 +1,14 @@
 SlidePager       [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-SlidePager-green.svg?style=flat)](https://android-arsenal.com/details/1/2618)
-===========
+==========
 A ViewPager implementation that is useful for navigating through views that can be grouped, such as days in a week (API 14+).
 
 To include in your project, add this to your build.gradle file:
 
 ```
    //SlidePager
-   compile 'com.github.omadahealth.slidepager:slidepager:1.8.0@aar'
+   compile 'com.github.omadahealth.slidepager:slidepager:1.9.2@aar'
 ```
-![Demo](app/src/main/res/raw/github_gif.gif)
+![Demo](app/src/main/res/raw/slidepager.gif)
 
 ========
 ### By
@@ -72,6 +72,7 @@ You can change several attributes in the XML file:
 * app:slide_show_progress_plusmark [boolean] --> True if you want to display the plus mark on an empty special day
 * app:slide_show_week [boolean] --> True if you want to show the left text view
 * app:slide_show_date [boolean] --> True if you want to show the right text view
+* app:sp_slide_show_circular_bars [boolean] --> True if you want to show the circular bars, false otherwise
 * app:slide_progress_chart_bar_top_text_color [color hex] --> The top text color of the SlideChartView
 * app:slide_progress_chart_bar_bottom_text_color [color hex] --> The bottom text color of the SlideChartView
 * app:slide_progress_chart_bar_bottom_special_text_color [color hex] --> The bottom text color of the SlideChartView (special progress)

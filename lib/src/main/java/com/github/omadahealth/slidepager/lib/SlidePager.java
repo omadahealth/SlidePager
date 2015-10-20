@@ -32,7 +32,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.omadahealth.slidepager.lib.adapter.AbstractSlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
@@ -272,7 +271,7 @@ public class SlidePager extends ViewPager {
             SlideTransformer.initTags(selectedView);
         }
 
-        return (List<View>) selectedView.getTag();
+        return (List<View>) selectedView.getTag(R.id.slide_transformer_tag_key);
     }
 
     /**
