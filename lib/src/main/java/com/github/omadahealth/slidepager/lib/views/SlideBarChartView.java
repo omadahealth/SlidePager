@@ -358,7 +358,7 @@ public class SlideBarChartView extends AbstractSlideView {
 
     @SuppressWarnings("unchecked")
     public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes, final int position) {
-        final List<View> children = (List<View>) getTag();
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         final List<BarChartProgressView> listView = new ArrayList<>();
         if (children != null) {
             Date date = new Date();
@@ -394,7 +394,7 @@ public class SlideBarChartView extends AbstractSlideView {
         this.setVisibility(View.VISIBLE);
         this.setAlpha(1f);
         loadStyledAttributes(mAttributes);
-        final List<View> children = (List<View>) getTag();
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof BarChartProgressView) {
