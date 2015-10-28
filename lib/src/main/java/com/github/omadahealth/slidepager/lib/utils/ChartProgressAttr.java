@@ -34,6 +34,8 @@ public class ChartProgressAttr extends ProgressAttr {
     }
 
     public Double getValue() {
+        if(mValue ==null)
+            return 0d;
         return mValue;
     }
 

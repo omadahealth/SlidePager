@@ -24,7 +24,6 @@
 package com.github.omadahealth.slidepager;
 
 import android.content.res.Configuration;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -32,11 +31,13 @@ import android.view.View;
 import android.widget.Button;
 
 import com.github.omadahealth.demo.R;
-import com.github.omadahealth.demo.databinding.ActivityMainBinding;
+import com.github.omadahealth.slidepager.lib.SlidePager;
 import com.github.omadahealth.slidepager.lib.SlideTransformer;
+import com.github.omadahealth.slidepager.lib.adapter.SlideBarChartPagerAdapter;
 import com.github.omadahealth.slidepager.lib.adapter.SlideChartPagerAdapter;
 import com.github.omadahealth.slidepager.lib.adapter.SlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
+import com.github.omadahealth.slidepager.lib.utils.BarChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
@@ -45,10 +46,21 @@ import com.github.omadahealth.slidepager.lib.views.SlideView;
 import java.util.Date;
 
 public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener<ChartProgressAttr> {
+
     /**
-     * Tag for logging this class
+     * The slide pager we use
      */
-    private static final String TAG = "MainActivity";
+    private SlidePager mSlidePager;
+
+    /**
+     * The slide pager we use
+     */
+    private SlidePager mSlideChartPager;
+
+    /**
+     * The slide pager we use
+     */
+    private SlidePager mSlideBarChartPager;
 
     /**
      * Max number of weeks in 'a program', could be set to the number of weeks if. Simply causes
@@ -57,12 +69,12 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     private static final int DEFAULT_PROGRAM_WEEKS = 16;
 
     /**
-     * Start date of the {@link ActivityMainBinding#slidePager}
+     * Start date of the {@link #mSlidePager}
      */
     private Date mStartDate;
 
     /**
-     * The current index of the {@link SlidePagerAdapter} we set on {@link ActivityMainBinding#slidePager}
+     * The current index of the {@link SlidePagerAdapter} we set on {@link #mSlidePager}
      */
     private int mCurrentPage;
 
@@ -74,8 +86,6 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
 
     private ProgressAttr progressAttr = new ProgressAttr(0, false, false);
 
-    private ActivityMainBinding mainBinding;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -84,16 +94,16 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         //SlidePagerAdapter
         mStartDate = Utilities.getPreviousDate(DEFAULT_PROGRAM_WEEKS);
-
-        final SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, mStartDate, new Date(), mainBinding.slidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
+        mSlidePager = (SlidePager) findViewById(R.id.slide_pager);
+        final SlidePagerAdapter adapterOne = new SlidePagerAdapter(this, mStartDate, new Date(), mSlidePager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
         SlideView.setSelectedView(0);
-        mainBinding.slidePager.setAdapter(adapterOne);
-        mainBinding.slidePager.setPageTransformer(false, new SlideTransformer());
-        mainBinding.slidePager.setOnPageChangeListener(this);
+        mSlidePager.setAdapter(adapterOne);
+        mSlidePager.setPageTransformer(false, new SlideTransformer());
+        mSlidePager.setOnPageChangeListener(this);
 
         Button change = (Button) findViewById(R.id.change_button);
         change.setOnClickListener(new View.OnClickListener() {
@@ -103,53 +113,68 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
                 adapterOne.getCurrentView(mCurrentPage).animateProgressView(mCurrentIndex, progressAttr);
             }
         });
-        mainBinding.slidePager.post(new Runnable() {
+        mSlidePager.post(new Runnable() {
             @Override
             public void run() {
-                mainBinding.slidePager.refreshPage();
+                mSlidePager.refreshPage();
             }
         });
 
 
         //SlideChartPagerAdapter
-        SlideChartPagerAdapter adapterChart = new SlideChartPagerAdapter(this, Utilities.getPreviousDate(16), new Date(), mainBinding.chartPager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
-        mainBinding.chartPager.setAdapter(adapterChart);
-        mainBinding.chartPager.setOnPageChangeListener(this);
-        mainBinding.chartPager.post(new Runnable() {
+        mSlideChartPager = (SlidePager) findViewById(R.id.chart_pager);
+        SlideChartPagerAdapter adapterChart = new SlideChartPagerAdapter(this, Utilities.getPreviousDate(16), new Date(), mSlideChartPager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
+        mSlideChartPager.setAdapter(adapterChart);
+        mSlideChartPager.setOnPageChangeListener(this);
+        mSlideChartPager.post(new Runnable() {
             @Override
             public void run() {
-                mainBinding.chartPager.refreshPage();
+                mSlideChartPager.refreshPage();
             }
         });
+
+        mSlideBarChartPager = (SlidePager) findViewById(R.id.bar_chart_pager);
+        SlideBarChartPagerAdapter adapterBarChart = new SlideBarChartPagerAdapter(this, Utilities.getPreviousDate(16), new Date(), mSlideBarChartPager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
+        mSlideBarChartPager.setAdapter(adapterBarChart);
+        mSlideBarChartPager.setOnPageChangeListener(this);
+        mSlideBarChartPager.post(new Runnable() {
+            @Override
+            public void run() {
+                mSlideBarChartPager.refreshPage();
+            }
+        });
+
+
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mainBinding.slidePager.refreshPage();
-        mainBinding.chartPager.refreshPage();
+        mSlidePager.refreshPage();
+        mSlideChartPager.refreshPage();
+        mSlideBarChartPager.refreshPage();
     }
 
     @Override
     public ChartProgressAttr getDayProgress(int page, int index) {
-        Log.i(TAG, "Get day progress : " + page + ", " + index);
-        int progress = 0;
+        int progress;
         Double value = null;
-        if (page == 14) {
+        if (page == 14 && (index == 2 || (index > 3))) {
+            progress = 0;
+
+        } else {
+
             value = 180.2d;
             progress = 100;
-        } else {
-            value = 180.2d;
-            progress = (int) Math.round((index % 4) * 33.33d);
         }
-
+        if (page == 14 && index == 3) {
+            value = 150d;
+            progress = 80;
+        }
         String day = Utilities.getSelectedDayText(Utilities.getPreviousDate(16).getTime(), page, index);
 
-        int color = getResources().getColor(progress < 34 ? R.color.red :
-                progress < 67 ? R.color.orange :
-                        R.color.green);
 
-        return new ChartProgressAttr(progress, value, day, page == 15 && index == 5, page == 15 && index == 6, color, color, R.drawable.checkmark_green, false, false);
+        return new ChartProgressAttr(progress, value, day, page == 14 && index == 3, page == 14 && index > 3);
     }
 
     @Override

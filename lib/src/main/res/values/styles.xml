@@ -46,6 +46,10 @@
         <item name="android:minHeight">20dp</item>
     </style>
 
+    <style name="slideBarChartBarStyle" parent="slideChartBarStyle">
+        <item name="android:layout_width">0.0dp</item>
+    </style>
+
     <style name="slideChartTextStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -63,5 +67,8 @@
         <item name="android:textSize">@dimen/default_chart_bottom_text_size</item>
         <item name="tv_typeface">roboto_light</item>
     </style>
+
+
+
 
 </resources>
