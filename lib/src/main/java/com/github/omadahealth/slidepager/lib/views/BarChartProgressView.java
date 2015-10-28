@@ -26,7 +26,6 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 
-
 /**
  * Created by dae.park on 10/5/15.
  */
@@ -119,7 +118,7 @@ public class BarChartProgressView extends RelativeLayout {
     /**
      * true if the progress==100;
      */
-    private Boolean mCompleted=null;
+    private Boolean mCompleted = null;
     /**
      * Check mark visibility on goal completion
      */
@@ -128,7 +127,7 @@ public class BarChartProgressView extends RelativeLayout {
     /**
      * If the view resets while {@link #mCheckMark} is easing in, it will use this boolean to know that, and hide it
      */
-    private boolean mShowCheckMark=false;
+    private boolean mShowCheckMark = false;
 
 
     /**
@@ -144,7 +143,6 @@ public class BarChartProgressView extends RelativeLayout {
     private static String INSTANCE_TODAY_COLOR = "today_color";
     private static String INSTANCE_SHOW_NULL_VAL = "show_null_val";
     private static String INSTANCE_SHOW_CHECKMARK = "show_checkmark";
-
 
 
     public BarChartProgressView(Context context) {
@@ -273,7 +271,6 @@ public class BarChartProgressView extends RelativeLayout {
     }
 
 
-
     /**
      * Animates the display of the check mark depending on the progress
      */
@@ -343,8 +340,8 @@ public class BarChartProgressView extends RelativeLayout {
         mBarView.setCompleted(progress.getProgress() == 100);
 
         int endValue = (int) ((progress.getValue() / (double) mMaxStep) * 100.0);
-        if(!mBarVisibleNullValue){
-            endValue=-1;
+        if (!mBarVisibleNullValue) {
+            endValue = -1;
         }
         mBarView.animateProgress(0, endValue, duration, delay);
 
@@ -368,10 +365,10 @@ public class BarChartProgressView extends RelativeLayout {
      * @param show True to show, false to hide
      */
     public void showCheckMark(boolean show) {
-        if(!mCheckMarkVisible) {
+        if (!mCheckMarkVisible) {
             return;
         }
-        mShowCheckMark=show;
+        mShowCheckMark = show;
         AnimatorSet set = new AnimatorSet();
         //Immediately remove them
         if (!show) {
@@ -398,10 +395,10 @@ public class BarChartProgressView extends RelativeLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 // resets the checkmark
-                if(!mShowCheckMark){
+                if (!mShowCheckMark) {
                     mCheckMark.setAlpha(0f);
                 }
-                Log.d("alhpa", ""+mCheckMark.getAlpha());
+                Log.d("alhpa", "" + mCheckMark.getAlpha());
             }
 
             @Override
@@ -443,7 +440,9 @@ public class BarChartProgressView extends RelativeLayout {
      *
      * @return The {@link #mCheckMark}
      */
-    public ImageView getCheckMark(){return mCheckMark;}
+    public ImageView getCheckMark() {
+        return mCheckMark;
+    }
 
     /**
      * Returns the current {@link #mBarView#getCompleted()} using {@link Math#round(float)}
@@ -451,10 +450,10 @@ public class BarChartProgressView extends RelativeLayout {
      * @return The {@link ChartProgressAttr#getProgress()}
      */
     public boolean getCompleted() {
-        if(mCompleted==null) {
+        if (mCompleted == null) {
             mCompleted = mChartProgressAttr != null ? mChartProgressAttr.getProgress() == 100 : null;
         }
-        return mCompleted==null ? false : mCompleted;
+        return mCompleted == null ? false : mCompleted;
     }
 
 
