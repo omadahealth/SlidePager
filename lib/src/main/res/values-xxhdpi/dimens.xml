@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="view_progress_circular_bar_margin">3.5dp</dimen>
+</resources>
