@@ -58,4 +58,5 @@ uploadArchives {
             pom.version = VERSION_NAME
         }
     }
+
 }

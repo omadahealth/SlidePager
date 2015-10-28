@@ -7,6 +7,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -271,6 +272,8 @@ public class BarChartProgressView extends RelativeLayout {
         });
     }
 
+
+
     /**
      * Animates the display of the check mark depending on the progress
      */
@@ -398,6 +401,7 @@ public class BarChartProgressView extends RelativeLayout {
                 if(!mShowCheckMark){
                     mCheckMark.setAlpha(0f);
                 }
+                Log.d("alhpa", ""+mCheckMark.getAlpha());
             }
 
             @Override
@@ -435,6 +439,13 @@ public class BarChartProgressView extends RelativeLayout {
     }
 
     /**
+     * Returns the contained {@link #mCheckMark}
+     *
+     * @return The {@link #mCheckMark}
+     */
+    public ImageView getCheckMark(){return mCheckMark;}
+
+    /**
      * Returns the current {@link #mBarView#getCompleted()} using {@link Math#round(float)}
      *
      * @return The {@link ChartProgressAttr#getProgress()}
@@ -445,6 +456,7 @@ public class BarChartProgressView extends RelativeLayout {
         }
         return mCompleted==null ? false : mCompleted;
     }
+
 
     /**
      * Gets the tag of this view, which are from [1,7]
