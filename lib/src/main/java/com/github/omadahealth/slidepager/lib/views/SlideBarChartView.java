@@ -412,12 +412,21 @@ public class SlideBarChartView extends AbstractSlideView {
     }
 
     /**
-     *
+     * To be able to get the bar for specific day at run time
      * @param position
      * @return  {@link BarChartProgressView} for given position in the current week
      */
     public BarChartProgressView getProgressBarAtPosition(int position){
         return mChartProgressList.get(position);
+    }
+
+    /**
+     *
+     * @param position
+     * @return String
+     */
+    public String getValueAtPosition(int position){
+       return mProgressTopTextList.get(position).getText().toString();
     }
 
     /**
