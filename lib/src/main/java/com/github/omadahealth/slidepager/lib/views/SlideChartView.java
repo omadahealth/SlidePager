@@ -370,7 +370,7 @@ public class SlideChartView extends AbstractSlideView {
     }
 
     @SuppressWarnings("unchecked")
-    public void animateSeries(boolean show) {
+    public void resetStreaks(boolean show) {
         final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {
@@ -384,13 +384,27 @@ public class SlideChartView extends AbstractSlideView {
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public void animateStreaks() {
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
+        if (children != null) {
+            for (final View child : children) {
+                if (child instanceof ProgressView) {
+                    final ProgressView progressView = (ProgressView) child;
+                    progressView.animateStreaks();
+                }
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public void resetPage(TypedArray mAttributes) {
         this.setVisibility(View.VISIBLE);
         this.setAlpha(1f);
 
         loadStyledAttributes(mAttributes);
-        animateSeries(false);
+        resetStreaks(false);
         final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {

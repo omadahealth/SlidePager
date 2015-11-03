@@ -353,8 +353,11 @@ public class SlideBarChartView extends AbstractSlideView {
     }
 
     @Override
-    public void animateSeries(boolean show) {
+    public void resetStreaks(boolean show) {
+    }
 
+    @Override
+    public void animateStreaks() {
     }
 
     @SuppressWarnings("unchecked")

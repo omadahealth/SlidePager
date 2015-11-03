@@ -36,7 +36,9 @@ public abstract class AbstractSlideView extends LinearLayout {
         mHasAnimated = true;
     }
 
-    public abstract void animateSeries(boolean show);
+    public abstract void resetStreaks(boolean show);
+
+    public abstract void animateStreaks();
 
     /**
      * Indicates if this page already called {@link #animatePage(OnSlidePageChangeListener, TypedArray)}

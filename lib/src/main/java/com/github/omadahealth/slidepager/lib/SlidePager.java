@@ -204,7 +204,7 @@ public class SlidePager extends ViewPager {
                 //page scrolled when no room: drag, idle
                 switch (state) {
                     case ViewPager.SCROLL_STATE_DRAGGING:
-                        animateSeries(getCurrentItem(), false);
+                        animateStreaks(getCurrentItem(), false);
                         break;
                     case ViewPager.SCROLL_STATE_SETTLING:
                         break;
@@ -225,7 +225,7 @@ public class SlidePager extends ViewPager {
 
     /**
      * Resets the {@link ProgressView} attributes to o progress and uncompleted colors.
-     * Hides the series with {@link #animateSeries(int, boolean)}
+     * Hides the series with {@link #animateStreaks(int, boolean)}
      *
      * @param position The position of the page to reset
      */
@@ -233,8 +233,10 @@ public class SlidePager extends ViewPager {
     private void resetPage(int position) {
         if (getAdapter() != null) {
             AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
-            if (slideView != null && (!slideView.hasAnimated() || mHasToReanimate)) {
-                slideView.resetPage(mAttributes);
+            if (slideView != null) {
+                if (!slideView.hasAnimated() || mHasToReanimate) {
+                    slideView.resetPage(mAttributes);
+                }
             }
         }
     }
@@ -246,6 +248,8 @@ public class SlidePager extends ViewPager {
         AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
         if (!slideView.hasAnimated() || mHasToReanimate) {
             slideView.animatePage(mUserPageListener, mAttributes);
+        } else {
+            slideView.animateStreaks();
         }
     }
 
@@ -253,11 +257,9 @@ public class SlidePager extends ViewPager {
      * @param position
      * @param show
      */
-    private void animateSeries(int position, boolean show) {
+    private void animateStreaks(int position, boolean show) {
         AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
-        if (!slideView.hasAnimated() || mHasToReanimate) {
-            slideView.animateSeries(show);
-        }
+        slideView.resetStreaks(show);
     }
 
     /**

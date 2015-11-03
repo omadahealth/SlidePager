@@ -312,8 +312,9 @@ public class SlideView extends AbstractSlideView {
      *
      * @param show True to animate them visible, false to immediately hide them
      */
+    @Override
     @SuppressWarnings("unchecked")
-    public void animateSeries(boolean show) {
+    public void resetStreaks(boolean show) {
         final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {
@@ -323,6 +324,20 @@ public class SlideView extends AbstractSlideView {
                     progressView.showStreak(show, ProgressView.STREAK.LEFT_STREAK);
                     progressView.showStreak(show, ProgressView.STREAK.CENTER_STREAK);
                     progressView.showCheckMark(show);
+                }
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void animateStreaks() {
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
+        if (children != null) {
+            for (final View child : children) {
+                if (child instanceof ProgressView) {
+                    final ProgressView progressView = (ProgressView) child;
+                    progressView.animateStreaks();
                 }
             }
         }
@@ -341,7 +356,7 @@ public class SlideView extends AbstractSlideView {
         loadStyledAttributes(attributes);
         mSelectedView = getSelectableIndex();
 
-        animateSeries(false);
+        resetStreaks(false);
         getSelectedImageView().resetView();
         final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
