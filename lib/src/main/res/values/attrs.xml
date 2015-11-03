@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="SlidePager">
+        <attr name="slide_pager_reanimate_slide_view" format="boolean" />
+
         <attr name="slide_progress_completed_fill_color" format="color" />
         <attr name="slide_progress_completed_reach_color" format="color" />
         <attr name="slide_progress_not_completed_reach_color" format="color" />

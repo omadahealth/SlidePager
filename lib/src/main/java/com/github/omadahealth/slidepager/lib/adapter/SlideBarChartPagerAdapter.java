@@ -11,6 +11,7 @@ import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.SlideBarChartView;
+import com.github.omadahealth.slidepager.lib.views.SlideChartView;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
 import java.util.Date;
@@ -20,91 +21,16 @@ import java.util.Date;
  */
 public class SlideBarChartPagerAdapter extends AbstractSlidePagerAdapter<SlideBarChartView> {
 
-
-    /**
-     * Calls {@link #SlideBarChartPagerAdapter(Context, Date, Date)} with the end date being set
-     * to today
-     *
-     * @param context   The context
-     * @param startDate The start {@link Date} for computing the number of weeks
-     */
     public SlideBarChartPagerAdapter(Context context, Date startDate) {
         this(context, startDate, new Date());
     }
 
-    /**
-     * Public constructors to the {@link SlideChartPagerAdapter}
-     *
-     * @param context   The context
-     * @param startDate The start {@link Date} for computing the number of weeks
-     * @param endDate   The end {@link Date} for computing the number of weeks
-     */
     public SlideBarChartPagerAdapter(Context context, Date startDate, Date endDate) {
         this(context, startDate, endDate, null, null, -1);
-
     }
 
     public SlideBarChartPagerAdapter(Context context, Date startDate, Date endDate, TypedArray attributes, OnSlidePageChangeListener pageListener, int maxWeeks) {
         super(context, startDate, endDate, attributes, pageListener, maxWeeks);
-    }
-
-    @Override
-    public int getCount() {
-        return mViews.length;
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup collection, int position) {
-        SlideBarChartView currentView;
-        if (mViews.length > position) {
-            currentView = getViewForPosition(position);
-        } else {
-            return null;
-        }
-
-        collection.addView(currentView);
-        return currentView;
-    }
-
-    /**
-     * Gets the {@link SlideView} for the current pager position, uses lazy initialization
-     * to instantiate new views
-     *
-     * @param position The position in the pager
-     * @return The existing slide view, or a new one
-     */
-    private SlideBarChartView getViewForPosition(int position) {
-        if (mViews == null) {
-            this.mViews = initViews();
-        }
-
-        SlideBarChartView currentView = mViews[position];
-
-        if (currentView == null) {
-            currentView = getWeekSlide(position, mWeeks);
-            mViews[position] = currentView;
-        }
-
-        return currentView;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup collection, int position, Object view) {
-        collection.removeView((View) view);
-    }
-
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
-    }
-
-    @Override
-    public SlideBarChartView getCurrentView(int position) {
-        if (mViews == null || position > mViews.length - 1) {
-            return null;
-        }
-
-        return getViewForPosition(position);
     }
 
     /**

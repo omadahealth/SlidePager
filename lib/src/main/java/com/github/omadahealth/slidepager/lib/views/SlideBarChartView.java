@@ -348,6 +348,7 @@ public class SlideBarChartView extends AbstractSlideView {
 
     @Override
     public void animatePage(final OnSlidePageChangeListener onPageListener, final TypedArray attributes) {
+        super.animatePage(onPageListener, attributes);
         animatePage(onPageListener, attributes, 0);
     }
 

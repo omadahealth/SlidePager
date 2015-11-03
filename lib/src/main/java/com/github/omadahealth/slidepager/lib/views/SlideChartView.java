@@ -354,7 +354,9 @@ public class SlideChartView extends AbstractSlideView {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
+        super.animatePage(listener, attributes);
         final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {

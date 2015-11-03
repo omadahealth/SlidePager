@@ -54,6 +54,7 @@ If you want to use the chart SlidePager, use the SlideChartPagerAdapter to popul
 
 You can change several attributes in the XML file:
 
+* app:slide_pager_reanimate_slide_view [boolean] --> The boolean controlling the animation if the page has already been displayed
 * app:slide_progress_completed_fill_color [color hex] --> The fill color when the progress is at 100%
 * app:slide_progress_completed_reach_color [color hex] --> The reach color(border) when the progress == 100%
 * app:slide_progress_not_completed_reach_color [color hex] --> The reach color(border) when the progress < 100%

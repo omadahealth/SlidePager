@@ -104,6 +104,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         mSlidePager.setAdapter(adapterOne);
         mSlidePager.setPageTransformer(false, new SlideTransformer());
         mSlidePager.setOnPageChangeListener(this);
+        mSlidePager.setOffscreenPageLimit(3);
 
         Button change = (Button) findViewById(R.id.change_button);
         change.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +133,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
                 mSlideChartPager.refreshPage();
             }
         });
+        mSlideChartPager.setOffscreenPageLimit(3);
 
         mSlideBarChartPager = (SlidePager) findViewById(R.id.bar_chart_pager);
         SlideBarChartPagerAdapter adapterBarChart = new SlideBarChartPagerAdapter(this, Utilities.getPreviousDate(16), new Date(), mSlideBarChartPager.getAttributeSet(), this, DEFAULT_PROGRAM_WEEKS);
@@ -143,6 +145,7 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
                 mSlideBarChartPager.refreshPage();
             }
         });
+        mSlideBarChartPager.setOffscreenPageLimit(3);
 
 
     }

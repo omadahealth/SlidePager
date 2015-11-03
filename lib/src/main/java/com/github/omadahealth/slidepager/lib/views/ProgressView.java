@@ -241,7 +241,6 @@ public class ProgressView extends RelativeLayout {
         bundle.putParcelable(INSTANCE_STATE, super.onSaveInstanceState());
         bundle.putBoolean(INSTANCE_SHOW_STREAKS, mShowStreaks);
         bundle.putBoolean(INSTANCE_SHOW_PROGRESS_TEXT, mShowProgressText);
-        bundle.putBoolean(INSTANCE_SHOW_CIRCULAR_BAR, mShowCircularBar);
         bundle.putBoolean(INSTANCE_SHOW_PROGRESS_PLUSMARK, mShowProgressPlusMark);
 
         bundle.putInt(INSTANCE_COMPLETED_COLOR, mCompletedColor);
@@ -266,7 +265,6 @@ public class ProgressView extends RelativeLayout {
             Resources res = getContext().getResources();
             mShowStreaks = bundle.getBoolean(INSTANCE_SHOW_STREAKS, true);
             mShowProgressText = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_TEXT, true);
-//            mShowCircularBar = bundle.getBoolean(INSTANCE_SHOW_CIRCULAR_BAR, true);
             mShowProgressPlusMark = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_PLUSMARK, true);
 
             mCompletedColor = bundle.getInt(INSTANCE_COMPLETED_COLOR, res.getColor(R.color.default_progress_completed_reach_color));
@@ -322,7 +320,6 @@ public class ProgressView extends RelativeLayout {
         if (attributes != null) {
             mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_show_streaks, true);
             mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, true);
-//            mShowCircularBar = attributes.getBoolean(R.styleable.SlidePager_slide_show_circular_bars, true);
             mShowProgressPlusMark = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_plusmark, true);
 
 
@@ -348,7 +345,6 @@ public class ProgressView extends RelativeLayout {
         } else {
             mShowStreaks = true;
             mShowProgressText = true;
-//            mShowCircularBar = true;
             mShowProgressPlusMark = true;
 
             mCompletedColor = progress != null && progress.getCompletedColor() != null ?

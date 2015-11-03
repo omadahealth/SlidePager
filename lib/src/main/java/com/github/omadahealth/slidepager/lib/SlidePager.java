@@ -57,6 +57,12 @@ public class SlidePager extends ViewPager {
     private OnSlidePageChangeListener mUserPageListener;
 
     /**
+     * Indicates if the user configured the style to be reanimating each time we are scrolling the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     * or not.
+     */
+    protected boolean mHasToReanimate;
+
+    /**
      * True if we should start at the last position in the {@link AbstractSlidePagerAdapter}
      */
     private boolean mStartAtEnd;
@@ -164,6 +170,7 @@ public class SlidePager extends ViewPager {
             setAttributeSet(getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
                     defStyleAttr, 0));
             mStartAtEnd = mAttributes.getBoolean(R.styleable.SlidePager_slide_start_at_end, false);
+            mHasToReanimate = mAttributes.getBoolean(R.styleable.SlidePager_slide_pager_reanimate_slide_view, true);
         }
     }
 
@@ -180,9 +187,6 @@ public class SlidePager extends ViewPager {
                 if (mUserPageListener != null) {
                     mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
-                if (positionOffset == 0) {
-//                    resetPage(position);
-                }
                 mPageIndex = position;
             }
 
@@ -192,10 +196,6 @@ public class SlidePager extends ViewPager {
                     mUserPageListener.onPageSelected(position);
                 }
                 resetPage(position);
-
-                if (position > 0) {
-//                    resetPage(position - 1);
-                }
             }
 
             @Override
@@ -232,9 +232,9 @@ public class SlidePager extends ViewPager {
     @SuppressWarnings("unchecked")
     private void resetPage(int position) {
         if (getAdapter() != null) {
-            AbstractSlideView selectedView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
-            if (selectedView != null) {
-                selectedView.resetPage(mAttributes);
+            AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
+            if (slideView != null && (!slideView.hasAnimated() || mHasToReanimate)) {
+                slideView.resetPage(mAttributes);
             }
         }
     }
@@ -244,7 +244,9 @@ public class SlidePager extends ViewPager {
      */
     private void animatePage(int position) {
         AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
-        slideView.animatePage(mUserPageListener, mAttributes);
+        if (!slideView.hasAnimated() || mHasToReanimate) {
+            slideView.animatePage(mUserPageListener, mAttributes);
+        }
     }
 
     /**
@@ -253,7 +255,9 @@ public class SlidePager extends ViewPager {
      */
     private void animateSeries(int position, boolean show) {
         AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
-        slideView.animateSeries(show);
+        if (!slideView.hasAnimated() || mHasToReanimate) {
+            slideView.animateSeries(show);
+        }
     }
 
     /**

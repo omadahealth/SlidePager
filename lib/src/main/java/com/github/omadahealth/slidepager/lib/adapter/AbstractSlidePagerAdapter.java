@@ -123,6 +123,7 @@ public abstract class AbstractSlidePagerAdapter<T extends AbstractSlideView> ext
     /**
      * Gets the {@link SlideView} for the current pager position, uses lazy initialization
      * to instantiate new views
+     *
      * @param position The position in the pager
      * @return The existing slide view, or a new one
      */
@@ -142,8 +143,9 @@ public abstract class AbstractSlidePagerAdapter<T extends AbstractSlideView> ext
     }
 
     @Override
-    public void destroyItem(ViewGroup collection, int position, Object view) {
+    public void destroyItem(ViewGroup collection, final int position, Object view) {
         collection.removeView((View) view);
+        mViews[position] = null;
     }
 
     @Override
@@ -171,7 +173,7 @@ public abstract class AbstractSlidePagerAdapter<T extends AbstractSlideView> ext
      *
      * @return The number of weeks between the two dates
      */
-    protected abstract T[] initViews() ;
+    protected abstract T[] initViews();
 
     /**
      * Initializes a new {@link SlideView} and sets its
@@ -179,7 +181,7 @@ public abstract class AbstractSlidePagerAdapter<T extends AbstractSlideView> ext
      *
      * @return
      */
-    protected abstract T getWeekSlide(int pagePosition, int weeks) ;
+    protected abstract T getWeekSlide(int pagePosition, int weeks);
 
 
     /**
