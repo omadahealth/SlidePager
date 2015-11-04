@@ -74,6 +74,12 @@ public class SlideView extends AbstractSlideView {
     private List<ProgressView> mProgressList = new ArrayList<>(7);
 
     /**
+     * Indicates if the user configured the style to be reanimating each time we are scrolling the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     * or not.
+     */
+    private boolean mHasToReanimate;
+
+    /**
      * True of we want to show {@link ViewSlideBinding#leftTextView}
      */
     private boolean mShowLeftText;
@@ -159,6 +165,7 @@ public class SlideView extends AbstractSlideView {
     private void loadStyledAttributes(TypedArray attributes) {
         mAttributes = attributes;
         if (mAttributes != null) {
+            mHasToReanimate = mAttributes.getBoolean(R.styleable.SlidePager_slide_pager_reanimate_slide_view, true);
             mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
             mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
@@ -323,7 +330,10 @@ public class SlideView extends AbstractSlideView {
                     progressView.showStreak(show, ProgressView.STREAK.RIGHT_STREAK);
                     progressView.showStreak(show, ProgressView.STREAK.LEFT_STREAK);
                     progressView.showStreak(show, ProgressView.STREAK.CENTER_STREAK);
-                    progressView.showCheckMark(show);
+
+                    if (mHasToReanimate) {
+                        progressView.showCheckMark(show);
+                    }
                 }
             }
         }
@@ -374,8 +384,8 @@ public class SlideView extends AbstractSlideView {
     /**
      * Animates the progress of a {@link ProgressView}
      *
-     * @param view     The view to animate
-     * @param children The sibling views we use to evaluate streaks showing
+     * @param view         The view to animate
+     * @param children     The sibling views we use to evaluate streaks showing
      * @param progressAttr The {@link ProgressAttr} for this view got from the listener
      */
     private void animateProgress(ProgressView view, List<View> children, ProgressAttr progressAttr) {

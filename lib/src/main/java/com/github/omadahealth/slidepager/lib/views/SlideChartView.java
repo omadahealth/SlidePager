@@ -115,6 +115,12 @@ public class SlideChartView extends AbstractSlideView {
     private TypedArray mAttributes;
 
     /**
+     * Indicates if the user configured the style to be reanimating each time we are scrolling the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     * or not.
+     */
+    private boolean mHasToReanimate;
+
+    /**
      * The {@link android.graphics.Color} link of the special day: {@link ProgressAttr#isSpecial()}
      */
     private int mSpecialBottomTextColor;
@@ -171,6 +177,7 @@ public class SlideChartView extends AbstractSlideView {
     private void loadStyledAttributes(TypedArray attributes) {
         mAttributes = attributes;
         if (mAttributes != null) {
+            mHasToReanimate = mAttributes.getBoolean(R.styleable.SlidePager_slide_pager_reanimate_slide_view, true);
             mTopTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_top_text_color, getResources().getColor(R.color.default_progress_chart_bar_top_text));
             mSpecialBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_special_text_color, getResources().getColor(R.color.default_progress_chart_bar_special_bottom_text));
             mBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_text_color, getResources().getColor(R.color.default_progress_chart_bar_bottom_text));
@@ -378,7 +385,10 @@ public class SlideChartView extends AbstractSlideView {
                     final ProgressView progressView = (ProgressView) child;
                     progressView.showStreak(show, ProgressView.STREAK.RIGHT_STREAK);
                     progressView.showStreak(show, ProgressView.STREAK.LEFT_STREAK);
-                    progressView.showCheckMark(show);
+
+                    if (mHasToReanimate) {
+                        progressView.showCheckMark(show);
+                    }
                 }
             }
         }
