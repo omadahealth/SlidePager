@@ -249,7 +249,7 @@ public class SlidePager extends ViewPager {
         if (!slideView.hasAnimated() || mHasToReanimate) {
             slideView.animatePage(mUserPageListener, mAttributes);
         } else {
-            slideView.animateStreaks();
+            slideView.animateStreaks(mUserPageListener, mAttributes);
         }
     }
 

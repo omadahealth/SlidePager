@@ -396,12 +396,14 @@ public class SlideChartView extends AbstractSlideView {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void animateStreaks() {
+    public void animateStreaks(OnSlidePageChangeListener listener, TypedArray attributes) {
         final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof ProgressView) {
                     final ProgressView progressView = (ProgressView) child;
+                    ProgressAttr progressAttr = listener.getDayProgress(mPagePosition, ((ProgressView) child).getIntTag());
+                    ((ProgressView) child).loadStyledAttributes(attributes, progressAttr);
                     progressView.animateStreaks();
                 }
             }

@@ -357,7 +357,7 @@ public class SlideBarChartView extends AbstractSlideView {
     }
 
     @Override
-    public void animateStreaks() {
+    public void animateStreaks(OnSlidePageChangeListener listener, TypedArray attributes) {
     }
 
     @SuppressWarnings("unchecked")

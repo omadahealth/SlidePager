@@ -38,7 +38,7 @@ public abstract class AbstractSlideView extends LinearLayout {
 
     public abstract void resetStreaks(boolean show);
 
-    public abstract void animateStreaks();
+    public abstract void animateStreaks(OnSlidePageChangeListener listener, TypedArray attributes);
 
     /**
      * Indicates if this page already called {@link #animatePage(OnSlidePageChangeListener, TypedArray)}
