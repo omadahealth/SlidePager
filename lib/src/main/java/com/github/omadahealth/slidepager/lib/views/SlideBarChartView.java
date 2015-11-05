@@ -167,7 +167,7 @@ public class SlideBarChartView extends AbstractSlideView {
             mChartBarColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_color, getResources().getColor(R.color.default_progress_chart_bar_color));
             mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
             mDelay = attributes.getInt(R.styleable.SlidePager_slide_progress_bar_chart_animation_delay, DEFAULT_PROGRESS_ANIMATION_DELAY);
-            mProgressAnimationTime = attributes.getInt(R.styleable.SlidePager_slide_progress_bar_chart_animation_time, DEFAULT_PROGRESS_ANIMATION_TIME );
+            mProgressAnimationTime = attributes.getInt(R.styleable.SlidePager_slide_progress_bar_chart_animation_time, DEFAULT_PROGRESS_ANIMATION_TIME);
         }
     }
 
@@ -259,19 +259,17 @@ public class SlideBarChartView extends AbstractSlideView {
     private void initTopAndBottomTexts() {
         //Set the top text to be the values
         for (int i = 0; i < mProgressTopTextList.size(); i++) {
-            int intValue = (mChartProgressAttr.get(i).getValue()).intValue();
+            int intValue = mChartProgressAttr == null || mChartProgressAttr.get(i) == null ? 0 : mChartProgressAttr.get(i).getValue().intValue();
             String topText = intValue == 0 ? "-" : "" + intValue;
-            mProgressTopTextList.get(i).setText(mChartProgressAttr.get(i).isFuture() ? "" : topText);
-            mProgressTopTextList.get(i).setTextColor(mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mTopTextColor);
-
-
+            mProgressTopTextList.get(i).setText(mChartProgressAttr == null || mChartProgressAttr.get(i) == null || mChartProgressAttr.get(i).isFuture() ? "" : topText);
+            mProgressTopTextList.get(i).setTextColor(mChartProgressAttr == null || mChartProgressAttr.get(i) == null || mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mTopTextColor);
         }
 
         //Set the bottom texts to be the day values and set the color if special
         for (int i = 0; i < mProgressBottomTextList.size(); i++) {
             TypefaceTextView currentTextView = mProgressBottomTextList.get(i);
-            currentTextView.setTextColor(mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mBottomTextColor);
-            currentTextView.setText(mChartProgressAttr.get(i).getBottomText());
+            currentTextView.setTextColor(mChartProgressAttr == null || mChartProgressAttr.get(i) == null || mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mBottomTextColor);
+            currentTextView.setText(mChartProgressAttr == null || mChartProgressAttr.get(i) == null ? "" : mChartProgressAttr.get(i).getBottomText());
         }
     }
 
@@ -417,20 +415,20 @@ public class SlideBarChartView extends AbstractSlideView {
 
     /**
      * To be able to get the bar for specific day at run time
+     *
      * @param position
-     * @return  {@link BarChartProgressView} for given position in the current week
+     * @return {@link BarChartProgressView} for given position in the current week
      */
-    public BarChartProgressView getProgressBarAtPosition(int position){
+    public BarChartProgressView getProgressBarAtPosition(int position) {
         return mChartProgressList.get(position);
     }
 
     /**
-     *
      * @param position
      * @return String
      */
-    public String getValueAtPosition(int position){
-       return mProgressTopTextList.get(position).getText().toString();
+    public String getValueAtPosition(int position) {
+        return mProgressTopTextList.get(position).getText().toString();
     }
 
     /**
