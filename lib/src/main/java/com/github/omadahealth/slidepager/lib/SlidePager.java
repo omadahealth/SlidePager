@@ -134,15 +134,36 @@ public class SlidePager extends ViewPager {
         }
     }
 
+    /**
+     * Fixes for "java.lang.IndexOutOfBoundsException Invalid index 0, size is 0"
+     * on "android.support.v4.view.ViewPager.performDrag"
+     */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         Log.i(TAG, "SlidePager click :" + (ev.getAction() & MotionEvent.ACTION_MASK));
+        if (getAdapter() == null || getAdapter().getCount() == 0) {
+            Log.i(TAG, "SlidePager onInterceptTouchEvent returned false because adapter is null or empty:");
+            return false;
+        }
         onTouchEvent(ev);
-        return super.onInterceptTouchEvent(ev);
+        try {
+            return super.onInterceptTouchEvent(ev);
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
+        return false;
     }
 
+    /**
+     * Fixes for "java.lang.IndexOutOfBoundsException Invalid index 0, size is 0"
+     * on "android.support.v4.view.ViewPager.performDrag"
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (getAdapter() == null || getAdapter().getCount() == 0) {
+            Log.i(TAG, "SlidePager onTouchEvent returned false because adapter is null or empty:");
+            return false;
+        }
         try {
             return super.onTouchEvent(event);
         } catch (Exception e) {
