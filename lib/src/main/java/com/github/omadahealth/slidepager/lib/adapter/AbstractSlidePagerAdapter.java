@@ -145,7 +145,7 @@ public abstract class AbstractSlidePagerAdapter<T extends AbstractSlideView> ext
     @Override
     public void destroyItem(ViewGroup collection, final int position, Object view) {
         collection.removeView((View) view);
-        mViews[position] = null;
+//        mViews[position] = null;
     }
 
     @Override
