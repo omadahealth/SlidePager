@@ -232,6 +232,7 @@ public class ProgressView extends RelativeLayout {
         if (isInEditMode()) {
             return;
         }
+        mAttributes = getContext().getTheme().obtainStyledAttributes(attributeSet, R.styleable.SlidePager, 0, 0);
         bindViews(context);
     }
 
@@ -784,7 +785,7 @@ public class ProgressView extends RelativeLayout {
      * @return
      */
     public Integer getIntTag() {
-        return Integer.parseInt((String) getTag());
+        return Integer.parseInt((String) (getTag() == null ? "0" : getTag()));
     }
 
     public static boolean isShowCircularBar() {
