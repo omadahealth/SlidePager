@@ -2,16 +2,12 @@ package com.github.omadahealth.slidepager.lib.adapter;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
 
-import com.github.omadahealth.slidepager.lib.SlidePager;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.SlideBarChartView;
-import com.github.omadahealth.slidepager.lib.views.SlideChartView;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
 import java.util.Date;
@@ -20,6 +16,8 @@ import java.util.Date;
  * Created by dae.park on 10/5/15.
  */
 public class SlideBarChartPagerAdapter extends AbstractSlidePagerAdapter<SlideBarChartView> {
+
+    private static final String TAG = "SlideBarChartPagerAd";
 
     public SlideBarChartPagerAdapter(Context context, Date startDate) {
         this(context, startDate, new Date());
@@ -41,7 +39,8 @@ public class SlideBarChartPagerAdapter extends AbstractSlidePagerAdapter<SlideBa
      */
     protected SlideBarChartView[] initViews() {
         if (mEndDate.before(mStartDate)) {
-            throw new IllegalArgumentException("Start date must be before end date");
+            Log.e(TAG, "End date is before start date. Reverts to same date as start date");
+            mStartDate = mEndDate;
         }
         mWeeks = Utilities.getWeeksBetween(mStartDate, mEndDate);
         mWeeks = mWeeks == 0 ? 1 : mWeeks;

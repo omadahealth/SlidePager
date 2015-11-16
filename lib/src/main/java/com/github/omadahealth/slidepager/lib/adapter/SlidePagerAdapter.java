@@ -25,6 +25,7 @@ package com.github.omadahealth.slidepager.lib.adapter;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.util.Log;
 
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
@@ -38,6 +39,7 @@ import java.util.Date;
  */
 public class SlidePagerAdapter extends AbstractSlidePagerAdapter<SlideView> {
 
+    private static final String TAG = "SlidePagerAdapter";
 
     public SlidePagerAdapter(Context context, Date startDate) {
         super(context, startDate);
@@ -59,7 +61,8 @@ public class SlidePagerAdapter extends AbstractSlidePagerAdapter<SlideView> {
      */
     protected SlideView[] initViews() {
         if (mEndDate.before(mStartDate)) {
-            throw new IllegalArgumentException("Start date must be before end date");
+            Log.e(TAG, "End date is before start date. Reverts to same date as start date");
+            mStartDate = mEndDate;
         }
         mWeeks = Utilities.getWeeksBetween(mStartDate, mEndDate);
         mWeeks = mWeeks == 0 ? 1 : mWeeks;
