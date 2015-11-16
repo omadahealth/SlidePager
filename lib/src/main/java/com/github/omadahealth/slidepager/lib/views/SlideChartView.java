@@ -280,16 +280,20 @@ public class SlideChartView extends AbstractSlideView {
     private void initTopAndBottomTexts() {
         //Set the top text to be the values
         for (int i = 0; i < mProgressTopTextList.size(); i++) {
-            String oneDecimal = Utilities.formatWeight(mProgressAttr.get(i).getValue());
-            mProgressTopTextList.get(i).setText(oneDecimal);
-            mProgressTopTextList.get(i).setTextColor(mTopTextColor);
+            if (mProgressAttr != null && mProgressAttr.get(i) != null) {
+                String oneDecimal = Utilities.formatWeight(mProgressAttr.get(i).getValue());
+                mProgressTopTextList.get(i).setText(oneDecimal);
+                mProgressTopTextList.get(i).setTextColor(mTopTextColor);
+            }
         }
 
         //Set the bottom texts to be the day values and set the color if special
         for (int i = 0; i < mProgressBottomTextList.size(); i++) {
-            TypefaceTextView currentTextView = mProgressBottomTextList.get(i);
-            currentTextView.setTextColor(mProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mBottomTextColor);
-            currentTextView.setText(mProgressAttr.get(i).getBottomText());
+            if (mProgressAttr != null && mProgressAttr.get(i) != null) {
+                TypefaceTextView currentTextView = mProgressBottomTextList.get(i);
+                currentTextView.setTextColor(mProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mBottomTextColor);
+                currentTextView.setText(mProgressAttr.get(i).getBottomText());
+            }
         }
     }
 

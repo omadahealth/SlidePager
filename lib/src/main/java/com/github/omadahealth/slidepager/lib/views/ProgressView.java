@@ -26,10 +26,12 @@ package com.github.omadahealth.slidepager.lib.views;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -104,6 +106,11 @@ public class ProgressView extends RelativeLayout {
      * The progress color for {@link ViewProgressBinding#circularBar} when progress is 100
      */
     private int mCompletedColor;
+
+    /**
+     * The progress checkmark drawable id, if specified by {@link ProgressAttr} or set apart
+     */
+    private Integer mCompletedDrawable;
 
     /**
      * The progress reached color for {@link ViewProgressBinding#circularBar} when progress is below 100
@@ -209,7 +216,6 @@ public class ProgressView extends RelativeLayout {
 
     private static String INSTANCE_SHOW_STREAKS = "show_streaks";
     private static String INSTANCE_SHOW_PROGRESS_TEXT = "show_progress_text";
-    private static String INSTANCE_SHOW_CIRCULAR_BAR = "show_circular_bar";
     private static String INSTANCE_SHOW_PROGRESS_PLUSMARK = "show_progress_plusmark";
     private static String INSTANCE_COMPLETED_COLOR = "completed_color";
     private static String INSTANCE_COMPLETED_FILL_COLOR = "completed_fill_color";
@@ -316,6 +322,7 @@ public class ProgressView extends RelativeLayout {
 
         mIsSpecial = progress == null ? false : progress.isSpecial();
         mIsFuture = progress == null ? false : progress.isFuture();
+        mCompletedDrawable = progress == null ? null : progress.getCompletedDrawable();
 
         Resources res = getContext().getResources();
         if (attributes != null) {
@@ -329,7 +336,10 @@ public class ProgressView extends RelativeLayout {
                     :
                     attributes.getColor(R.styleable.SlidePager_slide_progress_completed_reach_color, res.getColor(R.color.default_progress_completed_reach_color));
 
-            mCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
+            mCompletedFillColor = progress != null && progress.getCompletedFillColor() != null ?
+                    progress.getCompletedFillColor()
+                    :
+                    attributes.getColor(R.styleable.SlidePager_slide_progress_completed_fill_color, res.getColor(R.color.default_progress_completed_fill_color));
 
             mNotCompletedReachColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_reach_color, res.getColor(R.color.default_progress_not_completed_reach_color));
             mNotCompletedOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_outline_color, res.getColor(R.color.default_progress_not_completed_outline_color));
@@ -532,7 +542,7 @@ public class ProgressView extends RelativeLayout {
      * @param duration The duration in milliseconds of the animation
      * @param siblings The sibling views we use to evaluate streaks showing
      */
-    public void animateProgress(int start, ProgressAttr progress, int duration, final List<View> siblings) {
+    public void animateProgress(int start, final ProgressAttr progress, int duration, final List<View> siblings) {
         if (progress == null || !mShowCircularBar) {
             return;
         }
@@ -540,22 +550,13 @@ public class ProgressView extends RelativeLayout {
         setCircleColorsAndSize();
 
         mSiblings = setSiblings(siblings);
-        if (mReachColor != mNotCompletedReachColor) {
-            mBinding.circularBar.setClockwiseReachedArcColor(mReachColor);
-        } else {
-            mBinding.circularBar.setClockwiseReachedArcColor(progress.getProgress() == 100 ? mCompletedColor : mReachColor);
-        }
 
-        //Reached color
-        if (progress.getReachedColor() != null) {
-            mReachColor = progress.getReachedColor();
-        } else {
-            mReachColor = mIsSpecial ? mSpecialReachColor : mReachColor;
-        }
+        setUpColors(progress);
 
         //Set CheckMark drawable for non-special
-        if (progress.getCompletedDrawable() != null) {
-            mBinding.checkMark.setImageDrawable(getResources().getDrawable(progress.getCompletedDrawable()));
+        mCompletedDrawable = progress.getCompletedDrawable() != null ? progress.getCompletedDrawable() : mCompletedDrawable;
+        if (mCompletedDrawable != null) {
+            mBinding.checkMark.setImageDrawable(getResources().getDrawable(mCompletedDrawable));
         } else {
             mBinding.checkMark.setImageDrawable(getResources().getDrawable(R.drawable.checkmark_green));
         }
@@ -580,6 +581,13 @@ public class ProgressView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                //Fill color
+                if (progress.getCompletedFillColor() != null) {
+                    mCompletedFillColor = progress.getCompletedFillColor();
+                }
+                mBinding.circularBar.setCircleFillColor(mCompletedFillColor);
+
+                //Streaks
                 if (siblings != null) {
                     for (View view : siblings) {
                         if (view instanceof ProgressView) {
@@ -587,7 +595,6 @@ public class ProgressView extends RelativeLayout {
                         }
                     }
                 }
-
                 animateStreaks();
             }
 
@@ -602,7 +609,29 @@ public class ProgressView extends RelativeLayout {
             }
         });
         mBinding.circularBar.animateProgress(start, progress.getProgress(), duration);
+    }
 
+    /**
+     * Set up custom colors based on {@link ProgressAttr} parameters
+     */
+    public void setUpColors(ProgressAttr progress) {
+        //Reached color
+        if (progress.getReachedColor() != null) {
+            mReachColor = progress.getReachedColor();
+        } else {
+            mReachColor = mIsSpecial ? mSpecialReachColor : mReachColor;
+        }
+        if (mReachColor != mNotCompletedReachColor) {
+            mBinding.circularBar.setClockwiseReachedArcColor(mReachColor);
+        } else {
+            mBinding.circularBar.setClockwiseReachedArcColor(progress.getProgress() == 100 ? mCompletedColor : mReachColor);
+        }
+
+        //CompletedColor
+        if (progress.getCompletedColor() != null) {
+            mCompletedColor = progress.getCompletedColor();
+        }
+        mBinding.circularBar.setClockwiseReachedArcColor(mCompletedColor);
     }
 
     /**
@@ -796,4 +825,26 @@ public class ProgressView extends RelativeLayout {
         mShowCircularBar = showCircularBar;
     }
 
+    public void setCompletedColor(int completedColor) {
+        this.mCompletedColor = completedColor;
+    }
+
+    public void setCompletedFillColor(int mCompletedFillColor) {
+        this.mCompletedFillColor = mCompletedFillColor;
+    }
+
+    public void setCompletedDrawable(Integer completedDrawable) {
+        this.mCompletedDrawable = completedDrawable;
+        if (mCompletedDrawable != null) {
+            mBinding.checkMark.setImageDrawable(getResources().getDrawable(mCompletedDrawable));
+        }
+    }
+
+    /**
+     * Set the {@link #mCompletedColor} manually or by data binding, for the 100% color
+     */
+    @BindingAdapter("slide_progress_completed_reach_color")
+    public static void setSlideProgressCompletedReachColor(ProgressView progressView, @ColorInt int color) {
+        progressView.setCompletedColor(color);
+    }
 }

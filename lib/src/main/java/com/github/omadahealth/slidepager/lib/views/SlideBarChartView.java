@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -259,17 +258,21 @@ public class SlideBarChartView extends AbstractSlideView {
     private void initTopAndBottomTexts() {
         //Set the top text to be the values
         for (int i = 0; i < mProgressTopTextList.size(); i++) {
-            int intValue = mChartProgressAttr == null || mChartProgressAttr.get(i) == null ? 0 : mChartProgressAttr.get(i).getValue().intValue();
-            String topText = intValue == 0 ? "-" : "" + intValue;
-            mProgressTopTextList.get(i).setText(mChartProgressAttr == null || mChartProgressAttr.get(i) == null || mChartProgressAttr.get(i).isFuture() ? "" : topText);
-            mProgressTopTextList.get(i).setTextColor(mChartProgressAttr == null || mChartProgressAttr.get(i) == null || mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mTopTextColor);
+            if (mChartProgressAttr != null && mChartProgressAttr.get(i) != null) {
+                int intValue = mChartProgressAttr == null || mChartProgressAttr.get(i) == null ? 0 : mChartProgressAttr.get(i).getValue().intValue();
+                String topText = intValue == 0 ? "-" : "" + intValue;
+                mProgressTopTextList.get(i).setText(mChartProgressAttr == null || mChartProgressAttr.get(i) == null || mChartProgressAttr.get(i).isFuture() ? "" : topText);
+                mProgressTopTextList.get(i).setTextColor(mChartProgressAttr == null || mChartProgressAttr.get(i) == null || mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mTopTextColor);
+            }
         }
 
         //Set the bottom texts to be the day values and set the color if special
         for (int i = 0; i < mProgressBottomTextList.size(); i++) {
-            TypefaceTextView currentTextView = mProgressBottomTextList.get(i);
-            currentTextView.setTextColor(mChartProgressAttr == null || mChartProgressAttr.get(i) == null || mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mBottomTextColor);
-            currentTextView.setText(mChartProgressAttr == null || mChartProgressAttr.get(i) == null ? "" : mChartProgressAttr.get(i).getBottomText());
+            if (mChartProgressAttr != null && mChartProgressAttr.get(i) != null) {
+                TypefaceTextView currentTextView = mProgressBottomTextList.get(i);
+                currentTextView.setTextColor(mChartProgressAttr == null || mChartProgressAttr.get(i) == null || mChartProgressAttr.get(i).isSpecial() ? mSpecialBottomTextColor : mBottomTextColor);
+                currentTextView.setText(mChartProgressAttr == null || mChartProgressAttr.get(i) == null ? "" : mChartProgressAttr.get(i).getBottomText());
+            }
         }
     }
 
@@ -284,8 +287,10 @@ public class SlideBarChartView extends AbstractSlideView {
 
     private void initMaxStep() {
         for (int i = 0; i < 6; i++) {
-            int steps = mChartProgressAttr.get(i).getValue().intValue();
-            mMaxStep = steps > mMaxStep ? steps : mMaxStep;
+            if (mChartProgressAttr != null && mChartProgressAttr.get(i) != null) {
+                int steps = mChartProgressAttr.get(i).getValue().intValue();
+                mMaxStep = steps > mMaxStep ? steps : mMaxStep;
+            }
         }
     }
 
