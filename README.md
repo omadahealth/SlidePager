@@ -80,6 +80,21 @@ You can change several attributes in the XML file:
 * app:slide_progress_chart_color [color hex] --> The color of the bars in SlideChartView
 * app:slide_progress_chart_bar_size [dimension] --> The size of the bars in SlideChartView
 
+-SlideBarChartView
+* app:slide_progress_bar_chart_bar_width [dimension] --> The width of the bar
+* app:slide_progress_bar_chart_future_color [color hex] --> Color of the bars in the future days
+* app:slide_progress_bar_chart_today_color [color hex] --> Color of the bar for today ( only when progress < 100)
+* app:attr name="slide_progress_bar_chart_not_completed_color [color hex] --> Color of the bar when progress < 100
+* app:slide_progress_bar_chart_completed_color [color hex] --> Color of the bar when progress == 100
+* app:slide_progress_bar_chart_null_value_bar_display [boolean] --> If true, it will show a circle for 0 values
+(same as gif), if false it won't show anything  (true by default)
+* app:slide_progress_bar_chart_check_mark_visible [boolean] --> If true, a checkmark will show when progress == 100
+(true by default)
+* app:slide_progress_bar_chart_animation_time [integer] --> Animation duration of the bar
+* app:slide_progress_bar_chart_animation_delay [integer] --> Each bar will wait for the duration before start animating
+
+
+
 ========
 
 ### Credits
