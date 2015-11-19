@@ -6,14 +6,14 @@ To include in your project, add this to your build.gradle file:
 
 ```
    //SlidePager
-   compile 'com.github.omadahealth.slidepager:slidepager:2.1.6@aar'
+   compile 'com.github.omadahealth.slidepager:slidepager:2.2.0@aar'
 ```
 ![Demo](app/src/main/res/raw/slidepager.gif) ![Demo](app/src/main/res/raw/slidepager2.gif)
 
 ========
 ### By
 Developers:
-        [Olivier Goutay](https://github.com/olivierg13) and [Stoyan Dimitrov](https://github.com/StoyanD) and [Dae Park](https://github.com/daespark)
+        [Olivier Goutay](https://github.com/olivierg13), [Stoyan Dimitrov](https://github.com/StoyanD) and [Dae Park](https://github.com/daespark)
 
 Designers:
         [Yassine Bentaieb](http://yassinebentaieb.com/)

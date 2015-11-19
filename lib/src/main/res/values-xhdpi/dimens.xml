@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="view_progress_circular_bar_margin">3.5dp</dimen>
+    <dimen name="view_day_progress_margin_padding_negative">-7dp</dimen>
 </resources>
