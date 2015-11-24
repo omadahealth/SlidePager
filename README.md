@@ -6,7 +6,7 @@ To include in your project, add this to your build.gradle file:
 
 ```
    //SlidePager
-   compile 'com.github.omadahealth.slidepager:slidepager:2.2.0@aar'
+   compile 'com.github.omadahealth.slidepager:slidepager:2.2.1@aar'
 ```
 ![Demo](app/src/main/res/raw/slidepager.gif) ![Demo](app/src/main/res/raw/slidepager2.gif)
 
@@ -65,6 +65,7 @@ You can change several attributes in the XML file:
 * app:slide_progress_special_reach_color [color hex] --> The reach color(border) when the progress < 100%
 * app:slide_progress_special_outline_color [color hex] --> The outline color(border) when the progress < 100%
 * app:slide_progress_special_fill_color [color hex] --> The fill color(border) when the progress < 100%
+* app:slide_progress_text_color [color hex] --> The color used for the text below the CircularBar
 * app:slide_progress_reached_width [dimension] --> The size of the reached progress on the CircularBar
 * app:slide_start_at_end [boolean] --> True if you want the pager to start at the last page instead of 0
 * app:slide_show_streaks [boolean] --> True if you want the connecting streaks to appear between consecutive 100% progress views

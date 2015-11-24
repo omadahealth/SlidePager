@@ -8,6 +8,7 @@
     <color name="default_progress_special_reach_color">#03A9F4</color>
     <color name="default_progress_special_outline_color">#81D7FF</color>
     <color name="default_progress_special_fill_color">#EDF8FC</color>
+    <color name="default_progress_text_color">#78909C</color>
     <color name="default_progress_chart_bar_color">#4b7185</color>
     <color name="default_progress_chart_bar_top_text">#ffffff</color>
     <color name="default_progress_chart_bar_bottom_text">#4b83a0</color>
