@@ -32,7 +32,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.omadahealth.slidepager.lib.adapter.AbstractSlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
@@ -56,6 +55,12 @@ public class SlidePager extends ViewPager {
      * is defined implemented by this class and set in {@link #setSlidePager()}
      */
     private OnSlidePageChangeListener mUserPageListener;
+
+    /**
+     * Indicates if the user configured the style to be reanimating each time we are scrolling the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     * or not.
+     */
+    protected boolean mHasToReanimate;
 
     /**
      * True if we should start at the last position in the {@link AbstractSlidePagerAdapter}
@@ -129,15 +134,36 @@ public class SlidePager extends ViewPager {
         }
     }
 
+    /**
+     * Fixes for "java.lang.IndexOutOfBoundsException Invalid index 0, size is 0"
+     * on "android.support.v4.view.ViewPager.performDrag"
+     */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         Log.i(TAG, "SlidePager click :" + (ev.getAction() & MotionEvent.ACTION_MASK));
+        if (getAdapter() == null || getAdapter().getCount() == 0) {
+            Log.i(TAG, "SlidePager onInterceptTouchEvent returned false because adapter is null or empty:");
+            return false;
+        }
         onTouchEvent(ev);
-        return super.onInterceptTouchEvent(ev);
+        try {
+            return super.onInterceptTouchEvent(ev);
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
+        return false;
     }
 
+    /**
+     * Fixes for "java.lang.IndexOutOfBoundsException Invalid index 0, size is 0"
+     * on "android.support.v4.view.ViewPager.performDrag"
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (getAdapter() == null || getAdapter().getCount() == 0) {
+            Log.i(TAG, "SlidePager onTouchEvent returned false because adapter is null or empty:");
+            return false;
+        }
         try {
             return super.onTouchEvent(event);
         } catch (Exception e) {
@@ -165,6 +191,7 @@ public class SlidePager extends ViewPager {
             setAttributeSet(getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
                     defStyleAttr, 0));
             mStartAtEnd = mAttributes.getBoolean(R.styleable.SlidePager_slide_start_at_end, false);
+            mHasToReanimate = mAttributes.getBoolean(R.styleable.SlidePager_slide_pager_reanimate_slide_view, true);
         }
     }
 
@@ -181,9 +208,6 @@ public class SlidePager extends ViewPager {
                 if (mUserPageListener != null) {
                     mUserPageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
-                if (positionOffset == 0) {
-//                    resetPage(position);
-                }
                 mPageIndex = position;
             }
 
@@ -193,10 +217,6 @@ public class SlidePager extends ViewPager {
                     mUserPageListener.onPageSelected(position);
                 }
                 resetPage(position);
-
-                if (position > 0) {
-//                    resetPage(position - 1);
-                }
             }
 
             @Override
@@ -205,7 +225,7 @@ public class SlidePager extends ViewPager {
                 //page scrolled when no room: drag, idle
                 switch (state) {
                     case ViewPager.SCROLL_STATE_DRAGGING:
-                        animateSeries(getCurrentItem(), false);
+                        animateStreaks(getCurrentItem(), false);
                         break;
                     case ViewPager.SCROLL_STATE_SETTLING:
                         break;
@@ -226,16 +246,18 @@ public class SlidePager extends ViewPager {
 
     /**
      * Resets the {@link ProgressView} attributes to o progress and uncompleted colors.
-     * Hides the series with {@link #animateSeries(int, boolean)}
+     * Hides the series with {@link #animateStreaks(int, boolean)}
      *
      * @param position The position of the page to reset
      */
     @SuppressWarnings("unchecked")
     private void resetPage(int position) {
         if (getAdapter() != null) {
-            AbstractSlideView selectedView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
-            if (selectedView != null) {
-                selectedView.resetPage(mAttributes);
+            AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
+            if (slideView != null) {
+                if (!slideView.hasAnimated() || mHasToReanimate) {
+                    slideView.resetPage(mAttributes);
+                }
             }
         }
     }
@@ -245,16 +267,20 @@ public class SlidePager extends ViewPager {
      */
     private void animatePage(int position) {
         AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
-        slideView.animatePage(mUserPageListener, mAttributes);
+        if (!slideView.hasAnimated() || mHasToReanimate) {
+            slideView.animatePage(mUserPageListener, mAttributes);
+        } else {
+            slideView.animateStreaks(mUserPageListener, mAttributes);
+        }
     }
 
     /**
      * @param position
      * @param show
      */
-    private void animateSeries(int position, boolean show) {
+    private void animateStreaks(int position, boolean show) {
         AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
-        slideView.animateSeries(show);
+        slideView.resetStreaks(show);
     }
 
     /**
@@ -272,7 +298,7 @@ public class SlidePager extends ViewPager {
             SlideTransformer.initTags(selectedView);
         }
 
-        return (List<View>) selectedView.getTag();
+        return (List<View>) selectedView.getTag(R.id.slide_transformer_tag_key);
     }
 
     /**

@@ -11,6 +11,13 @@ import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListene
  * Created by oliviergoutay on 8/5/15.
  */
 public abstract class AbstractSlideView extends LinearLayout {
+
+    /**
+     * Indicates if this page already called {@link #animatePage(OnSlidePageChangeListener, TypedArray)}
+     * to know if we want to reanimate or not.
+     */
+    protected boolean mHasAnimated;
+
     public AbstractSlideView(Context context) {
         super(context);
     }
@@ -25,7 +32,19 @@ public abstract class AbstractSlideView extends LinearLayout {
 
     public abstract void resetPage(TypedArray mAttributes);
 
-    public abstract void animatePage(OnSlidePageChangeListener listener, TypedArray attributes);
+    public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
+        mHasAnimated = true;
+    }
 
-    public abstract void animateSeries(boolean show);
+    public abstract void resetStreaks(boolean show);
+
+    public abstract void animateStreaks(OnSlidePageChangeListener listener, TypedArray attributes);
+
+    /**
+     * Indicates if this page already called {@link #animatePage(OnSlidePageChangeListener, TypedArray)}
+     * to know if we want to reanimate or not.
+     */
+    public boolean hasAnimated() {
+        return mHasAnimated;
+    }
 }

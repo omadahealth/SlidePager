@@ -74,6 +74,12 @@ public class SlideView extends AbstractSlideView {
     private List<ProgressView> mProgressList = new ArrayList<>(7);
 
     /**
+     * Indicates if the user configured the style to be reanimating each time we are scrolling the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     * or not.
+     */
+    private boolean mHasToReanimate;
+
+    /**
      * True of we want to show {@link ViewSlideBinding#leftTextView}
      */
     private boolean mShowLeftText;
@@ -159,6 +165,7 @@ public class SlideView extends AbstractSlideView {
     private void loadStyledAttributes(TypedArray attributes) {
         mAttributes = attributes;
         if (mAttributes != null) {
+            mHasToReanimate = mAttributes.getBoolean(R.styleable.SlidePager_slide_pager_reanimate_slide_view, true);
             mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
             mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
@@ -286,15 +293,16 @@ public class SlideView extends AbstractSlideView {
      * @param attributes The attributes to use
      */
     @SuppressWarnings("unchecked")
+    @Override
     public void animatePage(OnSlidePageChangeListener listener, TypedArray attributes) {
-        final List<View> children = (List<View>) getTag();
+        super.animatePage(listener, attributes);
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof ProgressView) {
                     ProgressAttr progressAttr = listener.getDayProgress(mPagePosition, ((ProgressView) child).getIntTag());
                     ((ProgressView) child).loadStyledAttributes(attributes, progressAttr);
                     animateProgress((ProgressView) child, children, progressAttr);
-
                 }
             }
             animateSelectedTranslation(mProgressList.get(mSelectedView));
@@ -310,9 +318,10 @@ public class SlideView extends AbstractSlideView {
      *
      * @param show True to animate them visible, false to immediately hide them
      */
+    @Override
     @SuppressWarnings("unchecked")
-    public void animateSeries(boolean show) {
-        final List<View> children = (List<View>) getTag();
+    public void resetStreaks(boolean show) {
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof ProgressView) {
@@ -320,7 +329,26 @@ public class SlideView extends AbstractSlideView {
                     progressView.showStreak(show, ProgressView.STREAK.RIGHT_STREAK);
                     progressView.showStreak(show, ProgressView.STREAK.LEFT_STREAK);
                     progressView.showStreak(show, ProgressView.STREAK.CENTER_STREAK);
-                    progressView.showCheckMark(show);
+
+                    if (mHasToReanimate) {
+                        progressView.showCheckMark(show);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void animateStreaks(OnSlidePageChangeListener listener, TypedArray attributes) {
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
+        if (children != null) {
+            for (final View child : children) {
+                if (child instanceof ProgressView) {
+                    final ProgressView progressView = (ProgressView) child;
+                    ProgressAttr progressAttr = listener.getDayProgress(mPagePosition, ((ProgressView) child).getIntTag());
+                    ((ProgressView) child).loadStyledAttributes(attributes, progressAttr);
+                    progressView.animateStreaks();
                 }
             }
         }
@@ -339,9 +367,9 @@ public class SlideView extends AbstractSlideView {
         loadStyledAttributes(attributes);
         mSelectedView = getSelectableIndex();
 
-        animateSeries(false);
+        resetStreaks(false);
         getSelectedImageView().resetView();
-        final List<View> children = (List<View>) getTag();
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         if (children != null) {
             for (final View child : children) {
                 if (child instanceof ProgressView) {
@@ -357,8 +385,8 @@ public class SlideView extends AbstractSlideView {
     /**
      * Animates the progress of a {@link ProgressView}
      *
-     * @param view     The view to animate
-     * @param children The sibling views we use to evaluate streaks showing
+     * @param view         The view to animate
+     * @param children     The sibling views we use to evaluate streaks showing
      * @param progressAttr The {@link ProgressAttr} for this view got from the listener
      */
     private void animateProgress(ProgressView view, List<View> children, ProgressAttr progressAttr) {
@@ -376,7 +404,7 @@ public class SlideView extends AbstractSlideView {
      */
     @SuppressWarnings("unchecked")
     public void animateProgressView(int index, ProgressAttr progress) {
-        final List<View> children = (List<View>) getTag();
+        final List<View> children = (List<View>) getTag(R.id.slide_transformer_tag_key);
         ProgressView view = getProgressView(index);
         if (view != null && view.isShowCircularBar()) {
             view.animateProgress(view.getProgress(), progress, mProgressAnimationTime, children);

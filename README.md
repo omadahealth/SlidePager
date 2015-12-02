@@ -6,14 +6,14 @@ To include in your project, add this to your build.gradle file:
 
 ```
    //SlidePager
-   compile 'com.github.omadahealth.slidepager:slidepager:1.9.1@aar'
+   compile 'com.github.omadahealth.slidepager:slidepager:2.2.1@aar'
 ```
-![Demo](app/src/main/res/raw/slidepager.gif)
+![Demo](app/src/main/res/raw/slidepager.gif) ![Demo](app/src/main/res/raw/slidepager2.gif)
 
 ========
 ### By
 Developers:
-        [Olivier Goutay](https://github.com/olivierg13) and [Stoyan Dimitrov](https://github.com/StoyanD)
+        [Olivier Goutay](https://github.com/olivierg13), [Stoyan Dimitrov](https://github.com/StoyanD) and [Dae Park](https://github.com/daespark)
 
 Designers:
         [Yassine Bentaieb](http://yassinebentaieb.com/)
@@ -54,6 +54,7 @@ If you want to use the chart SlidePager, use the SlideChartPagerAdapter to popul
 
 You can change several attributes in the XML file:
 
+* app:slide_pager_reanimate_slide_view [boolean] --> The boolean controlling the animation if the page has already been displayed
 * app:slide_progress_completed_fill_color [color hex] --> The fill color when the progress is at 100%
 * app:slide_progress_completed_reach_color [color hex] --> The reach color(border) when the progress == 100%
 * app:slide_progress_not_completed_reach_color [color hex] --> The reach color(border) when the progress < 100%
@@ -64,6 +65,7 @@ You can change several attributes in the XML file:
 * app:slide_progress_special_reach_color [color hex] --> The reach color(border) when the progress < 100%
 * app:slide_progress_special_outline_color [color hex] --> The outline color(border) when the progress < 100%
 * app:slide_progress_special_fill_color [color hex] --> The fill color(border) when the progress < 100%
+* app:slide_progress_text_color [color hex] --> The color used for the text below the CircularBar
 * app:slide_progress_reached_width [dimension] --> The size of the reached progress on the CircularBar
 * app:slide_start_at_end [boolean] --> True if you want the pager to start at the last page instead of 0
 * app:slide_show_streaks [boolean] --> True if you want the connecting streaks to appear between consecutive 100% progress views
@@ -78,6 +80,21 @@ You can change several attributes in the XML file:
 * app:slide_progress_chart_bar_bottom_special_text_color [color hex] --> The bottom text color of the SlideChartView (special progress)
 * app:slide_progress_chart_color [color hex] --> The color of the bars in SlideChartView
 * app:slide_progress_chart_bar_size [dimension] --> The size of the bars in SlideChartView
+
+-SlideBarChartView
+* app:slide_progress_bar_chart_bar_width [dimension] --> The width of the bar
+* app:slide_progress_bar_chart_future_color [color hex] --> Color of the bars in the future days
+* app:slide_progress_bar_chart_today_color [color hex] --> Color of the bar for today ( only when progress < 100)
+* app:attr name="slide_progress_bar_chart_not_completed_color [color hex] --> Color of the bar when progress < 100
+* app:slide_progress_bar_chart_completed_color [color hex] --> Color of the bar when progress == 100
+* app:slide_progress_bar_chart_null_value_bar_display [boolean] --> If true, it will show a circle for 0 values
+(same as gif), if false it won't show anything  (true by default)
+* app:slide_progress_bar_chart_check_mark_visible [boolean] --> If true, a checkmark will show when progress == 100
+(true by default)
+* app:slide_progress_bar_chart_animation_time [integer] --> Animation duration of the bar
+* app:slide_progress_bar_chart_animation_delay [integer] --> Each bar will wait for the duration before start animating
+
+
 
 ========
 

@@ -1,26 +1,3 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2015 Omada Health, Inc
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package com.github.omadahealth.slidepager.lib.adapter;
 
 import android.content.Context;
@@ -30,27 +7,27 @@ import android.util.Log;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlideListener;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
-import com.github.omadahealth.slidepager.lib.views.SlideChartView;
+import com.github.omadahealth.slidepager.lib.views.SlideBarChartView;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
 import java.util.Date;
 
 /**
- * Created by stoyan on 4/3/15.
+ * Created by dae.park on 10/5/15.
  */
-public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChartView> {
+public class SlideBarChartPagerAdapter extends AbstractSlidePagerAdapter<SlideBarChartView> {
 
-    private static final String TAG = "SlideChartPagerAdapter";
+    private static final String TAG = "SlideBarChartPagerAd";
 
-    public SlideChartPagerAdapter(Context context, Date startDate) {
-        super(context, startDate);
+    public SlideBarChartPagerAdapter(Context context, Date startDate) {
+        this(context, startDate, new Date());
     }
 
-    public SlideChartPagerAdapter(Context context, Date startDate, Date endDate) {
-        super(context, startDate, endDate);
+    public SlideBarChartPagerAdapter(Context context, Date startDate, Date endDate) {
+        this(context, startDate, endDate, null, null, -1);
     }
 
-    public SlideChartPagerAdapter(Context context, Date startDate, Date endDate, TypedArray attributes, OnSlidePageChangeListener pageListener, int maxWeeks) {
+    public SlideBarChartPagerAdapter(Context context, Date startDate, Date endDate, TypedArray attributes, OnSlidePageChangeListener pageListener, int maxWeeks) {
         super(context, startDate, endDate, attributes, pageListener, maxWeeks);
     }
 
@@ -60,7 +37,7 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
      *
      * @return The number of weeks between the two dates
      */
-    protected SlideChartView[] initViews() {
+    protected SlideBarChartView[] initViews() {
         if (mEndDate.before(mStartDate)) {
             Log.e(TAG, "End date is before start date. Reverts to same date as start date");
             mStartDate = mEndDate;
@@ -68,7 +45,7 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
         mWeeks = Utilities.getWeeksBetween(mStartDate, mEndDate);
         mWeeks = mWeeks == 0 ? 1 : mWeeks;
 
-        return new SlideChartView[mWeeks];
+        return new SlideBarChartView[mWeeks];
     }
 
     /**
@@ -77,8 +54,8 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
      *
      * @return
      */
-    protected SlideChartView getWeekSlide(int pagePosition, int weeks) {
-        SlideChartView week = new SlideChartView(mContext, mAttributeSet, pagePosition, mUserPageListener);
+    protected SlideBarChartView getWeekSlide(int pagePosition, int weeks) {
+        SlideBarChartView week = new SlideBarChartView(mContext, mAttributeSet, pagePosition, mUserPageListener);
         week.setListener(new OnSlideListener() {
             @Override
             public void onDaySelected(int page, int index) {
@@ -106,5 +83,15 @@ public class SlideChartPagerAdapter extends AbstractSlidePagerAdapter<SlideChart
             }
         });
         return week;
+    }
+
+
+    /**
+     * Returns the right text for the {@link SlideView}
+     *
+     * @return
+     */
+    public String getRightText(int weeksSince) {
+        return Utilities.getWeekRangeText(mEndDate, weeksSince);
     }
 }

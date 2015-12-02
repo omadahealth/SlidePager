@@ -42,4 +42,6 @@ public interface OnSlidePageChangeListener<T extends ProgressAttr> extends ViewP
      */
     T getDayProgress(int page, int index);
 
+
+
 }

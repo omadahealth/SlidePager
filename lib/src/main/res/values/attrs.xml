@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="SlidePager">
+        <attr name="slide_pager_reanimate_slide_view" format="boolean" />
+
         <attr name="slide_progress_completed_fill_color" format="color" />
         <attr name="slide_progress_completed_reach_color" format="color" />
         <attr name="slide_progress_not_completed_reach_color" format="color" />
@@ -11,6 +13,7 @@
         <attr name="slide_progress_special_reach_color" format="color" />
         <attr name="slide_progress_special_outline_color" format="color" />
         <attr name="slide_progress_special_fill_color" format="color" />
+        <attr name="slide_progress_text_color" format="color" />
         <attr name="slide_progress_reached_width" format="dimension" />
         <attr name="slide_start_at_end" format="boolean" />
         <attr name="slide_shake_if_not_selectable" format="boolean" />
@@ -30,6 +33,18 @@
         <attr name="slide_progress_chart_bar_bottom_special_text_color" format="color" />
         <attr name="slide_progress_chart_color" format="color" />
         <attr name="slide_progress_chart_bar_size" format="dimension" />
+
+        <attr name="slide_progress_bar_chart_bar_width" format="dimension"/>
+        <attr name="slide_progress_bar_chart_future_color" format="color"/>
+        <attr name="slide_progress_bar_chart_today_color" format="color"/>
+        <attr name="slide_progress_bar_chart_not_completed_color" format="color"/>
+        <attr name="slide_progress_bar_chart_completed_color" format="color"/>
+        <attr name="slide_progress_bar_chart_null_value_bar_display" format="boolean"/>
+        <attr name="slide_progress_bar_chart_check_mark_visible" format="boolean"/>
+        <attr name="slide_progress_bar_chart_animation_time" format="integer"/>
+        <attr name="slide_progress_bar_chart_animation_delay" format="integer"/>
+
+
     </declare-styleable>
 
 </resources>

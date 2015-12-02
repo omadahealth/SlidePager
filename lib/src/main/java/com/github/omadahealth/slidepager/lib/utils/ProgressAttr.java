@@ -37,6 +37,12 @@ public class ProgressAttr {
     private Integer mCompletedColor;
 
     /**
+     * Determines the color filled for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * completedColor. Uses the default style color if set to null.
+     */
+    private Integer mCompletedFillColor;
+
+    /**
      * Determines the drawable for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
      * when progress is 100%. Uses the default drawable if set to null.
      */
@@ -83,6 +89,18 @@ public class ProgressAttr {
         this.mStreakRightOffScreen = streakRightOffScreen;
     }
 
+    public ProgressAttr(int progress, boolean special, boolean isFuture, Integer reachedColor, Integer completedColor, Integer completedFillColor, Integer completedDrawable, boolean streakLeftOffScreen, boolean streakRightOffScreen) {
+        this.mProgress = progress;
+        this.mSpecial = special;
+        this.mIsFuture = isFuture;
+        this.mReachedColor = reachedColor;
+        this.mCompletedColor = completedColor;
+        this.mCompletedFillColor = completedFillColor;
+        this.mCompletedDrawable = completedDrawable;
+        this.mStreakLeftOffScreen = streakLeftOffScreen;
+        this.mStreakRightOffScreen = streakRightOffScreen;
+    }
+
     public boolean isSpecial() {
         return mSpecial;
     }
@@ -121,6 +139,14 @@ public class ProgressAttr {
 
     public void setCompletedColor(Integer completedColor) {
         this.mCompletedColor = completedColor;
+    }
+
+    public Integer getCompletedFillColor() {
+        return mCompletedFillColor;
+    }
+
+    public void setCompletedFillColor(Integer completedFillColor) {
+        this.mCompletedFillColor = completedFillColor;
     }
 
     public Integer getCompletedDrawable() {

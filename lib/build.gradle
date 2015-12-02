@@ -40,7 +40,8 @@ dependencies {
 //adb shell monkey -p com.github.omadahealth.demo  -s 99 -v 20000
 
 //gradle clean build uploadArchives
-apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+//apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+apply from: 'https://raw.github.com/omadahealth/omada-nexus/master/gradle-mvn-push/gradle-mvn-push.gradle'
 
 //task androidSourcesJar(type: Jar) {
 //    classifier = 'sources'
