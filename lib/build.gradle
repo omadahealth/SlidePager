@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 57
-        versionName "2.2.3"
+        versionCode 58
+        versionName "2.2.4"
     }
     buildTypes {
         release {
@@ -40,25 +40,25 @@ dependencies {
 //adb shell monkey -p com.github.omadahealth.demo  -s 99 -v 20000
 
 //gradle clean build uploadArchives
-//apply from: 'https://raw.github.com/omadahealth/omada-nexus/master/gradle-mvn-push/gradle-mvn-push.gradle'
+apply from: 'https://raw.github.com/omadahealth/omada-nexus/master/gradle-mvn-push/gradle-mvn-push.gradle'
 
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
-}
-artifacts {
-    archives androidSourcesJar
-}
-
-apply plugin: 'maven'
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri("../../omada-nexus/release"))
-            snapshotRepository(url: uri("../../omada-nexus/release"))
-            pom.groupId = GROUP
-            pom.artifactId = POM_ARTIFACT_ID
-            pom.version = VERSION_NAME
-        }
-    }
-}
+//task androidSourcesJar(type: Jar) {
+//    classifier = 'sources'
+//    from android.sourceSets.main.java.sourceFiles
+//}
+//artifacts {
+//    archives androidSourcesJar
+//}
+//
+//apply plugin: 'maven'
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: uri("../../omada-nexus/release"))
+//            snapshotRepository(url: uri("../../omada-nexus/release"))
+//            pom.groupId = GROUP
+//            pom.artifactId = POM_ARTIFACT_ID
+//            pom.version = VERSION_NAME
+//        }
+//    }
+//}
