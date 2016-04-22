@@ -199,6 +199,12 @@ public class ProgressView extends RelativeLayout {
     private boolean mIsFuture;
 
     /**
+     * Indicates if the user configured the style to be reanimating each time we are scrolling the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     * or not.
+     */
+    private boolean mHasToReanimate;
+
+    /**
      * The saved attributes coming from {@link SlideChartView} and {@link SlideView}
      */
     private TypedArray mAttributes;
@@ -222,6 +228,7 @@ public class ProgressView extends RelativeLayout {
     private static String INSTANCE_SHOW_STREAKS = "show_streaks";
     private static String INSTANCE_SHOW_PROGRESS_TEXT = "show_progress_text";
     private static String INSTANCE_SHOW_PROGRESS_PLUSMARK = "show_progress_plusmark";
+    private static String INSTANCE_REANIMATE = "reanimate";
     private static String INSTANCE_COMPLETED_COLOR = "completed_color";
     private static String INSTANCE_COMPLETED_FILL_COLOR = "completed_fill_color";
     private static String INSTANCE_NOT_COMPLETED_COLOR = "not_completed_color";
@@ -255,6 +262,7 @@ public class ProgressView extends RelativeLayout {
         bundle.putBoolean(INSTANCE_SHOW_STREAKS, mShowStreaks);
         bundle.putBoolean(INSTANCE_SHOW_PROGRESS_TEXT, mShowProgressText);
         bundle.putBoolean(INSTANCE_SHOW_PROGRESS_PLUSMARK, mShowProgressPlusMark);
+        bundle.putBoolean(INSTANCE_REANIMATE, mHasToReanimate);
 
         bundle.putInt(INSTANCE_COMPLETED_COLOR, mCompletedColor);
         bundle.putInt(INSTANCE_COMPLETED_FILL_COLOR, mCompletedFillColor);
@@ -280,6 +288,7 @@ public class ProgressView extends RelativeLayout {
             mShowStreaks = bundle.getBoolean(INSTANCE_SHOW_STREAKS, true);
             mShowProgressText = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_TEXT, true);
             mShowProgressPlusMark = bundle.getBoolean(INSTANCE_SHOW_PROGRESS_PLUSMARK, true);
+            mHasToReanimate = bundle.getBoolean(INSTANCE_REANIMATE, true);
 
             mCompletedColor = bundle.getInt(INSTANCE_COMPLETED_COLOR, res.getColor(R.color.default_progress_completed_reach_color));
             mCompletedFillColor = bundle.getInt(INSTANCE_COMPLETED_FILL_COLOR, res.getColor(R.color.default_progress_completed_fill_color));
@@ -338,7 +347,7 @@ public class ProgressView extends RelativeLayout {
             mShowStreaks = attributes.getBoolean(R.styleable.SlidePager_slide_show_streaks, true);
             mShowProgressText = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_text, true);
             mShowProgressPlusMark = attributes.getBoolean(R.styleable.SlidePager_slide_show_progress_plusmark, true);
-
+            mHasToReanimate = mAttributes.getBoolean(R.styleable.SlidePager_slide_pager_reanimate_slide_view, true);
 
             mCompletedColor = progress != null && progress.getCompletedColor() != null ?
                     progress.getCompletedColor()
@@ -372,6 +381,7 @@ public class ProgressView extends RelativeLayout {
             mShowStreaks = true;
             mShowProgressText = true;
             mShowProgressPlusMark = true;
+            mHasToReanimate = true;
 
             mCompletedColor = progress != null && progress.getCompletedColor() != null ?
                     progress.getCompletedColor()
@@ -563,6 +573,13 @@ public class ProgressView extends RelativeLayout {
         if (progress == null || !mShowCircularBar) {
             return;
         }
+        if (!mHasToReanimate && (getProgress() - progress.getProgress()) == 0) {
+            animateStreaks();
+            return;
+        }
+
+        mProgressAttr = progress;
+
         mIsSpecial = progress.isSpecial();
         setCircleColorsAndSize();
 
@@ -658,14 +675,6 @@ public class ProgressView extends RelativeLayout {
     public void reset() {
         mShowStreaks = false;
         setProgressText();
-        mBinding.circularBar.setClockwiseReachedArcColor(mReachColor);
-        mBinding.circularBar.setCircleFillColor(mFillColor);
-        mBinding.circularBar.setClockwiseOutlineArcColor(mOutlineColor);
-        mBinding.circularBar.setProgress(0);
-
-        if (mAttributes != null && mProgressAttr != null) {
-            loadStyledAttributes(mAttributes, mProgressAttr);
-        }
     }
 
     /**

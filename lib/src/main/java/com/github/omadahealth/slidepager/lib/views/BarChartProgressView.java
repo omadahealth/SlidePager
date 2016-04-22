@@ -129,12 +129,16 @@ public class BarChartProgressView extends RelativeLayout {
      */
     private boolean mShowCheckMark = false;
 
+    /**
+     * Indicates if the user configured the style to be reanimating each time we are scrolling the {@link com.github.omadahealth.slidepager.lib.SlidePager}
+     * or not.
+     */
+    private boolean mHasToReanimate;
 
     /**
      * Data binding for this class
      */
     private ViewBarChartProgressBinding mBinding;
-
 
     private static String INSTANCE_COMPLETED_BAR_COLOR = "bar_completed_color";
     private static String INSTANCE_NOT_COMPLETED_BAR_COLOR = "not_completed_color";
@@ -143,7 +147,7 @@ public class BarChartProgressView extends RelativeLayout {
     private static String INSTANCE_TODAY_COLOR = "today_color";
     private static String INSTANCE_SHOW_NULL_VAL = "show_null_val";
     private static String INSTANCE_SHOW_CHECKMARK = "show_checkmark";
-
+    private static String INSTANCE_REANIMATE = "reanimate";
 
     public BarChartProgressView(Context context) {
         this(context, null);
@@ -169,6 +173,7 @@ public class BarChartProgressView extends RelativeLayout {
         bundle.putFloat(INSTANCE_BAR_WIDTH, mBarWidth);
         bundle.putBoolean(INSTANCE_SHOW_NULL_VAL, mBarVisibleNullValue);
         bundle.putBoolean(INSTANCE_SHOW_CHECKMARK, mCheckMarkVisible);
+        bundle.putBoolean(INSTANCE_REANIMATE, mHasToReanimate);
 
         return bundle;
     }
@@ -185,6 +190,7 @@ public class BarChartProgressView extends RelativeLayout {
             mBarWidth = bundle.getFloat(INSTANCE_BAR_WIDTH, res.getDimension(R.dimen.bar_view_default_width));
             mBarVisibleNullValue = bundle.getBoolean(INSTANCE_SHOW_NULL_VAL, true);
             mCheckMarkVisible = bundle.getBoolean(INSTANCE_SHOW_CHECKMARK, true);
+            mHasToReanimate = bundle.getBoolean(INSTANCE_REANIMATE, true);
             super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATE));
             return;
         }
@@ -226,6 +232,7 @@ public class BarChartProgressView extends RelativeLayout {
             mBarWidth = attributes.getDimension(R.styleable.SlidePager_slide_progress_bar_chart_bar_width, res.getDimension(R.dimen.bar_view_default_width));
             mBarVisibleNullValue = attributes.getBoolean(R.styleable.SlidePager_slide_progress_bar_chart_null_value_bar_display, true);
             mCheckMarkVisible = attributes.getBoolean(R.styleable.SlidePager_slide_progress_bar_chart_check_mark_visible, true);
+            mHasToReanimate = mAttributes.getBoolean(R.styleable.SlidePager_slide_pager_reanimate_slide_view, true);
             //Do not recycle attributes, we need them for the future views
 
         } else {
@@ -236,6 +243,7 @@ public class BarChartProgressView extends RelativeLayout {
             mBarWidth = res.getDimension(R.dimen.bar_view_default_width);
             mBarVisibleNullValue = true;
             mCheckMarkVisible = true;
+            mHasToReanimate = true;
         }
 
         setBarColorsAndSize();
@@ -309,10 +317,16 @@ public class BarChartProgressView extends RelativeLayout {
      * @param progress A {@link BarChartProgressAttr} object, containing the progress end (0-100) and the boolean to know if the day is special
      * @param duration The duration in milliseconds of the animation
      */
-    public void animateProgress(int start, ChartProgressAttr progress, int duration, int delay, Animator.AnimatorListener animatorListener) {
+    public void animateProgress(ChartProgressAttr progress, int duration, int delay, Animator.AnimatorListener animatorListener) {
         if (progress == null) {
             return;
         }
+        int endValue = (int) ((progress.getValue() / (double) mMaxStep) * 100.0);
+        if (!mHasToReanimate && (mBarView.getProgress() - endValue) == 0) {
+            animateCheckMark();
+            return;
+        }
+
         mIsFuture = progress.isFuture();
         mIsToday = progress.isSpecial();
         showCheckMark(false);
@@ -339,11 +353,10 @@ public class BarChartProgressView extends RelativeLayout {
         });
         mBarView.setCompleted(progress.getProgress() == 100);
 
-        int endValue = (int) ((progress.getValue() / (double) mMaxStep) * 100.0);
         if (!mBarVisibleNullValue) {
             endValue = -1;
         }
-        mBarView.animateProgress(0, endValue, duration, delay);
+        mBarView.animateProgress(endValue, duration, delay);
 
     }
 

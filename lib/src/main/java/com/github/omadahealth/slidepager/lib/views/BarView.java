@@ -11,7 +11,6 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.ScaleAnimation;
 
 import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
@@ -20,7 +19,6 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +106,11 @@ public class BarView extends View implements Animator.AnimatorListener {
     private static final String INSTANCE_SUFFIX = "suffix";
     private static final String INSTANCE_PREFIX = "prefix";
 
+    /**
+     * The current progress of this {@link BarView}
+     */
+    private int mProgress;
+
     public BarView(Context context) {
         this(context, null);
     }
@@ -136,10 +139,8 @@ public class BarView extends View implements Animator.AnimatorListener {
     protected void onDraw(Canvas canvas) {
         calculateDrawRectF();
 
-
         //Draw the bar
         canvas.drawRoundRect(mBarRectF, mBarWidth / 2, mBarWidth / 2, mBarFillPaint);
-
     }
 
 
@@ -288,12 +289,13 @@ public class BarView extends View implements Animator.AnimatorListener {
     /**
      * Animate the change in progress of this view
      *
-     * @param start    The value to start from, between 0-100
      * @param end      The value to set it to, between 0-100, if -1, there is no bar for null value, otherwise
      *                 a circle will be animated.
      * @param duration The the time to run the animation over,
      */
-    public void animateProgress(int start, int end, int duration, int delay) {
+    public void animateProgress(int end, int duration, int delay) {
+        mProgress = end;
+
         ViewGroup parent = (ViewGroup) getParent();
         int heightToReach = (parent.getMeasuredHeight() * end) / 102;
         int initialHeight = (int) mBarWidth;
@@ -503,5 +505,7 @@ public class BarView extends View implements Animator.AnimatorListener {
         return sp * scale;
     }
 
-
+    public int getProgress() {
+        return mProgress;
+    }
 }

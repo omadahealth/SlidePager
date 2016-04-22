@@ -372,8 +372,6 @@ public class SlideBarChartView extends AbstractSlideView {
             for (final View child : children) {
                 if (child instanceof BarChartProgressView) {
                     listView.add((BarChartProgressView) child);
-                    ((BarChartProgressView) child).getBarView().setMinimumHeight(0);
-
                 }
             }
             if (position > listView.size() - 1) {
@@ -414,7 +412,7 @@ public class SlideBarChartView extends AbstractSlideView {
 
     private void animateProgress(BarChartProgressView view, ProgressAttr progressAttr, Animator.AnimatorListener animatorListener, int delay) {
         if (progressAttr != null) {
-            view.animateProgress(0, (ChartProgressAttr) progressAttr, mProgressAnimationTime, delay, animatorListener);
+            view.animateProgress((ChartProgressAttr) progressAttr, mProgressAnimationTime, delay, animatorListener);
         }
     }
 

@@ -57,12 +57,6 @@ public class SlidePager extends ViewPager {
     private OnSlidePageChangeListener mUserPageListener;
 
     /**
-     * Indicates if the user configured the style to be reanimating each time we are scrolling the {@link com.github.omadahealth.slidepager.lib.SlidePager}
-     * or not.
-     */
-    protected boolean mHasToReanimate;
-
-    /**
      * True if we should start at the last position in the {@link AbstractSlidePagerAdapter}
      */
     private boolean mStartAtEnd;
@@ -191,7 +185,6 @@ public class SlidePager extends ViewPager {
             setAttributeSet(getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.SlidePager,
                     defStyleAttr, 0));
             mStartAtEnd = mAttributes.getBoolean(R.styleable.SlidePager_slide_start_at_end, false);
-            mHasToReanimate = mAttributes.getBoolean(R.styleable.SlidePager_slide_pager_reanimate_slide_view, true);
         }
     }
 
@@ -255,9 +248,7 @@ public class SlidePager extends ViewPager {
         if (getAdapter() != null) {
             AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
             if (slideView != null) {
-                if (!slideView.hasAnimated() || mHasToReanimate) {
-                    slideView.resetPage(mAttributes);
-                }
+                slideView.resetPage(mAttributes);
             }
         }
     }
@@ -267,10 +258,8 @@ public class SlidePager extends ViewPager {
      */
     private void animatePage(int position) {
         AbstractSlideView slideView = ((AbstractSlidePagerAdapter) getAdapter()).getCurrentView(position);
-        if (!slideView.hasAnimated() || mHasToReanimate) {
+        if (slideView != null) {
             slideView.animatePage(mUserPageListener, mAttributes);
-        } else {
-            slideView.animateStreaks(mUserPageListener, mAttributes);
         }
     }
 

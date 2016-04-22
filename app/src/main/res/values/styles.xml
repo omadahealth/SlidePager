@@ -6,7 +6,7 @@
     </style>
 
     <style name="SlidePagerStyle">
-        <!--<item name="slide_pager_reanimate_slide_view">false</item>-->
+        <item name="slide_pager_reanimate_slide_view">false</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
 
@@ -19,7 +19,7 @@
     </style>
 
     <style name="SlideChartPagerStyle">
-        <item name="slide_pager_reanimate_slide_view">false</item>
+        <item name="slide_pager_reanimate_slide_view">true</item>
         <item name="slide_start_at_end">true</item>
         <item name="slide_show_streaks">false</item>
         <item name="slide_show_progress_text">false</item>
@@ -36,8 +36,7 @@
     </style>
 
     <style name="SlideBarChartPagerStyle">
-        <!--<item name="slide_pager_reanimate_slide_view">false</item>-->
-
+        <item name="slide_pager_reanimate_slide_view">false</item>
         <item name="slide_start_at_end">true</item>
         <item name="slide_show_progress_text">false</item>
         <item name="slide_shake_if_not_selectable">false</item>
