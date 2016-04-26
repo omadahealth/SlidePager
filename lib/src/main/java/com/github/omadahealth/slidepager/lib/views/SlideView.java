@@ -489,7 +489,7 @@ public class SlideView extends AbstractSlideView {
      * @return The view
      */
     public ProgressView getProgressView(int index) {
-        if (mProgressList == null) {
+        if (mProgressList == null || index < 0 || index > mProgressList.size() - 1) {
             return null;
         }
         return mProgressList.get(index);

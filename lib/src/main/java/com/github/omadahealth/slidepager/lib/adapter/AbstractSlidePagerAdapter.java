@@ -110,7 +110,7 @@ public abstract class AbstractSlidePagerAdapter<T extends AbstractSlideView> ext
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
         T currentView;
-        if (mViews.length > position) {
+        if (mViews.length > position && position >= 0) {
             currentView = getViewForPosition(position);
         } else {
             return null;
@@ -130,6 +130,9 @@ public abstract class AbstractSlidePagerAdapter<T extends AbstractSlideView> ext
     private T getViewForPosition(int position) {
         if (mViews == null) {
             this.mViews = initViews();
+        }
+        if (position < 0 || position > mViews.length - 1) {
+            return null;
         }
 
         T currentView = mViews[position];
@@ -160,7 +163,7 @@ public abstract class AbstractSlidePagerAdapter<T extends AbstractSlideView> ext
      * @return The view for the given position, if created yet
      */
     public T getCurrentView(int position) {
-        if (mViews == null || position > mViews.length - 1) {
+        if (mViews == null || position < 0 || position > mViews.length - 1) {
             return null;
         }
 
