@@ -855,6 +855,10 @@ public class ProgressView extends RelativeLayout {
         this.mCompletedColor = completedColor;
     }
 
+    public void setNotCompletedReachColor(int mNotCompletedReachColor) {
+        this.mNotCompletedReachColor = mNotCompletedReachColor;
+    }
+
     public void setCompletedFillColor(int mCompletedFillColor) {
         this.mCompletedFillColor = mCompletedFillColor;
     }
