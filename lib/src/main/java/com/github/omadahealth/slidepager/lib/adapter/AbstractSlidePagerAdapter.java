@@ -204,4 +204,13 @@ public abstract class AbstractSlidePagerAdapter<T extends AbstractSlideView> ext
     public String getRightText(int weeksSince) {
         return Utilities.getWeekRangeText(mEndDate, weeksSince);
     }
+
+    /**
+     * External setter for {@link #mUserPageListener}
+     *
+     * @param userPageListener The new {@link OnSlidePageChangeListener}
+     */
+    public void setUserPageListener(OnSlidePageChangeListener userPageListener) {
+        this.mUserPageListener = userPageListener;
+    }
 }
