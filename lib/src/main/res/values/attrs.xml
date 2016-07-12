@@ -22,6 +22,7 @@
         <attr name="slide_show_week" format="boolean" />
         <attr name="slide_show_date" format="boolean" />
         <attr name="slide_show_streaks" format="boolean" />
+        <attr name="slide_show_selected_bar" format="boolean" />
         <attr name="slide_show_circular_bars" format="boolean"/>
         <attr name="slide_progress_text_label" format="enum">
             <enum name="slide_progress_text_short" value="0"/>

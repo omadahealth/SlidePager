@@ -6,7 +6,7 @@ To include in your project, add this to your build.gradle file:
 
 ```
    //SlidePager
-   compile 'com.github.omadahealth.slidepager:slidepager:2.3.3@aar'
+   compile 'com.github.omadahealth.slidepager:slidepager:2.4.0@aar'
 ```
 ![Demo](app/src/main/res/raw/slidepager.gif) ![Demo](app/src/main/res/raw/slidepager2.gif)
 
@@ -68,13 +68,14 @@ You can change several attributes in the XML file:
 * app:slide_progress_text_color [color hex] --> The color used for the text below the CircularBar
 * app:slide_progress_reached_width [dimension] --> The size of the reached progress on the CircularBar
 * app:slide_start_at_end [boolean] --> True if you want the pager to start at the last page instead of 0
-* app:slide_show_streaks [boolean] --> True if you want the connecting streaks to appear between consecutive 100% progress views
 * app:slide_shake_if_not_selectable [boolean] --> True if you want the SlidePager to shake when a day not selectable is clicked
 * app:slide_show_progress_text [boolean] --> True if you want to display the text below the CircularBar
 * app:slide_show_progress_plusmark [boolean] --> True if you want to display the plus mark on an empty special day
 * app:slide_show_week [boolean] --> True if you want to show the left text view
 * app:slide_show_date [boolean] --> True if you want to show the right text view
-* app:sp_slide_show_circular_bars [boolean] --> True if you want to show the circular bars, false otherwise
+* app:slide_show_streaks [boolean] --> True if you want the connecting streaks to appear between consecutive 100% progress views
+* app:slide_show_selected_bar [boolean] --> True if you want the selected bar to be shown and animated when a day is selected
+* app:slide_show_circular_bars [boolean] --> True if you want to show the circular bars, false otherwise
 * app:slide_progress_chart_bar_top_text_color [color hex] --> The top text color of the SlideChartView
 * app:slide_progress_chart_bar_bottom_text_color [color hex] --> The bottom text color of the SlideChartView
 * app:slide_progress_chart_bar_bottom_special_text_color [color hex] --> The bottom text color of the SlideChartView (special progress)

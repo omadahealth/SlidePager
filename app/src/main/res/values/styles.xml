@@ -16,6 +16,7 @@
         <item name="slide_show_progress_text">true</item>
         <item name="slide_show_week">true</item>
         <item name="slide_show_date">true</item>
+        <item name="slide_show_selected_bar">true</item>
     </style>
 
     <style name="SlideChartPagerStyle">

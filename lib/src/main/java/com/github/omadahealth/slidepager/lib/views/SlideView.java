@@ -95,6 +95,11 @@ public class SlideView extends AbstractSlideView {
     private boolean mShakeIfNotSelectable;
 
     /**
+     * True if we want to show {@link #mSelectedView}
+     */
+    private boolean mShowSelectedBar;
+
+    /**
      * The callback listener for when views are clicked
      */
     private OnSlideListener mCallback;
@@ -169,7 +174,9 @@ public class SlideView extends AbstractSlideView {
             mShowLeftText = attributes.getBoolean(R.styleable.SlidePager_slide_show_week, true);
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
             mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
+            mShowSelectedBar = attributes.getBoolean(R.styleable.SlidePager_slide_show_selected_bar, true);
 
+            mBinding.selectedDayImageView.setVisibility(mShowSelectedBar ? VISIBLE : GONE);
             mBinding.leftTextView.setVisibility(mShowLeftText && mLeftText != null ? VISIBLE : GONE);
             mBinding.rightTextView.setVisibility(mShowRightText && mRightText != null ? VISIBLE : GONE);
 
