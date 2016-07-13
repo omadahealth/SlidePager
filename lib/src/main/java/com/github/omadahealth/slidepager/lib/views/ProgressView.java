@@ -418,7 +418,9 @@ public class ProgressView extends RelativeLayout {
      * @param res
      */
     private void loadProgressTextLabels(Resources res) {
-        mProgressStrings = res.getStringArray(R.array.slide_progress_long_text);
+        if (mProgressStrings == null) {
+            mProgressStrings = res.getStringArray(R.array.slide_progress_long_text);
+        }
         if (mShowProgressText) {
             getProgressTextView().setVisibility(View.VISIBLE);
         } else {
@@ -876,5 +878,14 @@ public class ProgressView extends RelativeLayout {
     @BindingAdapter("slide_progress_completed_reach_color")
     public static void setSlideProgressCompletedReachColor(ProgressView progressView, @ColorInt int color) {
         progressView.setCompletedColor(color);
+    }
+
+    /**
+     * Allows the user to set a specific set of {@link #mProgressStrings} to be displayed below each {@link ProgressView}
+     *
+     * @param progressStrings The new array of {@link #mProgressStrings}
+     */
+    public static synchronized void setProgressStrings(String[] progressStrings) {
+        mProgressStrings = progressStrings;
     }
 }
