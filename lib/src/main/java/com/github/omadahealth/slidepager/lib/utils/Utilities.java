@@ -26,6 +26,7 @@ package com.github.omadahealth.slidepager.lib.utils;
 import com.github.omadahealth.slidepager.lib.adapter.SlidePagerAdapter;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,8 +78,9 @@ public class Utilities {
 
     /**
      * Calculates the number of weeks between two dates
+     *
      * @param start The start date
-     * @param end The end date
+     * @param end   The end date
      * @return Number of weeks the end date is after the start date, could be negative
      */
     public static int getWeeksBetween(Date start, Date end) {
@@ -91,7 +93,7 @@ public class Utilities {
         end = resetTime(end);
 
         //if same day
-        if(start.compareTo(end) == 0){
+        if (start.compareTo(end) == 0) {
             return 0;
         }
 
@@ -108,6 +110,7 @@ public class Utilities {
 
     /**
      * Sets the time of date to midnight
+     *
      * @param date the date
      * @return the start of that date
      */
@@ -123,7 +126,8 @@ public class Utilities {
 
     /**
      * Generates a string representing the date range of, ie. April 5 - April 11
-     * @param date The initial date
+     *
+     * @param date        The initial date
      * @param weeksBefore Number of weeks before the date
      * @return ie. April 5 - April 11
      */
@@ -147,16 +151,17 @@ public class Utilities {
 
     /**
      * Generates a string representing the current week compared to the total weeks represented
-     * @param position The current View in the {@link SlidePagerAdapter}
+     *
+     * @param position   The current View in the {@link SlidePagerAdapter}
      * @param totalWeeks The total number of weeks the {@link SlidePagerAdapter}
-     * @param maxWeeks The number of set weeks, could be the same as maxWeeks
+     * @param maxWeeks   The number of set weeks, could be the same as maxWeeks
      * @return Html string of what week we are in
      */
     public static String getWeekOfText(int position, int totalWeeks, int maxWeeks) {
         String start = "<html><b>Week ";
         String mid = " </b>of ";
         String end = "</html>";
-        if(totalWeeks > maxWeeks){
+        if (totalWeeks > maxWeeks) {
             return "<html><b>Week " + (position + 1) + "</b></html>";
         }
 
@@ -180,7 +185,7 @@ public class Utilities {
         } else {
             roundedValue = value - diff;
         }
-        DecimalFormat weightFormat = new DecimalFormat(WEIGHT_FORMAT);
+        DecimalFormat weightFormat = new DecimalFormat(WEIGHT_FORMAT, new DecimalFormatSymbols(Locale.ENGLISH));
         return Double.parseDouble(weightFormat.format(roundedValue));
     }
 
@@ -191,11 +196,11 @@ public class Utilities {
      * @return
      */
     public static String formatWeight(Double value) {
-        if(value == null) {
+        if (value == null) {
             return "-";
         }
 
-        DecimalFormat weightFormat = new DecimalFormat(WEIGHT_FORMAT);
+        DecimalFormat weightFormat = new DecimalFormat(WEIGHT_FORMAT, new DecimalFormatSymbols(Locale.ENGLISH));
         return weightFormat.format(formatWeightToDouble(value));
     }
 
@@ -297,8 +302,9 @@ public class Utilities {
 
     /**
      * Returns the selected day text in  'Jan 20' format
+     *
      * @param start The start date of the {@link com.github.omadahealth.slidepager.lib.SlidePager} in milliseconds
-     * @param page The index of the page
+     * @param page  The index of the page
      * @param index The index of the view inside the page
      * @return The formatted date string
      */
