@@ -325,7 +325,7 @@ public class ProgressView extends RelativeLayout {
         mDefaultProgressTypeface = mBinding.progressText.getCurrentTypeface();
 
         mBinding.circularBar.setStartLineEnabled(false);
-        mBinding.progressText.setTypeface(TypefaceTextView.getFont(context, TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
+        mBinding.progressText.setTypeface(TypefaceTextView.getFont(context, TypefaceType.getTypeface(TypefaceType.getDefaultTypeface(getContext())).getAssetFileName()));
         loadStyledAttributes(mAttributes, mProgressAttr);
     }
 
@@ -552,14 +552,12 @@ public class ProgressView extends RelativeLayout {
     /**
      * Sets the font type of {@link ViewProgressBinding#progressText}
      *
-     * @param selected True for {@link TypefaceType#ROBOTO_BOLD}, false for {@link TypefaceType#ROBOTO_THIN}
+     * @param selected True for {@link TypefaceType#getDefaultTypeface(Context)} in bold, false for normal
      */
     public void isSelected(boolean selected) {
         Resources res = getContext().getResources();
-        Typeface typeface = TypefaceTextView.getFont(getContext(),
-                selected ? TypefaceType.ROBOTO_BOLD.getAssetFileName() : mDefaultProgressTypeface.getAssetFileName());
-        mBinding.progressText.setTypeface(typeface);
-        mBinding.progressText.setTextSize(TypedValue.COMPLEX_UNIT_PX, selected ? res.getDimension(R.dimen.selected_progress_view_text_size) : res.getDimension(R.dimen.not_selected_progress_view_text_size));
+        Typeface typeface = TypefaceTextView.getFont(getContext(), TypefaceType.getTypeface(TypefaceType.getDefaultTypeface(getContext())).getAssetFileName());
+        mBinding.progressText.setTypeface(typeface, selected ? Typeface.BOLD : Typeface.NORMAL);
     }
 
     /**
