@@ -37,7 +37,6 @@ import com.github.omadahealth.slidepager.lib.adapter.SlideBarChartPagerAdapter;
 import com.github.omadahealth.slidepager.lib.adapter.SlideChartPagerAdapter;
 import com.github.omadahealth.slidepager.lib.adapter.SlidePagerAdapter;
 import com.github.omadahealth.slidepager.lib.interfaces.OnSlidePageChangeListener;
-import com.github.omadahealth.slidepager.lib.utils.BarChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;

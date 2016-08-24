@@ -345,7 +345,7 @@ public class SlideBarChartView extends AbstractSlideView {
             }
 
             day.isSelected(false);
-            currentBottomText.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()), Typeface.NORMAL);
+            currentBottomText.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.getTypeface(TypefaceType.getDefaultTypeface(getContext())).getAssetFileName()), Typeface.NORMAL);
         }
     }
 

@@ -156,6 +156,12 @@ public class SlideChartView extends AbstractSlideView {
     private int mProgressAnimationTime = DEFAULT_PROGRESS_ANIMATION_TIME;
 
     /**
+     * The outline size set to the {@link ProgressView} and used here to set padding to the lines
+     * so that they don't overlap in {@link #setPaddingForOutlineSize(View)}
+     */
+    private float mOutlineSize;
+
+    /**
      * A user defined {@link ViewPager.OnPageChangeListener}
      */
     private OnSlidePageChangeListener<ChartProgressAttr> mUserPageListener;
@@ -177,6 +183,7 @@ public class SlideChartView extends AbstractSlideView {
     private void loadStyledAttributes(TypedArray attributes) {
         mAttributes = attributes;
         if (mAttributes != null) {
+            mOutlineSize = mAttributes.getDimension(R.styleable.SlidePager_slide_progress_not_completed_outline_size, getResources().getDimension(R.dimen.circular_bar_default_outline_width));
             mHasToReanimate = mAttributes.getBoolean(R.styleable.SlidePager_slide_pager_reanimate_slide_view, true);
             mTopTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_top_text_color, getResources().getColor(R.color.default_progress_chart_bar_top_text));
             mSpecialBottomTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_chart_bar_bottom_special_text_color, getResources().getColor(R.color.default_progress_chart_bar_special_bottom_text));
@@ -264,6 +271,15 @@ public class SlideChartView extends AbstractSlideView {
         mChartBarList.add(mBinding.progress7BarBottom);
         mChartBarList.add(mBinding.progressBottomAxis);
 
+        //Set padding depending on outline size
+        setPaddingForOutlineSize(mBinding.progress1);
+        setPaddingForOutlineSize(mBinding.progress2);
+        setPaddingForOutlineSize(mBinding.progress3);
+        setPaddingForOutlineSize(mBinding.progress4);
+        setPaddingForOutlineSize(mBinding.progress5);
+        setPaddingForOutlineSize(mBinding.progress6);
+        setPaddingForOutlineSize(mBinding.progress7);
+
         //Init the tags of the subviews
         SlideTransformer.initTags(this);
 
@@ -272,6 +288,13 @@ public class SlideChartView extends AbstractSlideView {
 
         //Init bar colors and sizes
         initBarColorsAndSize();
+    }
+
+    /**
+     * Set the padding on the {@link View} based on {@link #mOutlineSize}
+     */
+    private void setPaddingForOutlineSize(View view) {
+        view.setPadding(view.getPaddingLeft(), (int) mOutlineSize, view.getPaddingRight(), (int) mOutlineSize);
     }
 
     /**
@@ -360,7 +383,7 @@ public class SlideChartView extends AbstractSlideView {
             }
 
             day.isSelected(false);
-            currentBottomText.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()), Typeface.NORMAL);
+            currentBottomText.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.getTypeface(TypefaceType.getDefaultTypeface(getContext())).getAssetFileName()), Typeface.NORMAL);
         }
     }
 

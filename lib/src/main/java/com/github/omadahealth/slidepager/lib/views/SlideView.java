@@ -223,8 +223,8 @@ public class SlideView extends AbstractSlideView {
         mProgressList.add(mBinding.progress6.loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 5) : null));
         mProgressList.add(mBinding.progress7.loadStyledAttributes(mAttributes, mUserPageListener != null ? mUserPageListener.getDayProgress(mPagePosition, 6) : null));
 
-        mBinding.leftTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
-        mBinding.rightTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.ROBOTO_LIGHT.getAssetFileName()));
+        mBinding.leftTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.getTypeface(TypefaceType.getDefaultTypeface(getContext())).getAssetFileName()));
+        mBinding.rightTextView.setTypeface(TypefaceTextView.getFont(getContext(), TypefaceType.getTypeface(TypefaceType.getDefaultTypeface(getContext())).getAssetFileName()));
 
         mBinding.selectedDayImageView.setSelectedViewId(mProgressList.get(SlideView.getSelectedView()).getId());
     }
