@@ -604,6 +604,15 @@ public class ProgressView extends RelativeLayout {
         if (progress == null || !mShowCircularBar) {
             return;
         }
+
+        //Set CheckMark drawable for non-special
+        mCompletedDrawable = progress.getCompletedDrawable() != null ? progress.getCompletedDrawable() : mCompletedDrawable;
+        if (mCompletedDrawable != null) {
+            mBinding.checkMark.setImageDrawable(getResources().getDrawable(mCompletedDrawable));
+        } else {
+            mBinding.checkMark.setImageDrawable(getResources().getDrawable(R.drawable.checkmark_green));
+        }
+
         if (!mHasToReanimate && (getProgress() - progress.getProgress()) == 0) {
             animateStreaks();
             return;
@@ -617,14 +626,6 @@ public class ProgressView extends RelativeLayout {
         mSiblings = setSiblings(siblings);
 
         setUpColors(progress);
-
-        //Set CheckMark drawable for non-special
-        mCompletedDrawable = progress.getCompletedDrawable() != null ? progress.getCompletedDrawable() : mCompletedDrawable;
-        if (mCompletedDrawable != null) {
-            mBinding.checkMark.setImageDrawable(getResources().getDrawable(mCompletedDrawable));
-        } else {
-            mBinding.checkMark.setImageDrawable(getResources().getDrawable(R.drawable.checkmark_green));
-        }
 
         //Set Checkmark drawable for special and not completed
         if (progress.isSpecial() && mShowProgressPlusMark && progress.getProgress() < 99.9) {
