@@ -28,6 +28,7 @@
             <enum name="slide_progress_text_short" value="0"/>
             <enum name="slide_progress_text_long" value="1"/>
         </attr>
+        <attr name="slide_progress_completed_precentage" format="float"/>
 
         <attr name="slide_progress_chart_bar_top_text_color" format="color"/>
         <attr name="slide_progress_chart_bar_bottom_text_color" format="color"/>

@@ -60,6 +60,33 @@ public class ProgressAttr {
      */
     private boolean mStreakRightOffScreen = false;
 
+    /**
+     * New completed percentage value. Default is 100
+     */
+    private Double mCompletedPercentage = null;
+
+    /**
+     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * notCompletedOutlineColor. Uses the default style color if set to null.
+     */
+    private Integer mNotCompletedOutlineColor;
+
+    /**
+     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * specialDayFillColor. Uses the default style color if set to null.
+     */
+    private Integer mSpecialFillColor;
+    /**
+     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * specialDayOutlineColor. Uses the default style color if set to null.
+     */
+    private Integer mSpecialOutlineColor;
+    /**
+     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * specialDayReachColor. Uses the default style color if set to null.
+     */
+    private Integer mSpecialReachColor;
+
     public ProgressAttr(int progress, boolean special, boolean isFuture) {
         this.mProgress = progress;
         this.mSpecial = special;
@@ -68,6 +95,7 @@ public class ProgressAttr {
         this.mCompletedColor = null;
         this.mCompletedDrawable = null;
     }
+
 
     public ProgressAttr(int progress, boolean special, boolean isFuture, Integer reachedColor, Integer completedColor, Integer completedDrawable) {
         this.mProgress = progress;
@@ -100,6 +128,24 @@ public class ProgressAttr {
         this.mStreakLeftOffScreen = streakLeftOffScreen;
         this.mStreakRightOffScreen = streakRightOffScreen;
     }
+
+    public ProgressAttr(int progress, boolean special, boolean isFuture, Integer reachedColor, Integer completedColor, Integer completedFillColor,  Integer notCompletedOutlineColor, Integer specialOutlineColor, Integer specialReachColor, Integer specialFillColor, Integer completedDrawable, Double completedPercentage) {
+        this.mProgress = progress;
+        this.mSpecial = special;
+        this.mIsFuture = isFuture;
+        this.mReachedColor = reachedColor;
+        this.mCompletedColor = completedColor;
+        this.mCompletedFillColor = completedFillColor;
+
+        this.mNotCompletedOutlineColor = notCompletedOutlineColor;
+        this.mSpecialFillColor = specialFillColor;
+        this.mSpecialOutlineColor = specialOutlineColor;
+        this.mSpecialReachColor = specialReachColor;
+
+        this.mCompletedDrawable = completedDrawable;
+        this.mCompletedPercentage = completedPercentage;
+    }
+
 
     public boolean isSpecial() {
         return mSpecial;
@@ -163,5 +209,45 @@ public class ProgressAttr {
 
     public boolean isStreakRightOffScreen() {
         return mStreakRightOffScreen;
+    }
+
+    public Double getCompletedPercentage() {
+        return mCompletedPercentage;
+    }
+
+    public void setCompletedPercentage(Double completedPercentage) {
+        this.mCompletedPercentage = completedPercentage;
+    }
+
+    public Integer getNotCompletedOutlineColor() {
+        return mNotCompletedOutlineColor;
+    }
+
+    public void setNotCompletedOutlineColor(Integer notCompletedOutlineColor) {
+        this.mNotCompletedOutlineColor = notCompletedOutlineColor;
+    }
+
+    public Integer getSpecialFillColor() {
+        return mSpecialFillColor;
+    }
+
+    public void setSpecialFillColor(Integer specialFillColor) {
+        this.mSpecialFillColor = specialFillColor;
+    }
+
+    public Integer getSpecialOutlineColor() {
+        return mSpecialOutlineColor;
+    }
+
+    public void setSpecialOutlineColor(Integer specialOutlineColor) {
+        this.mSpecialOutlineColor = specialOutlineColor;
+    }
+
+    public Integer getSpecialReachColor() {
+        return mSpecialReachColor;
+    }
+
+    public void setSpecialReachColor(Integer specialReachColor) {
+        this.mSpecialReachColor = specialReachColor;
     }
 }
