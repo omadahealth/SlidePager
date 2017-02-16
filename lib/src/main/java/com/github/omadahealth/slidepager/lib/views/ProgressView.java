@@ -604,9 +604,10 @@ public class ProgressView extends RelativeLayout {
         if (progress == null || !mShowCircularBar) {
             return;
         }
-
         //Set CheckMark drawable for non-special
         mCompletedDrawable = progress.getCompletedDrawable() != null ? progress.getCompletedDrawable() : mCompletedDrawable;
+
+        //Set Checkmark drawable for special and not completed
         if (mCompletedDrawable != null) {
             mBinding.checkMark.setImageDrawable(getResources().getDrawable(mCompletedDrawable));
         } else {
@@ -626,8 +627,6 @@ public class ProgressView extends RelativeLayout {
         mSiblings = setSiblings(siblings);
 
         setUpColors(progress);
-
-        //Set Checkmark drawable for special and not completed
         if (progress.isSpecial() && mShowProgressPlusMark && progress.getProgress() < 99.9) {
             mBinding.checkMark.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_plus));
 
