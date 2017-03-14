@@ -137,6 +137,20 @@ public class ProgressAttr {
         this.mStreakRightOffScreen = streakRightOffScreen;
     }
 
+    public ProgressAttr(int progress, boolean special, boolean isFuture, Integer reachedColor, Integer completedColor, Integer completedFillColor, Integer notCompletedOutlineColor, Integer specialOutlineColor, Integer specialReachColor, Integer specialFillColor, Integer completedDrawable, Double completedPercentage) {
+        this.mProgress = progress;
+        this.mSpecial = special;
+        this.mIsFuture = isFuture;
+        this.mReachedColor = reachedColor;
+        this.mCompletedColor = completedColor;
+        this.mCompletedFillColor = completedFillColor;
+        this.mNotCompletedOutlineColor = notCompletedOutlineColor;
+        this.mSpecialFillColor = specialFillColor;
+        this.mSpecialOutlineColor = specialOutlineColor;
+        this.mSpecialReachColor = specialReachColor;
+        this.mCompletedDrawable = completedDrawable;
+        this.mCompletedPercentage = completedPercentage;
+    }
     public ProgressAttr(int progress, List<Boolean> haveToAnimateCirclePieces, boolean special, boolean isFuture, Integer reachedColor, Integer completedColor, Integer completedFillColor, Integer notCompletedOutlineColor, Integer specialOutlineColor, Integer specialReachColor, Integer specialFillColor, Integer completedDrawable, Double completedPercentage) {
         this.mProgress = progress;
         this.mHaveToAnimateCirclePieces = haveToAnimateCirclePieces;
