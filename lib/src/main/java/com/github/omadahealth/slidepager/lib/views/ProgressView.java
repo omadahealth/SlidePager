@@ -204,6 +204,15 @@ public class ProgressView extends RelativeLayout {
      */
     private boolean mHasToReanimate;
 
+    public List<Boolean> getHaveToAnimateCirclePieces() {
+        return mHaveToAnimateCirclePieces;
+    }
+
+    /**
+     * list of booleans mapping to parts of circle arcs. true to animate those part false to not.
+     */
+    private List<Boolean> mHaveToAnimateCirclePieces;
+
     /**
      * The saved attributes coming from {@link SlideChartView} and {@link SlideView}
      */
@@ -213,6 +222,10 @@ public class ProgressView extends RelativeLayout {
      * The saved {@link ProgressAttr} coming from {@link SlideChartView} and {@link SlideView}
      */
     private ProgressAttr mProgressAttr;
+
+    private Double mCompletedPercentage;
+
+    private boolean needToAnimateProgress = true;
 
     private ViewProgressBinding mBinding;
 
@@ -241,6 +254,7 @@ public class ProgressView extends RelativeLayout {
     private static String INSTANCE_TEXT_COLOR = "text_color";
     private static String INSTANCE_SPECIAL_COMPLETED_FILL_COLOR = "special_fill_color";
     private static String INSTANCE_REACHED_WIDTH = "reached_width";
+    private static String INSTANCE_COMPLETED_PERCENTAGE = "completed_percentage";
 
     public ProgressView(Context context) {
         this(context, null);
@@ -277,6 +291,8 @@ public class ProgressView extends RelativeLayout {
         bundle.putInt(INSTANCE_TEXT_COLOR, mProgressTextColor);
         bundle.putFloat(INSTANCE_REACHED_WIDTH, mReachedWidth);
 
+        bundle.putDouble(INSTANCE_COMPLETED_PERCENTAGE, mCompletedPercentage);
+
         return bundle;
     }
 
@@ -306,6 +322,8 @@ public class ProgressView extends RelativeLayout {
             mProgressTextColor = bundle.getInt(INSTANCE_TEXT_COLOR, res.getColor(R.color.default_progress_text_color));
 
             mReachedWidth = bundle.getFloat(INSTANCE_REACHED_WIDTH, res.getDimension(R.dimen.default_progress_reached_width));
+
+            mCompletedPercentage = bundle.getDouble(INSTANCE_COMPLETED_PERCENTAGE, 99.95f);
 
             super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATE));
             return;
@@ -341,6 +359,7 @@ public class ProgressView extends RelativeLayout {
         mIsSpecial = progress != null && progress.isSpecial();
         mIsFuture = progress != null && progress.isFuture();
         mCompletedDrawable = progress == null ? null : progress.getCompletedDrawable();
+        mHaveToAnimateCirclePieces = progress == null ? null : progress.getHaveToAnimateCirclePieces();
 
         Resources res = getContext().getResources();
         if (attributes != null) {
@@ -364,18 +383,39 @@ public class ProgressView extends RelativeLayout {
                     :
                     attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_reach_color, res.getColor(R.color.default_progress_not_completed_reach_color));
 
-            mNotCompletedOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_outline_color, res.getColor(R.color.default_progress_not_completed_outline_color));
+            mNotCompletedOutlineColor = progress != null && progress.getNotCompletedOutlineColor() != null ?
+                    progress.getNotCompletedOutlineColor()
+                    :
+                    attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_outline_color, res.getColor(R.color.default_progress_not_completed_outline_color));
             mNotCompletedOutlineSize = attributes.getDimension(R.styleable.SlidePager_slide_progress_not_completed_outline_size, res.getDimension(R.dimen.circular_bar_default_outline_width));
             mNotCompletedFutureOutlineSize = attributes.getDimension(R.styleable.SlidePager_slide_progress_not_completed_future_outline_size, res.getDimension(R.dimen.circular_bar_default_future_outline_width));
             mNotCompletedFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_not_completed_fill_color, res.getColor(R.color.default_progress_not_completed_fill_color));
 
-            mSpecialReachColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_reach_color, res.getColor(R.color.default_progress_special_reach_color));
-            mSpecialOutlineColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_outline_color, res.getColor(R.color.default_progress_special_outline_color));
-            mSpecialFillColor = attributes.getColor(R.styleable.SlidePager_slide_progress_special_fill_color, res.getColor(R.color.default_progress_special_fill_color));
+            mSpecialReachColor = progress != null && progress.getSpecialReachColor() != null ?
+                    progress.getSpecialReachColor()
+                    :
+                    attributes.getColor(R.styleable.SlidePager_slide_progress_special_reach_color, res.getColor(R.color.default_progress_special_reach_color));
+            mSpecialOutlineColor = progress != null && progress.getSpecialOutlineColor() != null ?
+                    progress.getSpecialOutlineColor()
+                    :
+                    attributes.getColor(R.styleable.SlidePager_slide_progress_special_outline_color, res.getColor(R.color.default_progress_special_outline_color));
+            mSpecialFillColor = progress != null && progress.getSpecialFillColor() != null ?
+                    progress.getSpecialFillColor()
+                    :
+                    attributes.getColor(R.styleable.SlidePager_slide_progress_special_fill_color, res.getColor(R.color.default_progress_special_fill_color));
+
+            mCompletedDrawable = progress != null && progress.getCompletedDrawable() != null ?
+                    progress.getCompletedDrawable()
+                    :
+                    R.drawable.checkmark_green;
+
 
             mProgressTextColor = attributes.getColor(R.styleable.SlidePager_slide_progress_text_color, res.getColor(R.color.default_progress_text_color));
 
             mReachedWidth = attributes.getDimension(R.styleable.SlidePager_slide_progress_reached_width, res.getDimension(R.dimen.default_progress_reached_width));
+
+            mCompletedPercentage = progress != null && progress.getCompletedPercentage() != null ? progress.getCompletedPercentage() : new Double(attributes.getFloat(R.styleable.SlidePager_slide_progress_completed_precentage, 99.95f));
+
             //Do not recycle attributes, we need them for the future views
         } else {
             mShowStreaks = true;
@@ -400,6 +440,8 @@ public class ProgressView extends RelativeLayout {
             mSpecialFillColor = res.getColor(R.color.default_progress_special_fill_color);
 
             mProgressTextColor = res.getColor(R.color.default_progress_text_color);
+
+            mCompletedPercentage = 99.95d;
 
             mReachedWidth = res.getDimension(R.dimen.default_progress_reached_width);
         }
@@ -459,7 +501,7 @@ public class ProgressView extends RelativeLayout {
      */
     public void animateStreaks() {
         int index = getIntTag();
-        if (getCircularBar().getProgress() >= 99.95f) {
+        if (getCircularBar().getProgress() >= mCompletedPercentage) {
             showCheckMark(true);
 
             if (mShowStreaks && mSiblings != null && mSiblings.size() > 0) {
@@ -470,7 +512,7 @@ public class ProgressView extends RelativeLayout {
                 if (getIntTag() - 1 >= 0) {
                     ProgressView previousDay = mSiblings.get(index - 1);
                     //Previous is complete
-                    previousComplete = previousDay.getProgress() >= 99.95f;
+                    previousComplete = previousDay.getProgress() >= mCompletedPercentage;
                 } else {
                     if (mProgressAttr != null) {
                         previousComplete = mProgressAttr.isStreakLeftOffScreen();
@@ -480,7 +522,7 @@ public class ProgressView extends RelativeLayout {
                 if (index + 1 < mSiblings.size()) {
                     ProgressView nextDay = mSiblings.get(index + 1);
                     //Next is complete
-                    nextComplete = nextDay.getProgress() >= 99.95f;
+                    nextComplete = nextDay.getProgress() >= mCompletedPercentage;
                 } else {
                     if (mProgressAttr != null) {
                         nextComplete = mProgressAttr.isStreakRightOffScreen();
@@ -573,10 +615,34 @@ public class ProgressView extends RelativeLayout {
         if (progress == null || !mShowCircularBar) {
             return;
         }
-        if (!mHasToReanimate && (getProgress() - progress.getProgress()) == 0) {
+        //Set CheckMark drawable for non-special
+        mCompletedDrawable = progress.getCompletedDrawable() != null ? progress.getCompletedDrawable() : mCompletedDrawable;
+
+        //Set Checkmark drawable for special and not completed
+        if (mCompletedDrawable != null) {
+            mBinding.checkMark.setImageDrawable(getResources().getDrawable(mCompletedDrawable));
+        } else {
+            mBinding.checkMark.setImageDrawable(getResources().getDrawable(R.drawable.checkmark_green));
+        }
+        boolean reanimate = false;
+        if (mHaveToAnimateCirclePieces != null) {
+            if (mBinding.circularBar.getCirclePieceFillList().size() != progress.getHaveToAnimateCirclePieces().size()) {
+                reanimate = true;
+            } else {
+                for (int i = 0; i < progress.getHaveToAnimateCirclePieces().size(); i++) {
+                    if (mBinding.circularBar.getCirclePieceFillList().get(i) != progress.getHaveToAnimateCirclePieces().get(i)) {
+                        reanimate = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!mHasToReanimate && (getProgress() - progress.getProgress()) == 0 && !reanimate) {
             animateStreaks();
             return;
         }
+
 
         mProgressAttr = progress;
 
@@ -586,16 +652,6 @@ public class ProgressView extends RelativeLayout {
         mSiblings = setSiblings(siblings);
 
         setUpColors(progress);
-
-        //Set CheckMark drawable for non-special
-        mCompletedDrawable = progress.getCompletedDrawable() != null ? progress.getCompletedDrawable() : mCompletedDrawable;
-        if (mCompletedDrawable != null) {
-            mBinding.checkMark.setImageDrawable(getResources().getDrawable(mCompletedDrawable));
-        } else {
-            mBinding.checkMark.setImageDrawable(getResources().getDrawable(R.drawable.checkmark_green));
-        }
-
-        //Set Checkmark drawable for special and not completed
         if (progress.isSpecial() && mShowProgressPlusMark && progress.getProgress() < 99.9) {
             mBinding.checkMark.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_plus));
 
@@ -642,7 +698,16 @@ public class ProgressView extends RelativeLayout {
 
             }
         });
-        mBinding.circularBar.animateProgress(start, progress.getProgress(), duration);
+
+
+        if (mHaveToAnimateCirclePieces == null) {
+            mBinding.circularBar.animateProgress(start, progress.getProgress(), duration);
+        } else {
+            if (reanimate) {
+                mBinding.circularBar.animateProgress(mHaveToAnimateCirclePieces, duration);
+            }
+
+        }
     }
 
     /**

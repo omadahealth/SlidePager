@@ -132,6 +132,11 @@ public class SlideView extends AbstractSlideView {
     private int mPagePosition;
 
     /**
+     *
+     */
+    private boolean mHasToSetTextOnClick;
+
+    /**
      * The text for the {@link ViewSlideBinding#leftTextView}
      */
     private String mLeftText;
@@ -150,6 +155,8 @@ public class SlideView extends AbstractSlideView {
      * A user defined {@link ViewPager.OnPageChangeListener}
      */
     private OnSlidePageChangeListener mUserPageListener;
+
+    private boolean firstAnimation = true;
 
     /**
      * The binding object created in {@link #init(Context, TypedArray, int, OnSlidePageChangeListener)}
@@ -175,6 +182,7 @@ public class SlideView extends AbstractSlideView {
             mShowRightText = attributes.getBoolean(R.styleable.SlidePager_slide_show_date, true);
             mShakeIfNotSelectable = attributes.getBoolean(R.styleable.SlidePager_slide_shake_if_not_selectable, true);
             mShowSelectedBar = attributes.getBoolean(R.styleable.SlidePager_slide_show_selected_bar, true);
+            mHasToSetTextOnClick = attributes.getBoolean(R.styleable.SlidePager_slide_set_text_on_click, true);
 
             mBinding.selectedDayImageView.setVisibility(mShowSelectedBar ? VISIBLE : GONE);
             mBinding.leftTextView.setVisibility(mShowLeftText && mLeftText != null ? VISIBLE : GONE);
@@ -424,6 +432,9 @@ public class SlideView extends AbstractSlideView {
      * @param selected The index of the selected view in {@link #mProgressList}
      */
     private void toggleSelectedViews(int selected) {
+        if(!mHasToSetTextOnClick) {
+            return;
+        }
         mSelectedView = selected;
         for (ProgressView day : mProgressList) {
             if (day.getIntTag() == mSelectedView) {

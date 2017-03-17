@@ -42,7 +42,9 @@ import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.Utilities;
 import com.github.omadahealth.slidepager.lib.views.SlideView;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener<ChartProgressAttr> {
 
@@ -110,6 +112,11 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
             @Override
             public void onClick(View view) {
                 progressAttr = new ProgressAttr(progressAttr.getProgress() == 100 ? 0 : 100, mCurrentPage == 15 && mCurrentIndex == 4, false);
+                List<Boolean> list = new ArrayList<>();
+                list.add(true);
+                list.add(false);
+                list.add(true);
+                progressAttr.setHaveToAnimateCirclePieces(list);
                 adapterOne.getCurrentView(mCurrentPage).animateProgressView(mCurrentIndex, progressAttr);
             }
         });
@@ -172,8 +179,14 @@ public class MainActivity extends ActionBarActivity implements OnSlidePageChange
         }
         String day = Utilities.getSelectedDayText(Utilities.getPreviousDate(16).getTime(), page, index);
 
-
-        return new ChartProgressAttr(progress, value, day, page == 14 && index == 3, page == 14 && index > 3);
+        List<Boolean> list = new ArrayList<>();
+        list.add(true);
+        list.add(false);
+        list.add(true);
+        progressAttr.setHaveToAnimateCirclePieces(list);
+        ChartProgressAttr cpa=  new ChartProgressAttr(progress, value, day, page == 14 && index == 3, page == 14 && index > 3);
+        cpa.setHaveToAnimateCirclePieces(list);
+        return cpa;
     }
 
     @Override
