@@ -204,6 +204,10 @@ public class ProgressView extends RelativeLayout {
      */
     private boolean mHasToReanimate;
 
+    public List<Boolean> getHaveToAnimateCirclePieces() {
+        return mHaveToAnimateCirclePieces;
+    }
+
     /**
      * list of booleans mapping to parts of circle arcs. true to animate those part false to not.
      */
@@ -221,6 +225,7 @@ public class ProgressView extends RelativeLayout {
 
     private Double mCompletedPercentage;
 
+    private boolean needToAnimateProgress = true;
 
     private ViewProgressBinding mBinding;
 
@@ -619,11 +624,25 @@ public class ProgressView extends RelativeLayout {
         } else {
             mBinding.checkMark.setImageDrawable(getResources().getDrawable(R.drawable.checkmark_green));
         }
+        boolean reanimate = false;
+        if (mHaveToAnimateCirclePieces != null) {
+            if (mBinding.circularBar.getCirclePieceFillList().size() != progress.getHaveToAnimateCirclePieces().size()) {
+                reanimate = true;
+            } else {
+                for (int i = 0; i < progress.getHaveToAnimateCirclePieces().size(); i++) {
+                    if (mBinding.circularBar.getCirclePieceFillList().get(i) != progress.getHaveToAnimateCirclePieces().get(i)) {
+                        reanimate = true;
+                        break;
+                    }
+                }
+            }
+        }
 
-        if (!mHasToReanimate && (getProgress() - progress.getProgress()) == 0) {
+        if (!mHasToReanimate && (getProgress() - progress.getProgress()) == 0 && !reanimate) {
             animateStreaks();
             return;
         }
+
 
         mProgressAttr = progress;
 
@@ -679,10 +698,15 @@ public class ProgressView extends RelativeLayout {
 
             }
         });
+
+
         if (mHaveToAnimateCirclePieces == null) {
             mBinding.circularBar.animateProgress(start, progress.getProgress(), duration);
         } else {
-            mBinding.circularBar.animateProgress(mHaveToAnimateCirclePieces, duration);
+            if (reanimate) {
+                mBinding.circularBar.animateProgress(mHaveToAnimateCirclePieces, duration);
+            }
+
         }
     }
 

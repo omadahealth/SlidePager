@@ -156,6 +156,8 @@ public class SlideView extends AbstractSlideView {
      */
     private OnSlidePageChangeListener mUserPageListener;
 
+    private boolean firstAnimation = true;
+
     /**
      * The binding object created in {@link #init(Context, TypedArray, int, OnSlidePageChangeListener)}
      */
