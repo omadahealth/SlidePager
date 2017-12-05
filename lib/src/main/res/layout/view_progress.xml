@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true">
 
-                <com.github.OrangeGangsters.circularbarpager.library.CircularBar
+                <com.github.omadahealth.circularbarpager.library.CircularBar
                     android:id="@+id/circular_bar"
                     android:layout_width="@dimen/view_day_progress_dim"
                     android:layout_height="@dimen/view_day_progress_dim"

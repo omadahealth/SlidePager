@@ -101,7 +101,7 @@ You can change several attributes in the XML file:
 
 ### Credits
 
-* We used CircularBarPager from OrangeGangsters (https://github.com/OrangeGangsters/CircularBarPager) for the progress circles
+* We used CircularBarPager from omadahealth (https://github.com/omadahealth/CircularBarPager) for the progress circles
 * We used NineOldAndroids from JakeWharton (https://github.com/JakeWharton/NineOldAndroids/) to use beautiful animations on API 10+
 * We used AnimationEasingFunctions from daimajia (https://github.com/daimajia/AnimationEasingFunctions) to also use beautiful animations on API 10+
 

@@ -40,7 +40,7 @@ import android.widget.RelativeLayout;
 
 import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
-import com.github.OrangeGangsters.circularbarpager.library.CircularBar;
+import com.github.omadahealth.circularbarpager.library.CircularBar;
 import com.github.omadahealth.slidepager.lib.R;
 import com.github.omadahealth.slidepager.lib.databinding.ViewProgressBinding;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;

@@ -28,30 +28,30 @@ public class ProgressAttr {
     private boolean mSpecial;
 
     /**
-     * Determines if this {@link ProgressAttr} is in the future or not, specifying different thickness for the {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * Determines if this {@link ProgressAttr} is in the future or not, specifying different thickness for the {@link com.github.omadahealth.circularbarpager.library.CircularBar}
      */
     private boolean mIsFuture;
 
     /**
-     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.omadahealth.circularbarpager.library.CircularBar}
      * reachedColor. Uses the default style color if set to null.
      */
     private Integer mReachedColor;
 
     /**
-     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.omadahealth.circularbarpager.library.CircularBar}
      * completedColor. Uses the default style color if set to null.
      */
     private Integer mCompletedColor;
 
     /**
-     * Determines the color filled for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * Determines the color filled for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.omadahealth.circularbarpager.library.CircularBar}
      * completedColor. Uses the default style color if set to null.
      */
     private Integer mCompletedFillColor;
 
     /**
-     * Determines the drawable for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * Determines the drawable for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.omadahealth.circularbarpager.library.CircularBar}
      * when progress is 100%. Uses the default drawable if set to null.
      */
     private Integer mCompletedDrawable;
@@ -74,23 +74,23 @@ public class ProgressAttr {
     private Double mCompletedPercentage = null;
 
     /**
-     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.omadahealth.circularbarpager.library.CircularBar}
      * notCompletedOutlineColor. Uses the default style color if set to null.
      */
     private Integer mNotCompletedOutlineColor;
 
     /**
-     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.omadahealth.circularbarpager.library.CircularBar}
      * specialDayFillColor. Uses the default style color if set to null.
      */
     private Integer mSpecialFillColor;
     /**
-     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.omadahealth.circularbarpager.library.CircularBar}
      * specialDayOutlineColor. Uses the default style color if set to null.
      */
     private Integer mSpecialOutlineColor;
     /**
-     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.OrangeGangsters.circularbarpager.library.CircularBar}
+     * Determines the color for this specific {@link com.github.omadahealth.slidepager.lib.views.ProgressView} {@link com.github.omadahealth.circularbarpager.library.CircularBar}
      * specialDayReachColor. Uses the default style color if set to null.
      */
     private Integer mSpecialReachColor;

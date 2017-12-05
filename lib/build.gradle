@@ -26,7 +26,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.1.0'
 
     //CircularBarPager
-    compile('com.github.orangegangsters:library:1.3.10@aar')
+    compile('com.github.omadahealth.circularbarpager:library:1.3.11@aar')
     //Typefaces
     compile 'com.github.omadahealth.typefaceview:typefaceview:1.5.0@aar'
 
