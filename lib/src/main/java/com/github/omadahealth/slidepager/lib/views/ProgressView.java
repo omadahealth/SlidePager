@@ -46,9 +46,9 @@ import com.github.omadahealth.slidepager.lib.databinding.ViewProgressBinding;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.github.omadahealth.typefaceview.TypefaceType;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 
 import java.util.ArrayList;
 import java.util.List;

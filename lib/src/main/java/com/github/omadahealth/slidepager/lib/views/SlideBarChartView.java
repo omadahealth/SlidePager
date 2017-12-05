@@ -20,7 +20,7 @@ import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
 import com.github.omadahealth.typefaceview.TypefaceTextView;
 import com.github.omadahealth.typefaceview.TypefaceType;
-import com.nineoldandroids.animation.Animator;
+import android.animation.Animator;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -15,9 +15,9 @@ import android.view.ViewGroup;
 import com.daimajia.easing.Glider;
 import com.daimajia.easing.Skill;
 import com.github.omadahealth.slidepager.lib.R;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -316,7 +316,7 @@ public class BarView extends View implements Animator.AnimatorListener {
     }
 
     /**
-     * Adds the current listeners to the {@link com.nineoldandroids.animation.AnimatorSet}
+     * Adds the current listeners to the {@link android.animation.AnimatorSet}
      * before animation starts
      *
      * @param set The set to add listeners to

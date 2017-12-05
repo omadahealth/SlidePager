@@ -25,7 +25,7 @@ package com.github.omadahealth.slidepager;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends ActionBarActivity implements OnSlidePageChangeListener<ChartProgressAttr> {
+public class MainActivity extends AppCompatActivity implements OnSlidePageChangeListener<ChartProgressAttr> {
 
     private static final String TAG = "MainActivity";
     /**

@@ -21,9 +21,9 @@ import com.github.omadahealth.slidepager.lib.databinding.ViewBarChartProgressBin
 import com.github.omadahealth.slidepager.lib.utils.BarChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ChartProgressAttr;
 import com.github.omadahealth.slidepager.lib.utils.ProgressAttr;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 
 
 /**
