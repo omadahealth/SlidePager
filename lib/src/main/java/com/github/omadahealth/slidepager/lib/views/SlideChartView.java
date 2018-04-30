@@ -304,7 +304,7 @@ public class SlideChartView extends AbstractSlideView {
         //Set the top text to be the values
         for (int i = 0; i < mProgressTopTextList.size(); i++) {
             if (mProgressAttr != null && mProgressAttr.get(i) != null) {
-                String oneDecimal = Utilities.formatWeight(mProgressAttr.get(i).getValue());
+                String oneDecimal = Utilities.formatValue(mProgressAttr.get(i).getValue());
                 mProgressTopTextList.get(i).setText(oneDecimal);
                 mProgressTopTextList.get(i).setTextColor(mTopTextColor);
             }
