@@ -64,12 +64,7 @@ public class Utilities {
     /**
      * 123.432654 => 123.4
      */
-    public static final String WEIGHT_FORMAT = "0.0";
-
-    /**
-     * The precision of the scale's rounding
-     */
-    public static final double WEIGHT_SCALE_PRECISION = 0.2;
+    public static final String FORMAT = "0.0";
 
     /**
      * The string to show if the date is today
@@ -169,39 +164,32 @@ public class Utilities {
     }
 
     /**
-     * Formats the weight to a "0.0" in an increment of {@link #WEIGHT_SCALE_PRECISION} format and returns it as a double
+     * Formats the value to a "0.0" format and returns it as a double
      *
      * @param value The value to format
      * @return
      */
-    public static double formatWeightToDouble(Double value) {
+    private static double formatValueToDouble(Double value) {
         if (value == null) {
             value = 0.0;
         }
-        double diff = value % WEIGHT_SCALE_PRECISION;
-        double roundedValue;
-        if (diff >= 0.1) {
-            roundedValue = value + (WEIGHT_SCALE_PRECISION - diff);
-        } else {
-            roundedValue = value - diff;
-        }
-        DecimalFormat weightFormat = new DecimalFormat(WEIGHT_FORMAT, new DecimalFormatSymbols(Locale.ENGLISH));
-        return Double.parseDouble(weightFormat.format(roundedValue));
+        DecimalFormat format = new DecimalFormat(FORMAT, new DecimalFormatSymbols(Locale.ENGLISH));
+        return Double.parseDouble(format.format(value));
     }
 
     /**
-     * Formats the weight of to "0.0" format
+     * Formats the value of to "0.0" format
      *
      * @param value The value to format
      * @return
      */
-    public static String formatWeight(Double value) {
+    public static String formatValue(Double value) {
         if (value == null) {
             return "-";
         }
 
-        DecimalFormat weightFormat = new DecimalFormat(WEIGHT_FORMAT, new DecimalFormatSymbols(Locale.ENGLISH));
-        return weightFormat.format(formatWeightToDouble(value));
+        DecimalFormat format = new DecimalFormat(FORMAT, new DecimalFormatSymbols(Locale.ENGLISH));
+        return format.format(formatValueToDouble(value));
     }
 
     /**
